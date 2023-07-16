@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "120350431985",
+    "firebase_url": "https://seafood-app-5543f-default-rtdb.firebaseio.com",
+    "project_id": "seafood-app-5543f",
+    "storage_bucket": "seafood-app-5543f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120350431985:android:3a835eb87930fadc14a750",
+        "android_client_info": {
+          "package_name": "com.example.sistema_seafood"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "120350431985-eoa280dqmsierv8p49etg8nmka0udubm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRyqbrSaX1GzpaPbREgCHfDvfpg3bRAcM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "120350431985-eoa280dqmsierv8p49etg8nmka0udubm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
