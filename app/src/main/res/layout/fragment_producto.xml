@@ -66,7 +66,6 @@
                     android:id="@+id/checkBox"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:button="@android:drawable/btn_star_big_off"
                     android:translationX="3dp"
                     tools:translationY="-1dp" />
             </androidx.cardview.widget.CardView>
@@ -147,7 +146,7 @@
                 android:layout_height="60dp"
                 android:backgroundTint="#1A5D1A"
                 android:translationX="20dp"
-                android:translationY="150dp"
+                android:translationY="125dp"
                 app:cardCornerRadius="20dp">
 
                 <TextView
@@ -182,7 +181,6 @@
                     android:textAlignment="center"
                     android:translationX="280dp"
                     android:translationY="7dp"
-                    app:icon="@android:drawable/btn_star"
                     app:iconTint="#000000" />
             </androidx.cardview.widget.CardView>
 
@@ -192,7 +190,7 @@
                 android:layout_height="45dp"
                 android:translationX="125dp"
                 app:cardCornerRadius="32dp"
-                tools:translationY="155dp">
+                tools:translationY="135dp">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="140dp"
@@ -200,7 +198,7 @@
                     android:translationX="2.5dp"
                     app:cardCornerRadius="32dp"
                     tools:cardBackgroundColor="#1A5D1A"
-                    tools:translationY="2.5dp" >
+                    tools:translationY="2.5dp">
 
                     <TextView
                         android:id="@+id/cantidad"
