@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Producto"
+    tools:context=".DetalleProducto"
     tools:scrollbarSize="16dp">
 
     <LinearLayout
@@ -208,6 +208,7 @@
                         android:id="@+id/cantidad"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:autoText="false"
                         android:text="2"
                         android:textColor="#FFFFFF"
                         android:textSize="20sp"
@@ -221,6 +222,7 @@
                         android:layout_height="50dp"
                         android:backgroundTint="#1A5D1A"
                         android:backgroundTintMode="add"
+                        android:onClick="restarClicked"
                         android:text="-"
                         android:textSize="24sp"
                         android:translationY="-5dp"
@@ -238,7 +240,10 @@
                         android:translationX="80dp"
                         android:translationY="-5dp"
                         tools:textAlignment="center"
-                        tools:textStyle="bold" />
+                        tools:textStyle="bold"
+                        android:onClick="sumarClicked"
+                        />
+
                 </androidx.cardview.widget.CardView>
             </androidx.cardview.widget.CardView>
 
