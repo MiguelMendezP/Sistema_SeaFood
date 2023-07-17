@@ -65,9 +65,11 @@
                 <CheckBox
                     android:id="@+id/checkBox"
                     android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:translationX="3dp"
-                    tools:translationY="-1dp" />
+                    android:layout_height="40dp"
+                    android:button="@drawable/corazon"
+                    android:checked="false"
+                    android:translationX="4dp"
+                    tools:translationY="2dp" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -108,9 +110,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@android:drawable/btn_star"
-                    app:tint="#1A5D1A"
                     android:translationX="60dp"
-                    android:translationY="10dp" />
+                    android:translationY="10dp"
+                    app:tint="#1A5D1A" />
 
                 <TextView
                     android:id="@+id/textView6"
@@ -175,13 +177,15 @@
                     android:id="@+id/button5"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:backgroundTint="#FFFFFF"
+                    android:backgroundTint="#1A5D1A"
                     android:backgroundTintMode="add"
-                    android:text="carrito"
+                    android:padding="15dp"
+                    android:text="c"
                     android:textAlignment="center"
-                    android:translationX="280dp"
+                    android:translationX="270dp"
                     android:translationY="7dp"
-                    app:iconTint="#000000" />
+                    app:icon="@drawable/canasta"
+                    app:iconTint="#FFFFFF" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
