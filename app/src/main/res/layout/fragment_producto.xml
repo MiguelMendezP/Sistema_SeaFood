@@ -48,6 +48,7 @@
                 android:fontFamily="sans-serif"
                 android:foreground="@android:drawable/arrow_down_float"
                 android:rotation="90"
+                android:text="v"
                 android:translationX="10dp"
                 android:translationY="40dp" />
 
@@ -63,8 +64,8 @@
 
                 <CheckBox
                     android:id="@+id/checkBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:button="@android:drawable/btn_star_big_off"
                     android:translationX="3dp"
                     tools:translationY="-1dp" />
@@ -108,7 +109,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@android:drawable/btn_star"
-                    android:tint="#1A5D1A"
+                    app:tint="#1A5D1A"
                     android:translationX="60dp"
                     android:translationY="10dp" />
 
@@ -173,10 +174,11 @@
 
                 <Button
                     android:id="@+id/button5"
-                    android:layout_width="40dp"
-                    android:layout_height="45dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:backgroundTint="#FFFFFF"
                     android:backgroundTintMode="add"
+                    android:text="carrito"
                     android:textAlignment="center"
                     android:translationX="280dp"
                     android:translationY="7dp"
