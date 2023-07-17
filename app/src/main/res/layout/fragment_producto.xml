@@ -53,26 +53,6 @@
                 android:translationY="40dp" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/favorito"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:backgroundTint="#FFFFFF"
-                android:translationY="430dp"
-                app:cardCornerRadius="100dp"
-                app:cardElevation="8dp"
-                tools:translationX="320dp">
-
-                <CheckBox
-                    android:id="@+id/checkBox"
-                    android:layout_width="48dp"
-                    android:layout_height="40dp"
-                    android:button="@drawable/corazon"
-                    android:checked="false"
-                    android:translationX="4dp"
-                    tools:translationY="2dp" />
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
                 android:id="@+id/titulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,6 +73,26 @@
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/favorito"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:backgroundTint="#FFFFFF"
+                android:translationY="430dp"
+                app:cardCornerRadius="100dp"
+                app:cardElevation="8dp"
+                tools:translationX="320dp">
+
+                <CheckBox
+                    android:id="@+id/checkBox"
+                    android:layout_width="48dp"
+                    android:layout_height="40dp"
+                    android:button="@drawable/corazon"
+                    android:checked="false"
+                    android:translationX="4dp"
+                    tools:translationY="2dp" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -147,9 +147,67 @@
                 android:layout_width="350dp"
                 android:layout_height="60dp"
                 android:backgroundTint="#1A5D1A"
-                android:translationX="20dp"
+                android:translationX="25dp"
                 android:translationY="125dp"
                 app:cardCornerRadius="20dp">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/contorno"
+                    android:layout_width="145dp"
+                    android:layout_height="45dp"
+                    android:translationX="110dp"
+                    app:cardCornerRadius="32dp"
+                    tools:translationY="8dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="140dp"
+                        android:layout_height="40dp"
+                        android:translationX="2.5dp"
+                        app:cardCornerRadius="32dp"
+                        tools:cardBackgroundColor="#1A5D1A"
+                        tools:translationY="2.5dp">
+
+                        <TextView
+                            android:id="@+id/cantidad"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:autoText="false"
+                            android:text="2"
+                            android:textColor="#FFFFFF"
+                            android:textSize="20sp"
+                            android:translationY="5dp"
+                            tools:textStyle="bold"
+                            tools:translationX="65dp" />
+
+                        <Button
+                            android:id="@+id/button6"
+                            android:layout_width="60dp"
+                            android:layout_height="50dp"
+                            android:backgroundTint="#1A5D1A"
+                            android:backgroundTintMode="add"
+                            android:onClick="restarClicked"
+                            android:text="-"
+                            android:textSize="24sp"
+                            android:translationY="-5dp"
+                            tools:textAlignment="center"
+                            tools:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/button7"
+                            android:layout_width="60dp"
+                            android:layout_height="50dp"
+                            android:backgroundTint="#1A5D1A"
+                            android:backgroundTintMode="add"
+                            android:onClick="sumarClicked"
+                            android:text="+"
+                            android:textSize="24sp"
+                            android:translationX="80dp"
+                            android:translationY="-5dp"
+                            tools:textAlignment="center"
+                            tools:textStyle="bold" />
+
+                    </androidx.cardview.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:id="@+id/textView9"
@@ -186,65 +244,6 @@
                     android:translationY="7dp"
                     app:icon="@drawable/canasta"
                     app:iconTint="#FFFFFF" />
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/contorno"
-                android:layout_width="145dp"
-                android:layout_height="45dp"
-                android:translationX="125dp"
-                app:cardCornerRadius="32dp"
-                tools:translationY="135dp">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="140dp"
-                    android:layout_height="40dp"
-                    android:translationX="2.5dp"
-                    app:cardCornerRadius="32dp"
-                    tools:cardBackgroundColor="#1A5D1A"
-                    tools:translationY="2.5dp">
-
-                    <TextView
-                        android:id="@+id/cantidad"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:autoText="false"
-                        android:text="2"
-                        android:textColor="#FFFFFF"
-                        android:textSize="20sp"
-                        android:translationY="5dp"
-                        tools:textStyle="bold"
-                        tools:translationX="65dp" />
-
-                    <Button
-                        android:id="@+id/button6"
-                        android:layout_width="60dp"
-                        android:layout_height="50dp"
-                        android:backgroundTint="#1A5D1A"
-                        android:backgroundTintMode="add"
-                        android:onClick="restarClicked"
-                        android:text="-"
-                        android:textSize="24sp"
-                        android:translationY="-5dp"
-                        tools:textAlignment="center"
-                        tools:textStyle="bold" />
-
-                    <Button
-                        android:id="@+id/button7"
-                        android:layout_width="60dp"
-                        android:layout_height="50dp"
-                        android:backgroundTint="#1A5D1A"
-                        android:backgroundTintMode="add"
-                        android:text="+"
-                        android:textSize="24sp"
-                        android:translationX="80dp"
-                        android:translationY="-5dp"
-                        tools:textAlignment="center"
-                        tools:textStyle="bold"
-                        android:onClick="sumarClicked"
-                        />
-
-                </androidx.cardview.widget.CardView>
             </androidx.cardview.widget.CardView>
 
         </androidx.cardview.widget.CardView>
