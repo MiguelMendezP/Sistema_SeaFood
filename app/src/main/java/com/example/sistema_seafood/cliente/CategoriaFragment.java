@@ -88,20 +88,18 @@ private String nombreCategoria;
         // Inflate the layout for this fragment
         vista=inflater.inflate(R.layout.fragment_categoria, container, false);
         contenedorPlatillos =vista.findViewById(R.id.contenedorPlatillos);
-        Toast.makeText(getContext(),AdaptadorCategoria.getCat(nombreCategoria).getNombre(),Toast.LENGTH_SHORT).show();
         adaptadorPlatillo=new AdaptadorPlatillo(getContext(),AdaptadorCategoria.getCat(nombreCategoria));
         contenedorPlatillos.setAdapter(adaptadorPlatillo);
-//        contenedorPlatillos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.O)
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Toast.makeText(getContext(),adaptadorPlatillo.getPlatillo(i).getNombre(),Toast.LENGTH_SHORT).show();
-////                CategoriaFragment categoriaFragment=new CategoriaFragment();
-////                categoriaFragment.setCategoria(adaptadorMesas.getMesa(i));
-////                Navigation.findNavController(view).navigate(R.id.nav_categoria);
-//                // Obtener el FragmentManager
-//            }
-//        });
+        contenedorPlatillos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Toast.makeText(getContext(),adaptadorPlatillo.getPlatillo(i).getNombre(),Toast.LENGTH_SHORT).show();
+                PlatilloFragment.setPlatillo(adaptadorPlatillo.getPlatillo(i));
+                Navigation.findNavController(view).navigate(R.id.nav_platillo);
+                // Obtener el FragmentManager
+            }
+        });
 
         return vista;
     }

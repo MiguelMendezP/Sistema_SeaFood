@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/inicio_repartidor"
+        android:icon="@drawable/ic_inicio"
+        android:title="@string/inicio" />
+    <item
+        android:id="@+id/envio_actual"
+        android:icon="@drawable/ic_inicio"
+        android:title="@string/inicio" />
+    <item
+        android:id="@+id/page_historial"
+        android:icon="@drawable/ic_pedidos"
+        android:title="@string/pedidos" />
+    <item
+        android:id="@+id/page_perfil_repartidor"
+        android:icon="@drawable/ic_perfil"
+        android:title="@string/perfil" />
+
+</menu>

@@ -2,17 +2,12 @@ package com.example.sistema_seafood;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.helper.widget.MotionEffect;
 
-import com.example.sistema_seafood.cliente.HomeCliente;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
@@ -27,8 +22,8 @@ import java.util.Map;
 public class Categoria {
     private String nombre;
     private List<Platillo> platillos,platillosConDescuento;
-    private ImageView img;
 
+    private Bitmap imagen;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
     private QueryDocumentSnapshot documentReference;
@@ -44,11 +39,6 @@ public class Categoria {
         this.nombre=nombre;
         this.documentReference=documentReference;
         platillosConDescuento=new ArrayList<>();
-    }
-
-    public void setImg(ImageView img) {
-        this.img = img;
-        setImagen();
     }
 
     public void agruparPlatDesc(){
@@ -67,7 +57,7 @@ public class Categoria {
         if(platillos==null){
             platillos=new ArrayList<>();
             for(Map map:(ArrayList<Map>)documentReference.get("platillos")){
-                platillos.add(new Platillo(map.get("nombre").toString(),map.get("descripcion").toString(),Double.parseDouble(map.get("precio").toString()),Integer.parseInt(map.get("descuento").toString()),new ArrayList<>(),Double.parseDouble(map.get("puntuacion").toString())));
+                platillos.add(new Platillo(map.get("nombre").toString(),map.get("descripcion").toString(),Double.parseDouble(map.get("precio").toString()),Integer.parseInt(map.get("descuento").toString()), (List<Map>) map.get("valoraciones"),Double.parseDouble(map.get("puntuacion").toString())));
             }
         }
         return platillos;
@@ -76,7 +66,7 @@ public class Categoria {
         return platillosConDescuento;
     }
 
-    public void setImagen(){
+    public void mostrarImagen(ImageView imageView){
         String path = nombre.toLowerCase()+".jpg";
         try {
             // Crea un archivo temporal para almacenar la imagen
@@ -88,7 +78,8 @@ public class Categoria {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                             // Carga el archivo temporal en un Bitmap
-                            img.setImageBitmap(BitmapFactory.decodeFile(localFile.getAbsolutePath()));
+                            imagen =BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                            imageView.setImageBitmap(imagen);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -102,4 +93,9 @@ public class Categoria {
             e.printStackTrace();
         }
     }
+
+    public Bitmap getImagen() {
+        return imagen;
+    }
+
 }

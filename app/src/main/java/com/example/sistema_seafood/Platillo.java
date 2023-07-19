@@ -1,5 +1,8 @@
 package com.example.sistema_seafood;
 
+import static java.sql.Types.TIMESTAMP;
+
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
@@ -7,19 +10,24 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class Platillo extends Producto{
     private int descuento;
     private List<Valoracion> valoraciones;
+    private List<Map> vals;
 
-    private ImageView imageView;
+private Bitmap imagen;
     private double puntuacion;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
@@ -30,11 +38,24 @@ public class Platillo extends Producto{
         this.valoraciones=valoraciones;
     }
 
-    public Platillo(String nombre, String descripcion, double precio, int descuento, List<Valoracion> valoraciones, double puntuacion) {
+    public Platillo(String nombre, String descripcion, double precio, int descuento, List<Map> valoraciones, double puntuacion) {
         super(nombre, descripcion, precio);
         this.descuento=descuento;
-        this.valoraciones=valoraciones;
+        this.vals=valoraciones;
         this.puntuacion=puntuacion;
+    }
+
+    public List<Valoracion> getValoraciones(){
+        if(valoraciones==null){
+            valoraciones=new ArrayList<>();
+            for (Map valoracion:vals){
+                Timestamp timestamp= (Timestamp) valoracion.get("fecha");
+                Date fecha=timestamp.toDate();
+                valoraciones.add(new Valoracion(valoracion.get("usuario").toString(),valoracion.get("comentario").toString(),Double.parseDouble(valoracion.get("puntuacion").toString()),fecha));
+            }
+            return valoraciones;
+        }
+        return valoraciones;
     }
 
     public double getPuntuacion(){
@@ -50,16 +71,9 @@ public class Platillo extends Producto{
         return descuento;
     }
 
-    public List<Valoracion> getValoraciones() {
-        return valoraciones;
-    }
 
     public void setDescuento(int descuento){
         this.descuento=descuento;
-    }
-
-    public void setValoraciones(List<Valoracion> valoraciones) {
-        this.valoraciones = valoraciones;
     }
 
     public void setImagen(ImageView imageView, String categoria){
@@ -75,7 +89,8 @@ public class Platillo extends Producto{
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                             // Carga el archivo temporal en un Bitmap
-                            imageView.setImageBitmap(BitmapFactory.decodeFile(localFile.getAbsolutePath()));
+                            imagen=BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                            imageView.setImageBitmap(imagen);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -88,5 +103,13 @@ public class Platillo extends Producto{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Bitmap getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(Bitmap imagen) {
+        this.imagen = imagen;
     }
 }

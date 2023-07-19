@@ -1,14 +1,22 @@
 package com.example.sistema_seafood.cliente;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.sistema_seafood.Pedido;
 import com.example.sistema_seafood.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,6 +24,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.Executor;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,8 +51,12 @@ public class FragmentEstadoPedido extends Fragment implements OnMapReadyCallback
     private String mParam1;
     private String mParam2;
 
+    private Pedido pedido;
+
     private GoogleMap googleMap;
     private View view;
+
+    private TextView estado;
 
     public FragmentEstadoPedido() {
         // Required empty public constructor
@@ -72,9 +94,11 @@ public class FragmentEstadoPedido extends Fragment implements OnMapReadyCallback
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_estado_pedido, container, false);
+        estado=view.findViewById(R.id.estado);
+        pedido=HomeCliente.getPedido();
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         //if(mapFragment!=null)
-            mapFragment.getMapAsync(this);
+        mapFragment.getMapAsync(this);
         return view;
     }
 
@@ -83,9 +107,27 @@ public class FragmentEstadoPedido extends Fragment implements OnMapReadyCallback
 this.googleMap=googleMap;
 this.googleMap.setOnMapClickListener(this);
 this.googleMap.setOnMapLongClickListener(this);
-LatLng miUbicacion= new LatLng(17.125263,-96.773983);
-this.googleMap.addMarker(new MarkerOptions().position(miUbicacion).title("Mi ubicacion"));
-this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(miUbicacion));
+pedido.getDocumentReference().addSnapshotListener(new EventListener<DocumentSnapshot>() {
+    @Override
+    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+        GeoPoint geoPoint=value.getGeoPoint("ubicacionPedido");
+        LatLng ubicacion=new LatLng(geoPoint.getLatitude(),geoPoint.getLongitude());
+        googleMap.addMarker(new MarkerOptions().position(ubicacion).title("Mi ubicacion"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(ubicacion));
+        switch (value.getString("estado")){
+            case "en espera":
+                estado.setText("Estamos preparando tu pedido");
+                break;
+            case "enviado":
+                estado.setText("Tu pedido se encuentra en camino");
+                break;
+        }
+    }
+});
+
+//LatLng miUbicacion= new LatLng(17.125263,-96.773983);
+//this.googleMap.addMarker(new MarkerOptions().position(miUbicacion).title("Mi ubicacion"));
+//this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(miUbicacion));
     }
 
     @Override

@@ -66,7 +66,7 @@ public class AdaptadorCategoria extends BaseAdapter {
         Categoria aux= categorias.get(i);
         ImageView imageView=v.findViewById(R.id.imgCategoria);
         TextView title=v.findViewById(R.id.titular);
-        aux.setImg(imageView);
+        aux.mostrarImagen(imageView);
         title.setText(aux.getNombre());
         return v;
     }

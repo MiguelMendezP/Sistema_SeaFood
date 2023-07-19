@@ -1,7 +1,5 @@
-package com.example.sistema_seafood.cliente;
+package com.example.sistema_seafood.repartidor;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -17,31 +15,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
+import com.example.sistema_seafood.Carrito;
 import com.example.sistema_seafood.Categoria;
+import com.example.sistema_seafood.Pedido;
 import com.example.sistema_seafood.R;
+import com.example.sistema_seafood.Ubicacion;
+import com.example.sistema_seafood.cliente.AdaptadorCategoria;
+import com.example.sistema_seafood.cliente.CategoriaFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link InicioFragment#newInstance} factory method to
+ * Use the {@link PedidosDisponiblesRepartidor#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class InicioFragment extends Fragment {
+public class PedidosDisponiblesRepartidor extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -51,15 +49,11 @@ public class InicioFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    private View vista;
     private GridView gridViewMesas;
-    private boolean inicio=true;
+    private AdaptadorPedidosDisponible adaptadorPedidosDisponible;
+    private View view;
 
-    private Bitmap bitmap;
-    private AdaptadorCategoria adaptadorCategoria;
-
-    public InicioFragment() {
+    public PedidosDisponiblesRepartidor() {
         // Required empty public constructor
     }
 
@@ -69,11 +63,11 @@ public class InicioFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment InicioFragment.
+     * @return A new instance of fragment PedidosDisponiblesRepartidor.
      */
     // TODO: Rename and change types and number of parameters
-    public static InicioFragment newInstance(String param1, String param2) {
-        InicioFragment fragment = new InicioFragment();
+    public static PedidosDisponiblesRepartidor newInstance(String param1, String param2) {
+        PedidosDisponiblesRepartidor fragment = new PedidosDisponiblesRepartidor();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -90,8 +84,8 @@ public class InicioFragment extends Fragment {
         }
     }
 
-    public void consultarCategorias(FirebaseFirestore db){
-        db.collection("Categoria")
+    public void consultarPedidosDisponibles(){
+        FirebaseFirestore.getInstance().collection("Pedidos")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -99,8 +93,9 @@ public class InicioFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Categoria aux=new Categoria(document.getString("nombre"),document);
-                                adaptadorCategoria.add(aux);
+                                PedidoRepartidor pedido=new PedidoRepartidor(document.getString("cliente"),document.getString("estado"),document.getDate("fecha"), (ArrayList<Map>) document.get("productos"), document.getGeoPoint("ubicacion"),document.getReference());
+                                adaptadorPedidosDisponible.add(pedido);
+
                             }
                         } else {
                             Log.d(MotionEffect.TAG, "Error getting documents: ", task.getException());
@@ -109,35 +104,24 @@ public class InicioFragment extends Fragment {
                 });
     }
 
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        if(inicio==false){
-            ((HomeCliente)getActivity()).setTitulo("Bienvenido");
-        }
-        inicio=false;
-        vista= inflater.inflate(R.layout.fragment_inicio, container, false);
-        gridViewMesas =vista.findViewById(R.id.contenedorCategoria);
-        adaptadorCategoria=new AdaptadorCategoria(getContext());
-        consultarCategorias(FirebaseFirestore.getInstance());
-        gridViewMesas.setAdapter(adaptadorCategoria);
-        gridViewMesas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Toast.makeText(getContext(),adaptadorMesas.getMesa(i).getNombre(),Toast.LENGTH_SHORT).show();
-                Bundle bundle=new Bundle();
-                bundle.putString("categoria",adaptadorCategoria.getCategoria(i).getNombre());
-                CategoriaFragment categoriaFragment=new CategoriaFragment();
-                categoriaFragment.setCategoria(adaptadorCategoria.getCategoria(i));
-                Navigation.findNavController(view).navigate(R.id.nav_categoria,bundle);
-                // Obtener el FragmentManager
-            }
-        });
-        return vista;
+        view= inflater.inflate(R.layout.fragment_pedidos_disponibles_repartidor, container, false);
+        gridViewMesas =view.findViewById(R.id.contenedorPedidosDisponibles);
+        adaptadorPedidosDisponible=new AdaptadorPedidosDisponible(getContext());
+        consultarPedidosDisponibles();
+        gridViewMesas.setAdapter(adaptadorPedidosDisponible);
+//        gridViewMesas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.O)
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                //Toast.makeText(getContext(),adaptadorMesas.getMesa(i).getNombre(),Toast.LENGTH_SHORT).show();
+//               // Navigation.findNavController(view).navigate(R.id.nav_categoria);
+//                // Obtener el FragmentManager
+//            }
+//        });
+        return view;
     }
 }

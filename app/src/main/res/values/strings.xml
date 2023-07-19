@@ -24,4 +24,20 @@
     <string name="fechaNac">Fecha de nacimiento</string>
     <string name="numero">Teléfono</string>
     <string name="direccion">Dirección</string>
+    <string name="descripcion">Descripción</string>
+    <string name="comentarios">Comentarios</string>
+    <string name="menos">-</string>
+    <string name="mas">+</string>
+    <string name="pedir">Pedir</string>
+    <string name="extras">Extras</string>
+    <string name="confirmar">Confirmar Pedido</string>
+    <string name="detalle">Detalle de tu orden</string>
+    <string name="nombre">Nombre</string>
+    <string name="total">Total</string>
+    <string name="estado">Estado</string>
+    <string name="title_activity_home_repartidor">HomeRepartidor</string>
+    <string name="inicio">Inicio</string>
+    <string name="pedidosdisponibles">Pedidos Disponibles</string>
+    <string name="aceptar">Aceptar</string>
+
 </resources>

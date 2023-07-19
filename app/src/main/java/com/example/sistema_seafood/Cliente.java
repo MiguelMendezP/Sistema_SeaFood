@@ -10,6 +10,7 @@ public class Cliente {
 
     private List<Pedido> pedidos;
 
+
     public Cliente(String nombre, String numTelefono, String correo, Ubicacion ubicacion, List<Platillo> platillosFavoritos, List<Pedido> pedidos) {
         this.nombre = nombre;
         this.numTelefono = numTelefono;

@@ -43,4 +43,20 @@
         android:label=""
         tools:layout="@layout/fragment_estado_pedido" />
 
+    <fragment
+        android:id="@+id/nav_platillo"
+        android:name="com.example.sistema_seafood.cliente.PlatilloFragment"
+        android:label=""
+        tools:layout="@layout/fragment_platillo" />
+    <fragment
+        android:id="@+id/nav_carrito"
+        android:name="com.example.sistema_seafood.cliente.CarritoFragment"
+        android:label=""
+        tools:layout="@layout/fragment_carrito" />
+    <fragment
+        android:id="@+id/nav_confirmar"
+        android:name="com.example.sistema_seafood.cliente.ConfirmarFragment"
+        android:label=""
+        tools:layout="@layout/fragment_confirmar" />
+
 </navigation>
