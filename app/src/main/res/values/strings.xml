@@ -1,3 +1,43 @@
 <resources>
     <string name="app_name">Sistema_SeaFood</string>
+    <string name="title_activity_home_cliente">HomeCliente</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="titulo"></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="eslogan">Deleitate en el sabor del Mar</string>
+    <string name="bienvenido">Bienvenido</string>
+    <string name="perfil">Perfil</string>
+    <string name="favoritos">Favoritos</string>
+    <string name="pedidos">Pedidos</string>
+    <string name="ayuda">Ayuda</string>
+    <string name="correo">Correo</string>
+    <string name="fechaNac">Fecha de nacimiento</string>
+    <string name="numero">Teléfono</string>
+    <string name="direccion">Dirección</string>
+    <string name="descripcion">Descripción</string>
+    <string name="comentarios">Comentarios</string>
+    <string name="menos">-</string>
+    <string name="mas">+</string>
+    <string name="pedir">Pedir</string>
+    <string name="extras">Extras</string>
+    <string name="confirmar">Confirmar Pedido</string>
+    <string name="detalle">Detalle de tu orden</string>
+    <string name="nombre">Nombre</string>
+    <string name="total">Total</string>
+    <string name="estado">Estado</string>
+    <string name="title_activity_home_repartidor">HomeRepartidor</string>
+    <string name="inicio">Inicio</string>
+    <string name="pedidosdisponibles">Pedidos Disponibles</string>
+    <string name="aceptar">Aceptar</string>
+
 </resources>

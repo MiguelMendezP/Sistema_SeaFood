@@ -1,5 +1,7 @@
 package com.example.sistema_seafood;
 
+import android.graphics.Bitmap;
+
 public abstract class Producto {
     protected String nombre,descripcion;
     protected double precio;
@@ -13,6 +15,8 @@ public abstract class Producto {
     public String getNombre() {
         return nombre;
     }
+
+    public abstract Bitmap getImagen();
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
