@@ -1,4 +1,4 @@
-package com.example.sistema_seafood.administrador.ui.pedido;
+package com.example.sistema_seafood.comunes.ui.pedido;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.sistema_seafood.Pedido;
 import com.example.sistema_seafood.R;
-import com.example.sistema_seafood.administrador.AdapterPedido;
+import com.example.sistema_seafood.comunes.AdapterPedido;
 import com.example.sistema_seafood.databinding.FragmentPedidoBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

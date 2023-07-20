@@ -1,4 +1,4 @@
-package com.example.sistema_seafood.administrador.ui.platillos;
+package com.example.sistema_seafood.comunes.ui.platillos;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import android.widget.GridView;
 
 import com.example.sistema_seafood.models.Platillo;
 import com.example.sistema_seafood.R;
-import com.example.sistema_seafood.administrador.AdaptadorPlatillo;
+import com.example.sistema_seafood.comunes.AdaptadorPlatillo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;

@@ -1,4 +1,4 @@
-package com.example.sistema_seafood.administrador.ui.categoria;
+package com.example.sistema_seafood.comunes.ui.categoria;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,9 +19,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 
-import com.example.sistema_seafood.administrador.AdaptadorCategoria;
+import com.example.sistema_seafood.comunes.AdaptadorCategoria;
 import com.example.sistema_seafood.R;
-import com.example.sistema_seafood.administrador.ui.platillos.PlatilloFragment;
+import com.example.sistema_seafood.comunes.ui.platillos.PlatilloFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;

@@ -1,4 +1,4 @@
-package com.example.sistema_seafood.administrador.ui;
+package com.example.sistema_seafood.comunes.ui;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,8 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sistema_seafood.Extra;
 import com.example.sistema_seafood.R;
 import com.example.sistema_seafood.Repartidor;
+import com.example.sistema_seafood.comunes.AdapterExtras;
 
 import java.util.ArrayList;
 
