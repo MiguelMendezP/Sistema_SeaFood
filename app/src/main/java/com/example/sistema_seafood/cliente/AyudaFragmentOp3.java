@@ -63,7 +63,7 @@ public class AyudaFragmentOp3 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ayuda_opcion2, container, false);
+        View view = inflater.inflate(R.layout.fragment_ayuda_opcion3, container, false);
 
         ((Button)view.findViewById(R.id.contactar)).setOnClickListener(new View.OnClickListener() {
             @Override
