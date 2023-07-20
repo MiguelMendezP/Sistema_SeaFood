@@ -1,5 +1,7 @@
 package com.example.sistema_seafood.cliente;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.sistema_seafood.R;
 
@@ -61,6 +64,21 @@ public class AyudaFragmentOp2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ayuda_opcion2, container, false);
+        View view = inflater.inflate(R.layout.fragment_ayuda_opcion2, container, false);
+        ((Button)view.findViewById(R.id.contactar)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String numeroTelefono = "9510000000";
+                iniciarLlamada(numeroTelefono);
+            }
+        });
+
+        return view;
+    }
+
+    private void iniciarLlamada(String numeroTelefono) {
+        Intent intentLlamada = new Intent(Intent.ACTION_DIAL);
+        intentLlamada.setData(Uri.parse("tel:" + numeroTelefono));
+        startActivity(intentLlamada);
     }
 }

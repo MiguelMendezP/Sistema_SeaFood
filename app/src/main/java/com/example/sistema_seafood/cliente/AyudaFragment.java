@@ -1,11 +1,14 @@
 package com.example.sistema_seafood.cliente;
 
+import static androidx.core.content.PermissionChecker.checkSelfPermission;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -24,6 +27,7 @@ public class AyudaFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final int REQUEST_CALL_PERMISSION = 1;
 
     private Button op1,op2,op3,op4,op5;
     private static final String ARG_PARAM1 = "param1";
@@ -104,8 +108,19 @@ public class AyudaFragment extends Fragment {
             }
         });
 
+        ((Button)view.findViewById(R.id.contactar)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String numeroTelefono = "9510000000";
+                iniciarLlamada(numeroTelefono);
+            }
+        });
 
         return view;
     }
-
+    private void iniciarLlamada(String numeroTelefono) {
+        Intent intentLlamada = new Intent(Intent.ACTION_DIAL);
+        intentLlamada.setData(Uri.parse("tel:" + numeroTelefono));
+        startActivity(intentLlamada);
+    }
 }
