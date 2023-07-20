@@ -7,7 +7,7 @@ public class Carrito {
     private List<ProductoOrdenado> productosOrdenados;
 
     public Carrito(){
-        productosOrdenados=new ArrayList<>();
+        productosOrdenados = new ArrayList<>();
     }
 
     public List<ProductoOrdenado> getProductoOrdenados(){
@@ -28,5 +28,13 @@ public class Carrito {
             total+=productoOrdenado.getSubtotal();
         }
         return total;
+    }
+
+    public void setProductosOrdenados(List<ProductoOrdenado> productosOrdenados) {
+        this.productosOrdenados = productosOrdenados;
+    }
+
+    public void getProductosLista(){
+
     }
 }

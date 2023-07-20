@@ -1,3 +1,21 @@
 <resources>
-    <string name="app_name">Sistema_SeaFood</string>
+    <string name="app_name">SeaFood</string>
+    <string name="title_activity_manu_admin">manu_admin</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_inicio">Bienvenido</string>
+    <string name="menu_categorias">Categorias</string>
+    <string name="menu_platillos">PLatillos</string>
+    <string name="menu_extras">Extras</string>
+    <string name="menu_pedidos">Pedidos</string>
+    <string name="menu_perfil">Perfil</string>
+    <string name="menu_repartidores">Repartidores</string>
+    <string name="menu_ayuda">Ayuda</string>
+    <string name="title_activity_inicio_admin">inicioAdminActivity</string>
+    <string name="title_activity_inicio_cliente">inicioCliente</string>
 </resources>

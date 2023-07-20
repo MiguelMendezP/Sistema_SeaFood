@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_pedidos">
+
+    <fragment
+        android:id="@+id/nav_extras"
+        android:name="com.example.sistema_seafood.comunes.ui.extras.ExtrasFragment"
+        android:label=""
+        tools:layout="@layout/fragment_extras" />
+
+    <fragment
+        android:id="@+id/nav_categorias"
+        android:name="com.example.sistema_seafood.comunes.ui.categoria.CategoriaFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_categoria" />
+
+    <fragment
+        android:id="@+id/nav_platillos"
+        android:name="com.example.sistema_seafood.comunes.ui.platillos.PlatilloFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_platillo" />
+
+    <fragment
+        android:id="@+id/nav_pedidos"
+        android:name="com.example.sistema_seafood.comunes.ui.pedido.PedidoFragment"
+        android:label=""
+        tools:layout="@layout/fragment_pedido" />
+
+    <fragment
+        android:id="@+id/nav_perfil"
+        android:name="com.example.sistema_seafood.comunes.ui.perfil.PerfilFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_perfil" />
+
+    <fragment
+        android:id="@+id/nav_repartidores"
+        android:name="com.example.sistema_seafood.comunes.ui.repartidor.RepartidorFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_repartidor" />
+
+    <fragment
+        android:id="@+id/nav_ayuda"
+        android:name="com.example.sistema_seafood.comunes.ui.ayuda.AyudaFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_ayuda" />
+
+</navigation>
