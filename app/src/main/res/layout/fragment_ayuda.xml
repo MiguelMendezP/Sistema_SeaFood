@@ -1,14 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EAFBFB"
+    android:backgroundTintMode="add"
     tools:context=".cliente.AyudaFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:id="@+id/remplazar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="50sp"
+            android:paddingTop="60sp"
+            android:text="Ayuda"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:background="?android:attr/listDivider"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/opcion1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="5dp"
+            android:backgroundTint="#E9FAFA"
+            android:drawableRight="@drawable/arrow_forward_ios_24px"
+            android:text="El repartidor no entrego mi pedido"
+            android:textAlignment="textStart"
+            android:textColor="#49454F"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/opcion2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="5dp"
+            android:backgroundTint="#E9FAFA"
+            android:drawableRight="@drawable/arrow_forward_ios_24px"
+            android:text="No satisfecho con mi pedido (producto faltante, incorrecto, dañado, etc.)"
+            android:textAlignment="textStart"
+            android:textColor="#49454F"
+            android:textSize="16sp" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:background="?android:attr/listDivider"
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/opcion3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="5dp"
+            android:backgroundTint="#E9FAFA"
+            android:drawableRight="@drawable/arrow_forward_ios_24px"
+            android:text="Consulta sobre cancelaciones "
+            android:textAlignment="textStart"
+            android:textColor="#49454F"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/opcion4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="5dp"
+            android:backgroundTint="#E9FAFA"
+            android:drawableRight="@drawable/arrow_forward_ios_24px"
+            android:text="Temas de seguridad"
+            android:textAlignment="textStart"
+            android:textColor="#49454F"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/opcion5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="5dp"
+            android:backgroundTint="#E9FAFA"
+            android:drawableRight="@drawable/arrow_forward_ios_24px"
+            android:text="Términos y condiciones "
+            android:textAlignment="textStart"
+            android:textColor="#49454F"
+            android:textSize="16sp" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:background="?android:attr/listDivider"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:paddingStart="37dp"
+            android:text="Información de contacto" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="37dp"
+            android:text="tel: +52 951 000 0000" />
+
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="37dp"
+            android:text="correo: SeaFood@gmail.com" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/contactar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="15dp"
+                android:text="Contactar"
+                android:textColor="#FFFFFF" />
+        </FrameLayout>
+
+    </LinearLayout>
 
 </FrameLayout>

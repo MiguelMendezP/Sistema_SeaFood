@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EAFBFB"
+    tools:context=".cliente.AyudaFragmentOp2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingTop="60sp"
+            android:paddingEnd="20dp"
+            android:text="Insatisfecho con mi  pedido"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:background="?android:attr/listDivider"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:lineSpacingExtra="4sp"
+            android:padding="10dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:text="¡Lamentamos mucho que no esté satisfecho con su pedido! En SeaFood, nuestra principal prioridad es la satisfacción de nuestros clientes, y nos tomamos muy en serio cualquier comentario o inquietud que puedan tener. Entendemos que las expectativas pueden variar y, a veces, pueden surgir inconvenientes. Queremos asegurarnos de que esté completamente satisfecho con su experiencia, por lo que le invitamos a comunicarse con nosotros para compartir cualquier comentario o preocupación que pueda tener.  Si tiene alguna pregunta, comentario o inquietud, no dude en comunicarse con nuestro equipo de atención al cliente. Estamos aquí para escucharle y asegurarnos de que se sienta atendido de manera adecuada."
+            android:textAlignment="textStart"
+            android:textSize="16sp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/contactar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="15dp"
+                android:text="Contactar"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF" />
+        </FrameLayout>
+
+    </LinearLayout>
+</FrameLayout>
