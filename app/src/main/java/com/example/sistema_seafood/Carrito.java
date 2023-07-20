@@ -1,4 +1,4 @@
-package com.example.sistema_seafood;
+ package com.example.sistema_seafood;
 
 import android.widget.Spinner;
 
@@ -11,7 +11,7 @@ public class Carrito {
     private List<ProductoOrdenado> productosOrdenados;
 
     public Carrito(){
-        productosOrdenados=new ArrayList<>();
+        productosOrdenados = new ArrayList<>();
     }
 
     public List<ProductoOrdenado> getProductoOrdenados(){

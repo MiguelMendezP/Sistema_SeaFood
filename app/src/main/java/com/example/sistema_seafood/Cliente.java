@@ -1,5 +1,7 @@
 package com.example.sistema_seafood;
 
+import com.example.sistema_seafood.models.Platillo;
+
 import java.util.Date;
 import java.util.List;
 
