@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EAFBFB"
+    tools:context=".cliente.AyudaFragmentOp4">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#EAFBFB"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingTop="60sp"
+            android:paddingEnd="20dp"
+            android:text="Temas de seguridad"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:background="?android:attr/listDivider"
+            android:textAlignment="center" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardBackgroundColor="#EAFBFB">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="100dp"
+                android:background="#EAFBFB">
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="4sp"
+                    android:padding="10dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="En SeaFood, nos tomamos muy en serio la seguridad y el bienestar de nuestros clientes. Queremos asegurarnos de que se sienta protegido y seguro al utilizar nuestros servicios de entrega a domicilio. A continuación, le proporcionamos información importante sobre cómo abordar cualquier situación en la que el repartidor pueda tener una conducta inapropiada o si necesita ponerse en contacto con nosotros por motivos de seguridad. Conducta Inapropiada del Repartidor: Si en algún momento se siente incómodo o nota que el repartidor tiene una conducta inapropiada, le recomendamos que siga estos pasos: Mantenga la calma y priorice su seguridad personal. Si es posible, solicite la identificación del repartidor y verifique que coincida con los datos proporcionados por nuestra tienda. Si se encuentra en una situación de emergencia o peligro inmediato, comuníquese con las autoridades locales. Una vez que esté seguro, contáctenos inmediatamente para informarnos sobre el incidente. Estaremos aquí para apoyarlo y tomar las medidas adecuadas. Comunicación con la Tienda por Motivos de Seguridad: Entendemos que pueden surgir situaciones en las que necesite ponerse en contacto con nosotros por motivos de seguridad.  Si sospecha de algún comportamiento sospechoso o inseguro relacionado con nuestros repartidores o servicios de entrega, llámenos de inmediato. Describa la situación en detalle y proporcione cualquier información relevante que pueda ayudarnos a abordar el problema. Estaremos encantados de atender su llamada y tomar las medidas necesarias para garantizar su seguridad."
+                    android:textAlignment="textStart"
+                    android:textSize="16sp" />
+            </ScrollView>
+
+            <Button
+                android:id="@+id/contactar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="15dp"
+                android:text="Contactar"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF" />
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</FrameLayout>
