@@ -8,6 +8,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+<<<<<<< Updated upstream
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -40,4 +41,16 @@
     <string name="pedidosdisponibles">Pedidos Disponibles</string>
     <string name="aceptar">Aceptar</string>
 
+=======
+    <string name="menu_inicio">Bienvenido</string>
+    <string name="menu_categorias">Categorias</string>
+    <string name="menu_platillos">Platillos</string>
+    <string name="menu_extras">Extras</string>
+    <string name="menu_pedidos">Pedidos</string>
+    <string name="menu_perfil">Perfil</string>
+    <string name="menu_repartidores">Repartidores</string>
+    <string name="menu_ayuda">Ayuda</string>
+    <string name="title_activity_inicio_admin">inicioAdminActivity</string>
+    <string name="title_activity_inicio_cliente">inicioCliente</string>
+>>>>>>> Stashed changes
 </resources>

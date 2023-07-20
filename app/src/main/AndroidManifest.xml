@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Sistema_SeaFood"
         tools:targetApi="31">
+<<<<<<< Updated upstream
         <activity
             android:name=".repartidor.HomeRepartidor"
             android:exported="true" >
@@ -31,6 +32,20 @@
             android:exported="true"
             android:label="@string/title_activity_home_cliente"
             android:theme="@style/Theme.Sistema_SeaFood.NoActionBar">
+=======
+
+        <activity
+            android:name=".comunes.InicioAdmin"
+            android:exported="false"
+            android:label="@string/title_activity_inicio_admin"
+            android:theme="@style/Theme.Sistema_SeaFood.NoActionBar" />
+        <activity
+            android:name=".registrar"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+>>>>>>> Stashed changes
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

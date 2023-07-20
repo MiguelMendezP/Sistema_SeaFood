@@ -38,8 +38,30 @@
         tools:layout="@layout/fragment_categoria" />
 
     <fragment
+<<<<<<< Updated upstream
         android:id="@+id/nav_envio"
         android:name="com.example.sistema_seafood.cliente.FragmentEstadoPedido"
+=======
+        android:id="@+id/nav_agregarCategoria"
+        android:name="com.example.sistema_seafood.comunes.ui.categoria.agregarCategoria"
+        android:label=" "
+        tools:layout="@layout/fragment_agregar_categoria" />
+
+    <fragment
+        android:id="@+id/nav_platillos"
+        android:name="com.example.sistema_seafood.comunes.ui.platillos.PlatilloFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_platillo" />
+    <fragment
+        android:id="@+id/nav_agregarPlatillo"
+        android:name="com.example.sistema_seafood.comunes.ui.platillos.agregarPlatillo"
+        android:label=" "
+        tools:layout="@layout/fragment_agregar_platillo" />
+
+    <fragment
+        android:id="@+id/nav_pedidos"
+        android:name="com.example.sistema_seafood.comunes.ui.pedido.PedidoFragment"
+>>>>>>> Stashed changes
         android:label=""
         tools:layout="@layout/fragment_estado_pedido" />
 
