@@ -2,6 +2,22 @@ package com.example.sistema_seafood;
 
 import android.graphics.Bitmap;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
+
 public class Repartidor {
     private String nombre, numTelefono,correo;
     private Ubicacion ubicacion;
@@ -58,5 +74,41 @@ public class Repartidor {
 
     public void consultarImagen(){
 
+    }
+
+    private Bitmap imagen;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReference();
+    private QueryDocumentSnapshot documentReference;
+    public void mostrarImagen(ImageView imageView){
+        String path = correo.toLowerCase()+".jpg";
+        try {
+            // Crea un archivo temporal para almacenar la imagen
+            File localFile = File.createTempFile(correo.toLowerCase(),"jpg");
+
+            // Descarga la imagen desde Firebase Cloud Storage al archivo temporal
+            storageRef.child("categorias").getFile(localFile)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            // Carga el archivo temporal en un Bitmap
+                            imagen = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                            imageView.setImageBitmap(imagen);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Manejar errores en caso de que la descarga falle
+                        }
+                    });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Bitmap getImagen() {
+        return imagen;
     }
 }

@@ -20,29 +20,38 @@
         <activity
             android:name=".repartidor.HomeRepartidor"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
+
+        <activity
+            android:name=".registrar"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDRyqbrSaX1GzpaPbREgCHfDvfpg3bRAcM" />
 
         <activity
+            android:name=".administrador.InicioAdmin"
+            android:exported="false"
+            android:label="@string/title_activity_inicio_admin"
+            android:theme="@style/Theme.Sistema_SeaFood.NoActionBar" />
+
+        <activity
             android:name=".cliente.HomeCliente"
             android:exported="true"
             android:label="@string/title_activity_home_cliente"
             android:theme="@style/Theme.Sistema_SeaFood.NoActionBar">
-
-
-
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true" />
+            android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
     </application>
 
 </manifest>

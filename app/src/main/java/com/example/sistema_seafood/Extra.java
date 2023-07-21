@@ -65,4 +65,16 @@ public class Extra extends Producto{
     }
 
 
+    private String referencia;
+    public Extra(String referencia, String nombre, String descripcion, double precio) {
+        super(nombre, descripcion, precio);
+    }
+
+    public String getReferencia() {
+        return referencia;
+    }
+
+    public void setReferencia(String referencia) {
+        this.referencia = referencia;
+    }
 }

@@ -1,12 +1,20 @@
 package com.example.sistema_seafood.cliente;
 
+import static androidx.core.content.PermissionChecker.checkSelfPermission;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.sistema_seafood.R;
 
@@ -19,6 +27,9 @@ public class AyudaFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final int REQUEST_CALL_PERMISSION = 1;
+
+    private Button op1,op2,op3,op4,op5;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -61,7 +72,55 @@ public class AyudaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ((HomeCliente)getActivity()).setTitulo("Ayuda");
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ayuda, container, false);
+        View view = inflater.inflate(R.layout.fragment_ayuda, container, false);
+
+        ((Button)view.findViewById(R.id.opcion1)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.nav_opcion1);
+            }
+        });
+        ((Button)view.findViewById(R.id.opcion2)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.nav_opcion2);
+            }
+        });
+
+        ((Button)view.findViewById(R.id.opcion3)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.nav_opcion3);
+            }
+        });
+
+        ((Button)view.findViewById(R.id.opcion4)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.nav_opcion4);
+            }
+        });
+
+        ((Button)view.findViewById(R.id.opcion5)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.nav_opcion5);
+            }
+        });
+
+        ((Button)view.findViewById(R.id.contactar)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String numeroTelefono = "9510000000";
+                iniciarLlamada(numeroTelefono);
+            }
+        });
+
+        return view;
+    }
+    private void iniciarLlamada(String numeroTelefono) {
+        Intent intentLlamada = new Intent(Intent.ACTION_DIAL);
+        intentLlamada.setData(Uri.parse("tel:" + numeroTelefono));
+        startActivity(intentLlamada);
     }
 }

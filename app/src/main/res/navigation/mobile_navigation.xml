@@ -59,6 +59,31 @@
         android:label=""
         tools:layout="@layout/fragment_confirmar" />
     <fragment
+        android:id="@+id/nav_opcion1"
+        android:name="com.example.sistema_seafood.cliente.AyudaFragmentOp1"
+        android:label=""
+        tools:layout="@layout/fragment_ayuda_opcion1"/>
+    <fragment
+        android:id="@+id/nav_opcion2"
+        android:name="com.example.sistema_seafood.cliente.AyudaFragmentOp2"
+        android:label=""
+        tools:layout="@layout/fragment_ayuda_opcion2"/>
+    <fragment
+        android:id="@+id/nav_opcion3"
+        android:name="com.example.sistema_seafood.cliente.AyudaFragmentOp3"
+        android:label=""
+        tools:layout="@layout/fragment_ayuda_opcion3"/>
+    <fragment
+        android:id="@+id/nav_opcion4"
+        android:name="com.example.sistema_seafood.cliente.AyudaFragmentOp4"
+        android:label=""
+        tools:layout="@layout/fragment_ayuda_opcion4"/>
+    <fragment
+        android:id="@+id/nav_opcion5"
+        android:name="com.example.sistema_seafood.cliente.AyudaFragmentOp5"
+        android:label=""
+        tools:layout="@layout/fragment_ayuda_opcion5"/>
+    <fragment
         android:id="@+id/nav_nueva_ubicacion"
         android:name="com.example.sistema_seafood.ObtenerUbicacionFragment"
         android:label=""
