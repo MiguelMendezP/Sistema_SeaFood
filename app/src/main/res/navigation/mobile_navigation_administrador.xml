@@ -7,43 +7,55 @@
 
     <fragment
         android:id="@+id/nav_extras"
-        android:name="com.example.sistema_seafood.comunes.ui.extras.ExtrasFragment"
+        android:name="com.example.sistema_seafood.administrador.ui.extras.ExtrasFragment"
         android:label=""
         tools:layout="@layout/fragment_extras" />
 
     <fragment
         android:id="@+id/nav_categorias"
-        android:name="com.example.sistema_seafood.comunes.ui.categoria.CategoriaFragment"
+        android:name="com.example.sistema_seafood.administrador.ui.categoria.CategoriaFragment"
         android:label=" "
-        tools:layout="@layout/fragment_categoria" />
+        tools:layout="@layout/fragment_categoria_admin" />
+
+    <fragment
+        android:id="@+id/nav_agregarCategoria"
+        android:name="com.example.sistema_seafood.administrador.ui.categoria.agregarCategoria"
+        android:label=" "
+        tools:layout="@layout/fragment_agregar_categoria" />
 
     <fragment
         android:id="@+id/nav_platillos"
-        android:name="com.example.sistema_seafood.comunes.ui.platillos.PlatilloFragment"
+        android:name="com.example.sistema_seafood.administrador.ui.platillos.PlatilloFragment"
         android:label=" "
-        tools:layout="@layout/fragment_platillo" />
+        tools:layout="@layout/fragment_platillo_admin" />
+
+    <fragment
+        android:id="@+id/nav_agregarPlatillo"
+        android:name="com.example.sistema_seafood.administrador.ui.platillos.agregarPlatillo"
+        android:label=" "
+        tools:layout="@layout/fragment_agregar_platillo" />
 
     <fragment
         android:id="@+id/nav_pedidos"
-        android:name="com.example.sistema_seafood.comunes.ui.pedido.PedidoFragment"
+        android:name="com.example.sistema_seafood.administrador.ui.pedido.PedidoFragment"
         android:label=""
         tools:layout="@layout/fragment_pedido" />
 
     <fragment
         android:id="@+id/nav_perfil"
-        android:name="com.example.sistema_seafood.comunes.ui.perfil.PerfilFragment"
+        android:name="com.example.sistema_seafood.administrador.ui.perfil.PerfilFragment"
         android:label=" "
-        tools:layout="@layout/fragment_perfil" />
+        tools:layout="@layout/fragment_perfil_admin" />
 
     <fragment
         android:id="@+id/nav_repartidores"
-        android:name="com.example.sistema_seafood.comunes.ui.repartidor.RepartidorFragment"
+        android:name="com.example.sistema_seafood.administrador.ui.repartidor.RepartidorFragment"
         android:label=" "
         tools:layout="@layout/fragment_repartidor" />
 
     <fragment
         android:id="@+id/nav_ayuda"
-        android:name="com.example.sistema_seafood.comunes.ui.ayuda.AyudaFragment"
+        android:name="com.example.sistema_seafood.administrador.ui.ayuda.AyudaFragment"
         android:label=" "
         tools:layout="@layout/fragment_ayuda" />
 

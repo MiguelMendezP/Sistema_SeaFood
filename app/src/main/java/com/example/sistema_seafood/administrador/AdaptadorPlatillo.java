@@ -1,4 +1,4 @@
-package com.example.sistema_seafood.comunes;
+package com.example.sistema_seafood.administrador;
 
 import android.content.Context;
 import android.os.Build;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.sistema_seafood.Categoria;
 import com.example.sistema_seafood.models.Platillo;
 import com.example.sistema_seafood.R;
 

@@ -1,4 +1,4 @@
-package com.example.sistema_seafood.comunes;
+package com.example.sistema_seafood.administrador;
 
 import android.content.Context;
 import android.view.LayoutInflater;

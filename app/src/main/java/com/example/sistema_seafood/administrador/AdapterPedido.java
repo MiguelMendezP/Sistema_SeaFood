@@ -1,7 +1,6 @@
-package com.example.sistema_seafood.comunes;
+package com.example.sistema_seafood.administrador;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,27 +10,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.helper.widget.MotionEffect;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sistema_seafood.Pedido;
 import com.example.sistema_seafood.R;
-import com.example.sistema_seafood.Ubicacion;
-import com.example.sistema_seafood.models.Direccion;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 public class AdapterPedido extends RecyclerView.Adapter<AdapterPedido.MyViewHolder> {
 

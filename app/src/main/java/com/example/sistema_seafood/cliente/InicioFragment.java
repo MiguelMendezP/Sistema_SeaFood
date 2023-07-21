@@ -132,26 +132,10 @@ public class InicioFragment extends Fragment {
                 //Toast.makeText(getContext(),adaptadorMesas.getMesa(i).getNombre(),Toast.LENGTH_SHORT).show();
                 Bundle bundle=new Bundle();
                 bundle.putString("categoria",adaptadorCategoria.getCategoria(i).getNombre());
-<<<<<<< Updated upstream:app/src/main/java/com/example/sistema_seafood/cliente/InicioFragment.java
                 CategoriaFragment categoriaFragment=new CategoriaFragment();
                 categoriaFragment.setCategoria(adaptadorCategoria.getCategoria(i));
                 Navigation.findNavController(view).navigate(R.id.nav_categoria,bundle);
                 // Obtener el FragmentManager
-=======
-                PlatilloFragment platilloFragment = new PlatilloFragment();
-                platilloFragment.setCategoria(adaptadorCategoria.getCategoria(i));
-
-            }
-        });
-
-        btn_agregarCategoria = vista.findViewById(R.id.btn_agregarCategoria);
-        btn_agregarCategoria.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Navigation.findNavController(vista).navigate(R.id.nav_agregarCategoria);
-
->>>>>>> Stashed changes:app/src/main/java/com/example/sistema_seafood/comunes/ui/categoria/CategoriaFragment.java
             }
         });
         return vista;

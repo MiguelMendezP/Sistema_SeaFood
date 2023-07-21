@@ -1,4 +1,4 @@
-package com.example.sistema_seafood.comunes.ui.ayuda;
+package com.example.sistema_seafood.administrador.ui.ayuda;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.sistema_seafood.databinding.FragmentAyudaBinding;
-import com.example.sistema_seafood.databinding.FragmentInicioBinding;
 
 public class AyudaFragment extends Fragment {
 

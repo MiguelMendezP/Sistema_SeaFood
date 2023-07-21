@@ -46,6 +46,11 @@
     <string name="menu_perfil">Perfil</string>
     <string name="menu_repartidores">Repartidores</string>
     <string name="menu_ayuda">Ayuda</string>
+
+    <string name="title_home">Inicio</string>
+    <string name="title_dashboard">Envios</string>
+    <string name="title_notifications">Notificaciones</string>
+
     <string name="title_activity_inicio_admin">inicioAdminActivity</string>
     <string name="title_activity_inicio_cliente">inicioCliente</string>
 </resources>

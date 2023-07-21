@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation2"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/inicio_repartidor"
+        android:name="com.example.sistema_seafood.repartidor.PedidosDisponiblesRepartidor"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_pedidos_disponibles_repartidor" />
+
+    <fragment
+        android:id="@+id/envio"
+        android:name="com.example.sistema_seafood.repartidor.EnvioFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_envio" />
+
+    <fragment
+        android:id="@+id/page_historial"
+        android:name="com.example.sistema_seafood.repartidor.HistorialFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_historial" />
+    <fragment
+        android:id="@+id/page_perfil_repartidor"
+        android:name="com.example.sistema_seafood.repartidor.PerfilRepartidorFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_perfil_repartidor" />
+</navigation>

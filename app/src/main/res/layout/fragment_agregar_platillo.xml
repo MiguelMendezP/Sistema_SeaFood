@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EAFBFD"
-    tools:context=".comunes.ui.platillos.agregarPlatillo" >
+    tools:context=".administrador.ui.platillos.agregarPlatillo" >
 
     <LinearLayout
         android:layout_width="match_parent"

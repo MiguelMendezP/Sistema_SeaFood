@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ebfbfb"
-    tools:context=".comunes.ui.categoria.agregarCategoria" >
+    tools:context=".administrador.ui.categoria.agregarCategoria" >
 
     <LinearLayout
         android:layout_width="match_parent"

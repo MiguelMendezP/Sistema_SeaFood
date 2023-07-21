@@ -1,4 +1,4 @@
-package com.example.sistema_seafood.comunes.ui.categoria;
+package com.example.sistema_seafood.administrador.ui.categoria;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.helper.widget.MotionEffect;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,9 +20,10 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 
-import com.example.sistema_seafood.comunes.AdaptadorCategoria;
+import com.example.sistema_seafood.Categoria;
+import com.example.sistema_seafood.administrador.AdaptadorCategoria;
 import com.example.sistema_seafood.R;
-import com.example.sistema_seafood.comunes.ui.platillos.PlatilloFragment;
+import com.example.sistema_seafood.administrador.ui.platillos.PlatilloFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -91,7 +93,7 @@ public class CategoriaFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Categoria aux=new Categoria(document.getString("nombre"),document);
+                                Categoria aux = new Categoria(document.getString("nombre"),document);
                                 adaptadorCategoria.add(aux);
                             }
                         } else {
@@ -131,8 +133,7 @@ public class CategoriaFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Intent i = new Intent(getActivity(), agregarCategoria.class);
-                startActivity(i);
+                Navigation.findNavController(vista).navigate(R.id.nav_agregarCategoria);
 
             }
         });

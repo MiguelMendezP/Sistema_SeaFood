@@ -1,4 +1,4 @@
-package com.example.sistema_seafood.comunes.ui.perfil;
+package com.example.sistema_seafood.administrador.ui.perfil;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

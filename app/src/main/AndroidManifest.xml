@@ -2,15 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-feature
-        android:name="android.hardware.telephony"
-        android:required="false" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:allowBackup="true"
@@ -22,61 +17,45 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Sistema_SeaFood"
         tools:targetApi="31">
-<<<<<<< Updated upstream
-        <activity
-            android:name=".repartidor.HomeRepartidor"
-            android:exported="true" >
 
-        </activity>
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDRyqbrSaX1GzpaPbREgCHfDvfpg3bRAcM" />
-
-        <activity
-            android:name=".cliente.HomeCliente"
-            android:exported="true"
-            android:label="@string/title_activity_home_cliente"
-            android:theme="@style/Theme.Sistema_SeaFood.NoActionBar">
-=======
-
-        <activity
-            android:name=".comunes.InicioAdmin"
-            android:exported="false"
-            android:label="@string/title_activity_inicio_admin"
-            android:theme="@style/Theme.Sistema_SeaFood.NoActionBar" />
-        <activity
-            android:name=".registrar"
-            android:exported="false" />
-        <activity
-            android:name=".comunes.ui.categoria.agregarCategoria"
-            android:exported="false"
-            android:theme="@style/Theme.Sistema_SeaFood.NoActionBar" />
-        <activity
-            android:name=".comunes.ui.platillos.agregarPlatillo"
-            android:exported="false"
-            android:theme="@style/Theme.Sistema_SeaFood.NoActionBar" />
-        <activity
-            android:name=".comunes.InicioAdmin"
-            android:exported="false"
-            android:label="@string/title_activity_inicio_admin"
-            android:theme="@style/Theme.Sistema_SeaFood.NoActionBar" />
-        <activity
-            android:name=".registrar"
-            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
->>>>>>> Stashed changes
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".MainActivity"
-            android:exported="true" />
+            android:name=".registrar"
+            android:exported="false" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDRyqbrSaX1GzpaPbREgCHfDvfpg3bRAcM" />
+
+        <activity
+            android:name=".administrador.InicioAdmin"
+            android:exported="false"
+            android:label="@string/title_activity_inicio_admin"
+            android:theme="@style/Theme.Sistema_SeaFood.NoActionBar" />
+
+        <activity
+            android:name=".cliente.HomeCliente"
+            android:exported="true"
+            android:label="@string/title_activity_home_cliente"
+            android:theme="@style/Theme.Sistema_SeaFood.NoActionBar"/>
+
+        <activity
+            android:name=".repartidor.HomeRepartidor"
+            android:exported="true"
+            android:label="@string/title_activity_home_repartidor"
+            android:theme="@style/Theme.Sistema_SeaFood.NoActionBar" >
+
+        </activity>
+
     </application>
 
 </manifest>

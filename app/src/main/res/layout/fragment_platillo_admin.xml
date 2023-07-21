@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#1A5D1A"
-    tools:context=".comunes.ui.platillos.PlatilloFragment" >
+    tools:context=".administrador.ui.platillos.PlatilloFragment" >
 
 
     <TextView

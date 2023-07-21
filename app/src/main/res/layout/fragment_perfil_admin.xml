@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EAFBFB"
-    tools:context=".comunes.ui.perfil.PerfilFragment" >
+    tools:context=".administrador.ui.perfil.PerfilFragment" >
 
 
     <LinearLayout

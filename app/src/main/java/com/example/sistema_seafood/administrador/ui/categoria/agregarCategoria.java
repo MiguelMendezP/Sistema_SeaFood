@@ -1,13 +1,11 @@
-package com.example.sistema_seafood.comunes.ui.categoria;
+package com.example.sistema_seafood.administrador.ui.categoria;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,7 +21,6 @@ import android.widget.Toast;
 
 import com.example.sistema_seafood.R;
 import com.example.sistema_seafood.databinding.FragmentAgregarCategoriaBinding;
-import com.example.sistema_seafood.databinding.FragmentRepartidorBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;

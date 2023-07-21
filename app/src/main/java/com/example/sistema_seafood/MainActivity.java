@@ -11,13 +11,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.example.sistema_seafood.comunes.InicioAdmin;
+import com.example.sistema_seafood.administrador.InicioAdmin;
+import com.example.sistema_seafood.cliente.HomeCliente;
 import com.example.sistema_seafood.models.usuarioModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 //String correo = et_mail.getText().toString();
                 //String contrasenia = et_pass.getText().toString();
 
-                Intent menuAdmin = new Intent(MainActivity.this, InicioAdmin.class);
+                Intent menuAdmin = new Intent(MainActivity.this, HomeCliente.class);
                 startActivity(menuAdmin);
 
                 /*firebaseAuth.signInWithEmailAndPassword(correo, contrasenia).addOnCompleteListener(new OnCompleteListener<AuthResult>() {

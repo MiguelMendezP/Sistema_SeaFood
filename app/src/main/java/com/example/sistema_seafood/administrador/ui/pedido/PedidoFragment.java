@@ -1,4 +1,4 @@
-package com.example.sistema_seafood.comunes.ui.extras;
+package com.example.sistema_seafood.administrador.ui.pedido;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -6,18 +6,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.helper.widget.MotionEffect;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.sistema_seafood.Extra;
+import com.example.sistema_seafood.Pedido;
 import com.example.sistema_seafood.R;
-import com.example.sistema_seafood.comunes.AdapterExtras;
-import com.example.sistema_seafood.databinding.FragmentExtrasBinding;
+import com.example.sistema_seafood.administrador.AdapterPedido;
+import com.example.sistema_seafood.databinding.FragmentPedidoBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -25,33 +23,33 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class ExtrasFragment extends Fragment {
+public class PedidoFragment extends Fragment {
 
+    private FragmentPedidoBinding binding;
     private RecyclerView recyclerView;
-    private ArrayList<Extra> listaExtras;
-    private AdapterExtras adapterExtras;
+    private ArrayList<Pedido> listaPedidos;
+    private AdapterPedido adapterPedido;
 
-    private FragmentExtrasBinding binding;
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+            ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentExtrasBinding.inflate(inflater, container, false);
+        binding = FragmentPedidoBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         recyclerView = root.findViewById(R.id.recyclerView);
-        listaExtras = new ArrayList<>();
+        listaPedidos = new ArrayList<>();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapterExtras = new AdapterExtras(getActivity(), listaExtras);
-        recyclerView.setAdapter(adapterExtras);
+        adapterPedido = new AdapterPedido(getActivity(), listaPedidos);
+        recyclerView.setAdapter(adapterPedido);
 
         consultarCategorias(FirebaseFirestore.getInstance());
 
         return root;
     }
-
     public void consultarCategorias(FirebaseFirestore db) {
-        db.collection("extras")
+        db.collection("Pedidos")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -59,17 +57,29 @@ public class ExtrasFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                String productosListados = "";
+
+                                ArrayList<HashMap<String, Object>> matrizObjetos = (ArrayList<HashMap<String, Object>>) document.get("productos");
+                                for (HashMap<String, Object> objeto : matrizObjetos) {
+                                    String cantidad = objeto.get("cantidad").toString();
+                                    String producto = objeto.get("producto").toString();
+                                    productosListados = productosListados + producto+" X"+cantidad + "\n";
+                                }
+
 
                                 String referencia = document.getReference().getPath();
-                                Extra extra = new Extra(
+                                Pedido pedido = new Pedido(
                                         referencia,
-                                        document.getString("nombre"),
-                                        document.getString("descripcion"),
-                                        document.getDouble("precio"));
-
-                                listaExtras.add(extra);
+                                        document.getString("cliente"),
+                                        document.getDate("fecha"),
+                                        document.getString("direccion"),
+                                        document.getString("estado"),
+                                        productosListados,
+                                        document.getString("repartidor"),
+                                        document.getDouble("total"));
+                                listaPedidos.add(pedido);
                             }
-                            adapterExtras.notifyDataSetChanged();
+                            adapterPedido.notifyDataSetChanged();
                         } else {
                             Log.d(MotionEffect.TAG, "Error getting documents: ", task.getException());
                         }
