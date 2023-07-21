@@ -39,5 +39,16 @@
     <string name="inicio">Inicio</string>
     <string name="pedidosdisponibles">Pedidos Disponibles</string>
     <string name="aceptar">Aceptar</string>
-
+    <string name="historial">Historial</string>
+    <string name="envioActual">Envio Actual</string>
+    <string name="title_activity_actividad_repartidor">ActividadRepartidor</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="pedidosentregados">Pedidos Entregados</string>
+    <string name="ubicacionGuardada">Usar dirección guardada</string>
+    <string name="nuevaubicacion">Nueva Ubicación</string>
+    <string name="selecionUbicacion">Seleccione su ubicacion de entrega</string>
+<string name="entregar">Entregar Pedido</string>
+    <string name="productos">Productos:</string>
 </resources>

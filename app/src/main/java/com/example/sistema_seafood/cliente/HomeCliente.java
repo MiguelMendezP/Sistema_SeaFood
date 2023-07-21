@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
@@ -94,7 +95,7 @@ public class HomeCliente extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_perfil, R.id.nav_favoritos,R.id.nav_pedidos,R.id.nav_ayuda,R.id.nav_categoria,R.id.nav_envio, R.id.nav_platillo,R.id.nav_carrito,R.id.nav_confirmar)
+                R.id.nav_home, R.id.nav_perfil, R.id.nav_favoritos,R.id.nav_pedidos,R.id.nav_ayuda,R.id.nav_categoria,R.id.nav_envio, R.id.nav_platillo,R.id.nav_carrito,R.id.nav_confirmar,R.id.nav_nueva_ubicacion)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home_cliente);
@@ -103,41 +104,41 @@ public class HomeCliente extends AppCompatActivity {
         binding.appBarHomeCliente.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .replace(R.id.nav_host_fragment_content_home_cliente, new FragmentEstadoPedido())
-//                        .commit();
                 navController.navigate(R.id.nav_envio);
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                  //      .setAction("Action", null).show();
+            }
+        });
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if(item.getItemId()==R.id.nav_home){
+                    setTitulo("Bienvenido");
+                    navController.navigate(R.id.nav_home);
+                }
+                else if(item.getItemId()==R.id.nav_perfil){
+                    setTitulo("Perfil");
+                    navController.navigate(R.id.nav_perfil);
+                }
+                else if(item.getItemId()==R.id.nav_favoritos){
+                    setTitulo("Favoritos");
+                    navController.navigate(R.id.nav_favoritos);
+                }
+                else if(item.getItemId()==R.id.nav_pedidos){
+                    setTitulo("Pedidos");
+                    navController.navigate(R.id.nav_pedidos);
+                }
+                else{
+                    setTitulo("Ayuda");
+                    navController.navigate(R.id.nav_ayuda);
+                }
+                drawer.closeDrawers();
+                return true;
             }
         });
         consultarUsuario();
 
         floatingActionButton=findViewById(R.id.fab);
         floatingActionButton.setVisibility(View.INVISIBLE);
-
-//        floatingActionButton.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                switch (motionEvent.getAction()) {
-//                    case MotionEvent.ACTION_BUTTON_PRESS:
-//                        navController.navigate(R.id.nav_envio);
-//                    case MotionEvent.ACTION_DOWN:
-//                        originalX = view.getX() - motionEvent.getRawX();
-//                        originalY = view.getY() - motionEvent.getRawY();
-//                        break;
-//                    case MotionEvent.ACTION_MOVE:
-//                        view.animate()
-//                                .x(motionEvent.getRawX() + originalX)
-//                                .y(motionEvent.getRawY() + originalY)
-//                                .setDuration(0)
-//                                .start();
-//                        break;
-//                }
-//                return true;
-//            }
-//        });
         consultarExtras();
     }
 
@@ -243,4 +244,6 @@ public class HomeCliente extends AppCompatActivity {
     }
 
 }
+
+
 

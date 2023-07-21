@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -15,9 +16,11 @@ import androidx.annotation.RequiresApi;
 import com.example.sistema_seafood.Categoria;
 import com.example.sistema_seafood.Pedido;
 import com.example.sistema_seafood.R;
+import com.google.firebase.firestore.DocumentReference;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AdaptadorPedidosDisponible extends BaseAdapter {
     public Context context;
@@ -35,6 +38,16 @@ public class AdaptadorPedidosDisponible extends BaseAdapter {
     public void add(PedidoRepartidor pedido){
         pedidos.add(pedido);
         this.notifyDataSetChanged();
+    }
+
+    public void remove(DocumentReference documentReference){
+        for(PedidoRepartidor pedidoRepartidor:pedidos){
+            if (pedidoRepartidor.getDocumentReference().equals(documentReference)){
+                pedidos.remove(pedidoRepartidor);
+                this.notifyDataSetChanged();
+                return;
+            }
+        }
     }
     @Override
     public int getCount() {
@@ -62,10 +75,17 @@ public class AdaptadorPedidosDisponible extends BaseAdapter {
         Button btnAceptar=v.findViewById(R.id.btnAceptarPedido);
         PedidoRepartidor aux= pedidos.get(i);
         nombreCliente.setText(aux.getCliente());
-        direccionCliente.setText(aux.getUbicacion().toString());
+        direccionCliente.setText(aux.getDireccion());
+        LinearLayout linearLayou=v.findViewById(R.id.listaProductos);
+        for (Map producto:aux.getProductos()){
+            TextView textView=new TextView(context);
+            textView.setText(producto.get("cantidad")+" "+producto.get("producto"));
+            linearLayou.addView(textView);
+        }
         btnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                aux.aceptar(((HomeRepartidor)context).getRepartidor().getNombre());
                 ((HomeRepartidor)context).showEnvio(aux);
             }
         });

@@ -2,6 +2,8 @@ package com.example.sistema_seafood.cliente;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,14 +15,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.sistema_seafood.Carrito;
 import com.example.sistema_seafood.Pedido;
 import com.example.sistema_seafood.ProductoOrdenado;
 import com.example.sistema_seafood.R;
 import com.example.sistema_seafood.Ubicacion;
+import com.example.sistema_seafood.Utils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,8 +36,11 @@ import com.google.firebase.firestore.GeoPoint;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -49,6 +58,8 @@ public class ConfirmarFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    public static LatLng direccionEntrega;
 
     private LinearLayout linearProducto,linearTotal;
     private View view;
@@ -100,24 +111,52 @@ public class ConfirmarFragment extends Fragment {
             linearTotal.addView(auxTotal);
         }
         ((TextView)view.findViewById(R.id.totalPedido)).setText("$ "+(HomeCliente.getCarrito().getTotal()+30));
+        String direccion;
+
+        if (direccionEntrega==null){
+            direccion= Utils.getAddressFromLatLng(getContext(),HomeCliente.getCliente().getUbicacion().getLatitud(),HomeCliente.getCliente().getUbicacion().getLongitud());
+        }
+        else {
+            direccion=Utils.getAddressFromLatLng(getContext(),direccionEntrega.latitude,direccionEntrega.longitude);
+        }
+        ((TextView)view.findViewById(R.id.direccionGuardada)).setText(direccion);
+        Button btnAgregarDireccion=view.findViewById(R.id.btnNuevaUbicacion);
+        btnAgregarDireccion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.nav_nueva_ubicacion);
+            }
+        });
         ((Button)view.findViewById(R.id.btnConfirmar)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Pedido pedido=new Pedido(HomeCliente.getCliente(),HomeCliente.getCarrito(),new Date(),new Ubicacion(17.097837343208298, -96.75758794245301),"en espera");
+                HomeCliente.setPedido(pedido);
+                GeoPoint geoPoint;
+                if(direccionEntrega==null){
+                    geoPoint=new GeoPoint(HomeCliente.getCliente().getUbicacion().getLatitud(),HomeCliente.getCliente().getUbicacion().getLongitud());
+                }
+                else {
+                    geoPoint=new GeoPoint(direccionEntrega.latitude,direccionEntrega.longitude);
+                }
                 Map map=new HashMap();
-                map.put("cliente",HomeCliente.getCliente().getCorreo());
+                map.put("cliente",HomeCliente.getCliente().getNombre());
                 map.put("fecha",new Date());
-                map.put("ubicacion",new GeoPoint(HomeCliente.getCliente().getUbicacion().getLatitud(),HomeCliente.getCliente().getUbicacion().getLongitud()));
+                map.put("ubicacion",geoPoint);
                 map.put("repartidor","no asignado");
-                map.put("estado","en espera");
+                map.put("estado","pendiente");
                 map.put("productos",HomeCliente.getCarrito().getProductos());
                 map.put("ubicacionPedido",new GeoPoint(17.097837343208298, -96.75758794245301));
+                map.put("direccion",Utils.getAddressFromLatLng(getContext(),geoPoint.getLatitude(),geoPoint.getLongitude()));
+                map.put("total",HomeCliente.getCarrito().getTotal()+30);
 
-               Pedido pedido=new Pedido(HomeCliente.getCliente(),HomeCliente.getCarrito(),new Date(),new Ubicacion(17.097837343208298, -96.75758794245301),"en espera");
-               HomeCliente.setPedido(pedido);
+
                 FirebaseFirestore.getInstance().collection("Pedidos").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 HomeCliente.getPedido().setDocumentReference(documentReference);
+                                HomeCliente.carrito=new Carrito();
+                                Navigation.findNavController(view).navigate(R.id.nav_envio);
                                 //Toast.makeText(getContext(),documentReference.getId(), Toast.LENGTH_LONG).show();
                                 //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                             }
@@ -128,7 +167,7 @@ public class ConfirmarFragment extends Fragment {
                                 Log.w(TAG, "Error adding document", e);
                             }
                         });
-                Navigation.findNavController(view).navigate(R.id.nav_envio);
+
             }
         });
         return view;

@@ -89,6 +89,7 @@ public class PerfilFragment extends Fragment {
         telefono.setText(cliente.getNumTelefono());
         fechaNac.setText(new Date().toString());
         ubicacion.setText(cliente.getUbicacion().getLatitud() + "");
+
         return view;
     }
 }

@@ -1,14 +1,37 @@
 package com.example.sistema_seafood.repartidor;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.helper.widget.MotionEffect;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
+import android.widget.Toast;
 
 import com.example.sistema_seafood.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +48,10 @@ public class HistorialFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private GridView gridViewMesas;
+    private AdaptadorHistorialPedidos adaptadorHistorialPedidos;
+    private View view;
 
     public HistorialFragment() {
         // Required empty public constructor
@@ -57,10 +84,40 @@ public class HistorialFragment extends Fragment {
         }
     }
 
+
+    public void consultarHistorial(){
+        String repartidor=((HomeRepartidor)getActivity()).getRepartidor().getNombre();
+        FirebaseFirestore.getInstance().collection("Pedidos")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            //Toast.makeText(getContext(),repartidor,Toast.LENGTH_SHORT).show();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if(document.getString("repartidor").equals(repartidor) && document.getString("estado").equals("entregado")){
+                                    PedidoRepartidor pedido=new PedidoRepartidor(document.getString("cliente"),document.getString("estado"),document.getDate("fecha"), (ArrayList<Map>) document.get("productos"), document.getGeoPoint("ubicacion"),document.getReference(),document.getString("direccion"));
+                                    adaptadorHistorialPedidos.add(pedido);
+                                }
+
+                            }
+                        } else {
+                            Log.d(MotionEffect.TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_historial, container, false);
+        view= inflater.inflate(R.layout.fragment_historial, container, false);
+        gridViewMesas =view.findViewById(R.id.contenedorPedidosEntregados);
+        adaptadorHistorialPedidos=new AdaptadorHistorialPedidos(getContext());
+        consultarHistorial();
+        gridViewMesas.setAdapter(adaptadorHistorialPedidos);
+        return view;
     }
 }

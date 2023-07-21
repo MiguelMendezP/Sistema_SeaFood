@@ -1,9 +1,12 @@
 package com.example.sistema_seafood.repartidor;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.helper.widget.MotionEffect;
 import androidx.fragment.app.Fragment;
@@ -25,13 +28,17 @@ import com.example.sistema_seafood.cliente.AdaptadorCategoria;
 import com.example.sistema_seafood.cliente.CategoriaFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -86,19 +93,34 @@ public class PedidosDisponiblesRepartidor extends Fragment {
 
     public void consultarPedidosDisponibles(){
         FirebaseFirestore.getInstance().collection("Pedidos")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                PedidoRepartidor pedido=new PedidoRepartidor(document.getString("cliente"),document.getString("estado"),document.getDate("fecha"), (ArrayList<Map>) document.get("productos"), document.getGeoPoint("ubicacion"),document.getReference());
-                                adaptadorPedidosDisponible.add(pedido);
-
+                    public void onEvent(@Nullable QuerySnapshot snapshots,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "listen:error", e);
+                            return;
+                        }
+                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                            switch (dc.getType()) {
+                                case ADDED:
+                                    if(dc.getDocument().getString("estado").equals("listo")){
+                                        PedidoRepartidor pedido=new PedidoRepartidor(dc.getDocument().getString("cliente"),dc.getDocument().getString("estado"),dc.getDocument().getDate("fecha"), (ArrayList<Map>) dc.getDocument().get("productos"), dc.getDocument().getGeoPoint("ubicacion"),dc.getDocument().getReference(),dc.getDocument().getString("direccion"));
+                                        adaptadorPedidosDisponible.add(pedido);
+                                    }
+                                    break;
+                                case MODIFIED:
+                                    if(dc.getDocument().getString("estado").equals("listo")){
+                                        PedidoRepartidor pedido=new PedidoRepartidor(dc.getDocument().getString("cliente"),dc.getDocument().getString("estado"),dc.getDocument().getDate("fecha"), (ArrayList<Map>) dc.getDocument().get("productos"), dc.getDocument().getGeoPoint("ubicacion"),dc.getDocument().getReference(),dc.getDocument().getString("direccion"));
+                                        adaptadorPedidosDisponible.add(pedido);
+                                    }
+                                    else if(dc.getDocument().getString("estado").equals("enviado") || dc.getDocument().getString("estado").equals("entregado")){
+                                        adaptadorPedidosDisponible.remove(dc.getDocument().getReference());
+                                    }
+                                    break;
+                                case REMOVED:
                             }
-                        } else {
-                            Log.d(MotionEffect.TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
@@ -113,15 +135,6 @@ public class PedidosDisponiblesRepartidor extends Fragment {
         adaptadorPedidosDisponible=new AdaptadorPedidosDisponible(getContext());
         consultarPedidosDisponibles();
         gridViewMesas.setAdapter(adaptadorPedidosDisponible);
-//        gridViewMesas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.O)
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                //Toast.makeText(getContext(),adaptadorMesas.getMesa(i).getNombre(),Toast.LENGTH_SHORT).show();
-//               // Navigation.findNavController(view).navigate(R.id.nav_categoria);
-//                // Obtener el FragmentManager
-//            }
-//        });
         return view;
     }
 }

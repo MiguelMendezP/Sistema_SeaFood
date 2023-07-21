@@ -18,7 +18,7 @@
         android:padding="5dp">
 
         <TextView
-            android:id="@+id/nombreCliente"
+            android:id="@+id/nombreC"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
@@ -28,34 +28,16 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/direccionCliente"
+            android:id="@+id/direccionC"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView" />
 
         <LinearLayout
-            android:id="@+id/listaProductos"
+            android:id="@+id/listaProduct"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/productos"
-                android:textColor="@color/black"
-                android:textSize="14dp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/btnAceptarPedido"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_weight="1"
-            android:text="@string/aceptar" />
+            android:orientation="vertical"></LinearLayout>
 
     </LinearLayout>
 

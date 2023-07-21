@@ -1,5 +1,7 @@
 package com.example.sistema_seafood.repartidor;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,8 +9,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.sistema_seafood.R;
+import com.example.sistema_seafood.Repartidor;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +35,9 @@ public class PerfilRepartidorFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private View view;
+
+    private Repartidor repartidor;
     public PerfilRepartidorFragment() {
         // Required empty public constructor
     }
@@ -61,6 +73,39 @@ public class PerfilRepartidorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_perfil_repartidor, container, false);
+        view = inflater.inflate(R.layout.fragment_perfil_repartidor, container, false);
+        repartidor=((HomeRepartidor)getActivity()).getRepartidor();
+        ImageView imageView= view.findViewById(R.id.imgRepartidor);
+        imageView.setImageResource(R.drawable.especialidades);
+        ((TextView)view.findViewById(R.id.nombreRepartidor)).setText(repartidor.getNombre());
+        EditText correo=view.findViewById(R.id.editEmailRepartidor);
+        EditText telefono=view.findViewById(R.id.editTelefonoRepartidor);
+        correo.setHint(repartidor.getCorreo());
+        telefono.setHint(repartidor.getNumTelefono());
+        ((ImageButton)view.findViewById(R.id.btnEditCorreo)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                correo.setEnabled(true);
+                correo.requestFocus();
+                telefono.setEnabled(false);
+                showTeclado(correo);
+            }
+        });
+
+        ((ImageButton)view.findViewById(R.id.btnEditTelefono)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                telefono.setEnabled(true);
+                telefono.requestFocus();
+                correo.setEnabled(false);
+                showTeclado(telefono);
+            }
+        });
+        return view;
+    }
+
+    public void showTeclado(EditText editText){
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
     }
 }
