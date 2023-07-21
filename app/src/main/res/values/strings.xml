@@ -51,4 +51,6 @@
     <string name="selecionUbicacion">Seleccione su ubicacion de entrega</string>
 <string name="entregar">Entregar Pedido</string>
     <string name="productos">Productos:</string>
+
+    <string name="actualizar">Actualizar Información</string>
 </resources>

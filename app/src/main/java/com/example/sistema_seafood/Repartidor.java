@@ -1,8 +1,12 @@
 package com.example.sistema_seafood;
 
+import android.graphics.Bitmap;
+
 public class Repartidor {
     private String nombre, numTelefono,correo;
     private Ubicacion ubicacion;
+
+    private Bitmap bitmap;
 
     public Repartidor(String nombre, String numTelefono, String correo, Ubicacion ubicacion) {
         this.nombre = nombre;
@@ -46,5 +50,13 @@ public class Repartidor {
     public boolean tomarPedido(Pedido pedido){
         pedido.setRepartidor(this);
         return true;
+    }
+
+    public void setImage(){
+
+    }
+
+    public void consultarImagen(){
+
     }
 }
