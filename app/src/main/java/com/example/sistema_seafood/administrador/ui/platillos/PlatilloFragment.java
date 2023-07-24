@@ -19,7 +19,7 @@ import android.widget.GridView;
 import com.example.sistema_seafood.Categoria;
 import com.example.sistema_seafood.models.Platillo;
 import com.example.sistema_seafood.R;
-import com.example.sistema_seafood.administrador.AdaptadorPlatillo;
+import com.example.sistema_seafood.administrador.ui.AdaptadorPlatillo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -91,7 +91,7 @@ public class PlatilloFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        vista=inflater.inflate(R.layout.fragment_platillo, container, false);
+        vista=inflater.inflate(R.layout.fragment_platillo_admin, container, false);
 
         contenedorPlatillos = vista.findViewById(R.id.contenedorPlatillos);
         adaptadorPlatillo = new AdaptadorPlatillo(getContext());

@@ -78,7 +78,7 @@ public class Categoria {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                             // Carga el archivo temporal en un Bitmap
-                            imagen =BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                            imagen = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                             imageView.setImageBitmap(imagen);
                         }
                     })
@@ -95,7 +95,11 @@ public class Categoria {
     }
 
     public Bitmap getImagen() {
+
         return imagen;
     }
 
+    public QueryDocumentSnapshot getDocumentReference() {
+        return documentReference;
+    }
 }

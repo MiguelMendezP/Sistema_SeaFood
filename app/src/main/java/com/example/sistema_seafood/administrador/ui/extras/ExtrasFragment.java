@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sistema_seafood.Extra;
 import com.example.sistema_seafood.R;
-import com.example.sistema_seafood.administrador.AdapterExtras;
+import com.example.sistema_seafood.administrador.ui.AdapterExtras;
 import com.example.sistema_seafood.databinding.FragmentExtrasBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

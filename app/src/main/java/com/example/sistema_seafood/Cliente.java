@@ -22,6 +22,7 @@ public class Cliente {
         this.pedidos=pedidos;
     }
 
+
     public String getNombre() {
         return nombre;
     }

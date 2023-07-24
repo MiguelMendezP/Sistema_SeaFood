@@ -54,6 +54,13 @@
         tools:layout="@layout/fragment_repartidor" />
 
     <fragment
+        android:id="@+id/nav_agregarRepartidor"
+        android:name="com.example.sistema_seafood.administrador.ui.repartidor.agregarRepartidor"
+        android:label=" "
+        tools:layout="@layout/fragment_agregar_repartidor" />
+
+
+    <fragment
         android:id="@+id/nav_ayuda"
         android:name="com.example.sistema_seafood.administrador.ui.ayuda.AyudaFragment"
         android:label=" "

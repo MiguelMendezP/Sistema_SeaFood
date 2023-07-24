@@ -12,6 +12,7 @@ public class Pedido {
 
     private DocumentReference documentReference;
 
+
     public String getCorreoCliente() {
         return correoCliente;
     }
@@ -68,6 +69,7 @@ public class Pedido {
         this.productos = productos;
         this.total = total;
     }
+
 
     public String getReferencia() {
         return referencia;

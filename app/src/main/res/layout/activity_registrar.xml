@@ -36,8 +36,10 @@
                 android:layout_marginTop="32dp"
                 android:background="@drawable/background_edit"
                 android:ems="10"
-                android:gravity="center"
                 android:hint="Nombre"
+                android:paddingLeft="20dp"
+                android:textColor="#808080"
+                android:textColorHint="@color/gris"
                 android:inputType="text" />
 
             <EditText
@@ -47,8 +49,10 @@
                 android:layout_marginTop="32dp"
                 android:background="@drawable/background_edit"
                 android:ems="10"
-                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:textColor="#808080"
                 android:hint="Correo"
+                android:textColorHint="@color/gris"
                 android:inputType="textEmailAddress" />
 
             <EditText
@@ -58,8 +62,10 @@
                 android:layout_marginTop="32dp"
                 android:background="@drawable/background_edit"
                 android:ems="10"
-                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:textColor="#808080"
                 android:hint="Contraseña"
+                android:textColorHint="@color/gris"
                 android:inputType="textPassword" />
 
             <EditText
@@ -69,8 +75,10 @@
                 android:layout_marginTop="32dp"
                 android:background="@drawable/background_edit"
                 android:ems="10"
-                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:textColor="#808080"
                 android:hint="Confirme Contraseña"
+                android:textColorHint="@color/gris"
                 android:inputType="textPassword" />
 
             <EditText
@@ -80,8 +88,10 @@
                 android:layout_marginTop="32dp"
                 android:background="@drawable/background_edit"
                 android:ems="10"
-                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:textColor="#808080"
                 android:hint="Telefono"
+                android:textColorHint="@color/gris"
                 android:inputType="phone" />
 
             <androidx.appcompat.widget.AppCompatButton

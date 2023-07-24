@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
@@ -25,6 +27,34 @@ public class Repartidor {
         this.numTelefono = numTelefono;
         this.correo = correo;
         this.ubicacion = ubicacion;
+    }
+
+    private String referenciaImagen;
+    private String contrasenia;
+    private String rol;
+    public Repartidor(String referenciaImagen, String correo, String nombre, String contrasenia, String numero, String rol) {
+        this.referenciaImagen = referenciaImagen;
+        this.nombre = nombre;
+        this.numTelefono = numTelefono;
+        this.correo = correo;
+        this.contrasenia = contrasenia;
+        this.rol = rol;
+    }
+
+    public String getContrasenia() {
+        return contrasenia;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public String getReferenciaImagen() {
+        return referenciaImagen;
+    }
+
+    public void setReferenciaImagen(String referenciaImagen) {
+        this.referenciaImagen = referenciaImagen;
     }
 
     public String getNombre() {
@@ -68,14 +98,16 @@ public class Repartidor {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
     private QueryDocumentSnapshot documentReference;
+
     public void mostrarImagen(ImageView imageView){
-        String path = correo.toLowerCase()+".jpg";
+        String path = referenciaImagen+".jpg";
+        System.out.println(path);
+
         try {
             // Crea un archivo temporal para almacenar la imagen
-            File localFile = File.createTempFile(correo.toLowerCase(),"jpg");
-
+            File localFile = File.createTempFile(referenciaImagen.toLowerCase(), "jpg");
             // Descarga la imagen desde Firebase Cloud Storage al archivo temporal
-            storageRef.child("categorias").getFile(localFile)
+            storageRef.child("usuarios").child(path).getFile(localFile)
                     .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
@@ -87,6 +119,7 @@ public class Repartidor {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            imageView.setImageResource(R.drawable.perfil);
                             // Manejar errores en caso de que la descarga falle
                         }
                     });

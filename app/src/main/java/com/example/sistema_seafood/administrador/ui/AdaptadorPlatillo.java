@@ -1,4 +1,4 @@
-package com.example.sistema_seafood.administrador;
+package com.example.sistema_seafood.administrador.ui;
 
 import android.content.Context;
 import android.os.Build;
@@ -8,44 +8,49 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.RequiresApi;
 
 import com.example.sistema_seafood.Categoria;
+import com.example.sistema_seafood.models.Platillo;
 import com.example.sistema_seafood.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdaptadorCategoria extends BaseAdapter {
+public class AdaptadorPlatillo extends BaseAdapter {
     public Context context;
-    private static List<Categoria> categorias;
+    private static List<Platillo> platillos;
 
-    public static Categoria getCat(String name){
-        for (Categoria categoria: categorias){
-            if (categoria.getNombre().equals(name)){
-                return categoria;
+    private Categoria categoria;
+
+    public static Platillo getPlatillo(String nombre){
+        for (Platillo platillo:platillos){
+            if(platillo.getNombre().equals(nombre)){
+                return platillo;
             }
         }
         return null;
     }
 
-
-    public Categoria getCategoria(int position){
-
-        return categorias.get(position);
+    public Platillo getPlatillo(int position){
+        return platillos.get(position);
     }
 
-    public AdaptadorCategoria(Context context){
+
+    public AdaptadorPlatillo(Context context){
         this.context=context;
-        this.categorias =new ArrayList<>();
+        this.platillos= new ArrayList<>();
+        this.categoria = categoria;
     }
 
-    public void add(Categoria categoria){
-        categorias.add(categoria);
+    public void add(Platillo platillo){
+        platillos.add(platillo);
         this.notifyDataSetChanged();
     }
     @Override
     public int getCount() {
-        return categorias.size();
+        return platillos.size();
     }
 
     @Override
@@ -64,8 +69,8 @@ public class AdaptadorCategoria extends BaseAdapter {
         View v;
         LayoutInflater layoutInflater=LayoutInflater.from(context);
         v= layoutInflater.inflate(R.layout.card_categoria,null);
-        Categoria aux= categorias.get(i);
-        ImageView imageView=v.findViewById(R.id.imgCategoria);
+        Platillo aux = platillos.get(i);
+        ImageView imageView = v.findViewById(R.id.imgCategoria);
         TextView title=v.findViewById(R.id.titular);
         aux.mostrarImagen(imageView);
         title.setText(aux.getNombre());

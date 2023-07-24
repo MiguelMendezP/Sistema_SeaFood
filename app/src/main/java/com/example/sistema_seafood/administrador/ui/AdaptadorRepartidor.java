@@ -36,10 +36,12 @@ public class AdaptadorRepartidor extends RecyclerView.Adapter<AdaptadorRepartido
     @Override
     public void onBindViewHolder(@NonNull AdaptadorRepartidor.MyViewHolder holder, int position) {
         Repartidor repartidor = repartidores.get(position);
-
+        System.out.println(repartidor.getNombre());
         holder.nombreRepartidor.setText(repartidor.getNombre());
         holder.correoRepartidor.setText(repartidor.getCorreo());
         holder.iconRepartidor.setImageBitmap(repartidor.getImagen());
+        repartidor.mostrarImagen(holder.iconRepartidor);
+
     }
 
     @Override
