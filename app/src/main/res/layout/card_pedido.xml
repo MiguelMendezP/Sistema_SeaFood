@@ -18,18 +18,46 @@
         android:padding="5dp">
 
         <TextView
-            android:id="@+id/nombreCliente"
+            android:id="@+id/datePedido"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
+            android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/direccionCliente"
+            android:id="@+id/direccionPedido"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView" />
+
+        <LinearLayout
+            android:id="@+id/listaProductosPedido"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/productos"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/viewTotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textAlignment="textEnd"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            android:textStyle="bold|italic" />
 
         <Button
             android:id="@+id/btnAceptarPedido"
