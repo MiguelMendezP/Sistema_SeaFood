@@ -76,6 +76,7 @@ public class AdaptadorHistorialPedidos extends BaseAdapter {
             textView.setText(producto.get("cantidad").toString() + producto.get("producto").toString());
             linearLayout.addView(textView);
         }
+
         return v;
     }
 }

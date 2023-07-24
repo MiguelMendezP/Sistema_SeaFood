@@ -82,6 +82,7 @@ private View view;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_carrito, container, false);
+        HomeCliente.setTitulo("Carrito");
         spinner=view.findViewById(R.id.spinner);
         contenedorProductosOrdenados =view.findViewById(R.id.contenedorProductosOrd);
         adaptadorProductosOrdenados=new AdaptadorProductosOrdenados(getContext());
@@ -117,11 +118,11 @@ private View view;
             }
         });
 
-        ((TextView)view.findViewById(R.id.envio)).setText("$ 30");
+        ((TextView)view.findViewById(R.id.envio)).setText("30.0");
         total=((TextView) view.findViewById(R.id.total));
         subtotal=((TextView) view.findViewById(R.id.subtotalCarrito));
-        total.setText("$ "+(HomeCliente.getCarrito().getTotal()+30));
-        subtotal.setText("$ "+HomeCliente.getCarrito().getTotal());
+        total.setText((HomeCliente.getCarrito().getTotal()+30)+"");
+        subtotal.setText(HomeCliente.getCarrito().getTotal()+"");
 
         ((Button)view.findViewById(R.id.btnPedir)).setOnClickListener(new View.OnClickListener() {
             @Override

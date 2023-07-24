@@ -10,7 +10,7 @@
 
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/emailUserCliente"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Aquí puedes ver las categorías"
@@ -55,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@+id/textView">
+        app:layout_constraintBottom_toBottomOf="@+id/emailUserCliente">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_agregarCategoria"

@@ -45,7 +45,7 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
-                android:background="@color/descuento"
+                android:background="@color/amarillo"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="TextView"
                 android:textAlignment="center"

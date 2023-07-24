@@ -24,6 +24,7 @@ import com.example.sistema_seafood.Pedido;
 import com.example.sistema_seafood.R;
 import com.example.sistema_seafood.Repartidor;
 import com.example.sistema_seafood.Ubicacion;
+import com.example.sistema_seafood.Utils;
 import com.example.sistema_seafood.repartidor.EnvioFragment;
 import com.example.sistema_seafood.repartidor.HistorialFragment;
 import com.example.sistema_seafood.repartidor.PerfilRepartidorFragment;
@@ -62,21 +63,24 @@ public static Bitmap bitmap;
 
     private StorageReference storageRef= FirebaseStorage.getInstance().getReference();
 
+    private CambiasPasswordRepartidor cambiasPasswordRepartidor;
+
 private PedidosDisponiblesRepartidor pedidosDisponiblesRepartidor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        consultarUsuario();
         login();
         setContentView(R.layout.activity_home_repartidor);
-
+        consultarUsuario();
         envioFragment=new EnvioFragment();
         historialFragment=new HistorialFragment();
         perfil=new PerfilRepartidorFragment();
         pedidosDisponiblesRepartidor= new PedidosDisponiblesRepartidor();
+        cambiasPasswordRepartidor=new CambiasPasswordRepartidor();
         bottomNavigationView = findViewById(R.id.barraNavegacion);
         setupBottomMenu();
-        loadProfilePhotoUrl();
+        Utils.getImageProfile(this);
+
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -109,7 +113,7 @@ private PedidosDisponiblesRepartidor pedidosDisponiblesRepartidor;
     }
 
     public void consultarUsuario(){
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("usuarios").document("jose@gmail.com");
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("usuarios").document(mAuth.getCurrentUser().getEmail());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -124,6 +128,7 @@ private PedidosDisponiblesRepartidor pedidosDisponiblesRepartidor;
                         Ubicacion ubic=new Ubicacion(latitud,longitud);
                         String numTelefono=document.getString("numero");
                         repartidor=new Repartidor(nombre,numTelefono,correo,ubic);
+                        repartidor.setDocumentReference(document.getReference());
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -142,7 +147,7 @@ private PedidosDisponiblesRepartidor pedidosDisponiblesRepartidor;
     }
 
     public void login(){
-        mAuth.signInWithEmailAndPassword("dario@gmail.com", "jose16")
+        mAuth.signInWithEmailAndPassword("jose@gmail.com", "jose123")
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -162,7 +167,13 @@ private PedidosDisponiblesRepartidor pedidosDisponiblesRepartidor;
        bottomNavigationView.setSelectedItemId(R.id.envio);
     }
 
+    public void showChangePass(){
+        showFragment(cambiasPasswordRepartidor);
+    }
 
+    public void showPerfil(){
+        showFragment(perfil);
+    }
 
 
 
@@ -176,46 +187,5 @@ private PedidosDisponiblesRepartidor pedidosDisponiblesRepartidor;
 
     public Repartidor getRepartidor(){
         return repartidor;
-    }
-
-    private void loadProfilePhotoUrl() {
-        StorageReference profilePhotoRef = storageRef.child("usuarios").child(mAuth.getCurrentUser().getUid()+".jpg");
-
-        // Obtener la URL de descarga del archivo
-        profilePhotoRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                // Aquí tienes la URL de descarga del archivo
-                String profilePhotoUrl = uri.toString();
-
-                // Cargar la imagen desde la URL de descarga utilizando Picasso
-                Picasso.get()
-                        .load(profilePhotoUrl)
-                        .into(new Target() {
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                // Aquí tienes el bitmap descargado
-                                HomeRepartidor.bitmap=bitmap;
-                            }
-
-                            @Override
-                            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                                // Manejar el error si la descarga falla
-                                Log.e("ProfileActivity", "Error al cargar la imagen: " + e.getMessage());
-                            }
-
-                            @Override
-                            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                                // Aquí puedes realizar alguna acción mientras se carga la imagen
-                            }
-                        });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // Manejar el error si no se puede obtener la URL de descarga
-                Log.e("ProfileActivity", "Error al obtener la URL de descarga: " + e.getMessage());
-            }
-        });
     }
 }

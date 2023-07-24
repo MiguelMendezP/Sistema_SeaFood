@@ -22,8 +22,7 @@ import java.util.Map;
 public class Categoria {
     private String nombre;
     private List<Platillo> platillos,platillosConDescuento;
-
-    private Bitmap imagen;
+    public static Bitmap imagen;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
     private QueryDocumentSnapshot documentReference;
@@ -68,33 +67,34 @@ public class Categoria {
 
     public void mostrarImagen(ImageView imageView){
         String path = nombre.toLowerCase()+".jpg";
-        try {
-            // Crea un archivo temporal para almacenar la imagen
-            File localFile = File.createTempFile(nombre.toLowerCase(),"jpg");
+            try {
+                // Crea un archivo temporal para almacenar la imagen
+                File localFile = File.createTempFile(nombre.toLowerCase(),"jpg");
 
-            // Descarga la imagen desde Firebase Cloud Storage al archivo temporal
-            storageRef.child("categorias").child(nombre.toLowerCase()).child(path).getFile(localFile)
-                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            // Carga el archivo temporal en un Bitmap
-                            imagen =BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                            imageView.setImageBitmap(imagen);
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // Manejar errores en caso de que la descarga falle
-                        }
-                    });
+                // Descarga la imagen desde Firebase Cloud Storage al archivo temporal
+                storageRef.child("categorias").child(nombre.toLowerCase()).child(path).getFile(localFile)
+                        .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                // Carga el archivo temporal en un Bitmap
+                                imagen =BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                                imageView.setImageBitmap(imagen);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Manejar errores en caso de que la descarga falle
+                            }
+                        });
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
     }
 
-    public Bitmap getImagen() {
+    public static Bitmap getImagen() {
         return imagen;
     }
 

@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sistema_seafood.Carrito;
+import com.example.sistema_seafood.ObtenerUbicacionFragment;
 import com.example.sistema_seafood.Pedido;
 import com.example.sistema_seafood.ProductoOrdenado;
 import com.example.sistema_seafood.R;
@@ -100,6 +101,8 @@ public class ConfirmarFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_confirmar, container, false);
+        HomeCliente.setTitulo("Confirmar Pedido");
+
         linearProducto=view.findViewById(R.id.linearProducto);
         linearTotal=view.findViewById(R.id.linearTotal);
 
@@ -124,6 +127,7 @@ public class ConfirmarFragment extends Fragment {
         btnAgregarDireccion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ObtenerUbicacionFragment.motivo="ubicacionEntrega";
                 Navigation.findNavController(view).navigate(R.id.nav_nueva_ubicacion);
             }
         });

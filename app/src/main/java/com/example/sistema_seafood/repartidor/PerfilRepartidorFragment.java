@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -23,8 +24,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.sistema_seafood.MainActivity;
 import com.example.sistema_seafood.R;
 import com.example.sistema_seafood.Repartidor;
+import com.example.sistema_seafood.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -56,9 +59,7 @@ public class PerfilRepartidorFragment extends Fragment {
     private View view;
     ImageView imageView;
 
-    private FirebaseAuth mAuth=FirebaseAuth.getInstance();
     private Uri selectedImageUri;
-    private StorageReference storageRef= FirebaseStorage.getInstance().getReference();
 
     private Repartidor repartidor;
     public PerfilRepartidorFragment() {
@@ -90,6 +91,13 @@ public class PerfilRepartidorFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                ((HomeRepartidor)getActivity()).showInicio();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Override
@@ -112,31 +120,62 @@ public class PerfilRepartidorFragment extends Fragment {
             public void onClick(View v) {
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
+                Utils.uploadImageProfile(selectedImageUri,getContext());
             }
         });
-        ((ImageButton)view.findViewById(R.id.btnEditCorreo)).setOnClickListener(new View.OnClickListener() {
+        ((Button)view.findViewById(R.id.btnCerrarSesion)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                correo.setEnabled(true);
-                correo.requestFocus();
-                telefono.setEnabled(false);
-                showTeclado(correo);
-            }
-        });
-
-        ((ImageButton)view.findViewById(R.id.btnEditTelefono)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                telefono.setEnabled(true);
-                telefono.requestFocus();
-                correo.setEnabled(false);
-                showTeclado(telefono);
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                startActivity(intent);
+                getActivity().finish();
             }
         });
         ((Button)view.findViewById(R.id.btnActualizar)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadPhoto(selectedImageUri);
+                if(correo.getText().toString().equals("") && telefono.getText().toString().equals("")){
+                    Toast.makeText(getContext(),"Campos vacíos",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if(!correo.getText().toString().equals("")){
+                        FirebaseAuth.getInstance().getCurrentUser().updateEmail(correo.getText().toString())
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            // El correo electrónico se actualizó exitosamente.
+                                            Toast.makeText(getContext(), "Revise su bandeja de entrada y confirme el cambio", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            // Ocurrió un error al actualizar el correo electrónico.
+                                            Toast.makeText(getContext(), "Error al actualizar el correo electrónico", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                        repartidor.getDocumentReference().update("correo",correo.getText().toString());
+                        correo.setHint(correo.getText().toString());
+                        correo.setText("");
+                        correo.clearFocus();
+
+                    }
+                    if(!telefono.getText().toString().equals("")){
+                        repartidor.getDocumentReference().update("numero",telefono.getText().toString());
+                        telefono.setHint(telefono.getText().toString());
+                        telefono.setText("");
+                        telefono.clearFocus();
+
+                    }
+                    Toast.makeText(getContext(),"Información actualizada",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+        ((Button)view.findViewById(R.id.btnChangePassRepartidor)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeRepartidor)getActivity()).showChangePass();
             }
         });
         return view;
@@ -149,27 +188,6 @@ public class PerfilRepartidorFragment extends Fragment {
             selectedImageUri = data.getData();
             imageView.setImageURI(selectedImageUri);
 
-        }
-    }
-    private void uploadPhoto(Uri imageUri) {
-        if (imageUri != null) {
-            StorageReference photoRef = storageRef.child("usuarios").child(mAuth.getCurrentUser().getUid() + ".jpg");
-
-            photoRef.putFile(imageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            // Foto subida exitosamente
-                            Toast.makeText(getContext(), "Foto de perfil actualizada.", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // Error al subir la foto
-                            Log.e("ProfileActivity", "Error al subir la foto: " + e.getMessage());
-                        }
-                    });
         }
     }
 

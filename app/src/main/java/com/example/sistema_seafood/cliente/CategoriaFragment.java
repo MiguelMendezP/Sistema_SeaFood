@@ -15,10 +15,12 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.example.sistema_seafood.Categoria;
+import com.example.sistema_seafood.Platillo;
 import com.example.sistema_seafood.R;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,19 +37,16 @@ public class CategoriaFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private Categoria categoria;
-private String nombreCategoria;
+
+    public static Categoria categoria;
     private View vista;
     private GridView contenedorPlatillos;
     private AdaptadorPlatillo adaptadorPlatillo;
 
+
     public CategoriaFragment() {
         // Required empty public constructor
         //this.categoria=new Categoria("EXAMPLE",null);
-    }
-
-    public CategoriaFragment(Categoria categoria){
-        this.categoria=categoria;
     }
 
     public void setCategoria(Categoria categoria){
@@ -78,7 +77,6 @@ private String nombreCategoria;
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-            nombreCategoria=getArguments().getString("categoria");
         }
     }
 
@@ -88,19 +86,17 @@ private String nombreCategoria;
         // Inflate the layout for this fragment
         vista=inflater.inflate(R.layout.fragment_categoria, container, false);
         contenedorPlatillos =vista.findViewById(R.id.contenedorPlatillos);
-        adaptadorPlatillo=new AdaptadorPlatillo(getContext(),AdaptadorCategoria.getCat(nombreCategoria));
+        adaptadorPlatillo=new AdaptadorPlatillo(getContext(),categoria);
+        HomeCliente.setTitulo(categoria.getNombre());
         contenedorPlatillos.setAdapter(adaptadorPlatillo);
         contenedorPlatillos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Toast.makeText(getContext(),adaptadorPlatillo.getPlatillo(i).getNombre(),Toast.LENGTH_SHORT).show();
                 PlatilloFragment.setPlatillo(adaptadorPlatillo.getPlatillo(i));
                 Navigation.findNavController(view).navigate(R.id.nav_platillo);
-                // Obtener el FragmentManager
             }
         });
-
         return vista;
     }
 }

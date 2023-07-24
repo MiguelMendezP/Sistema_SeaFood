@@ -61,10 +61,7 @@ public class registrar extends AppCompatActivity {
                             item.put("contrasenia",contrasenia);
                             item.put("numero",numero);
                             item.put("rol","cliente");
-
-
                             db.collection("usuarios").document(correo).set(item);
-
                             Toast.makeText(registrar.this, "Usuario creado con exito", Toast.LENGTH_SHORT).show();
                             //finish();
                         }else{

@@ -2,36 +2,31 @@ package com.example.sistema_seafood.cliente;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sistema_seafood.Carrito;
-import com.example.sistema_seafood.Categoria;
 import com.example.sistema_seafood.Cliente;
 import com.example.sistema_seafood.Extra;
+import com.example.sistema_seafood.MainActivity;
 import com.example.sistema_seafood.Pedido;
 import com.example.sistema_seafood.Platillo;
 import com.example.sistema_seafood.R;
 import com.example.sistema_seafood.Ubicacion;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.example.sistema_seafood.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -53,52 +48,51 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class HomeCliente extends AppCompatActivity {
-
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityHomeClienteBinding binding;
 
     public static ArrayList<Extra> extras=new ArrayList<>();
 
-    private Fragment fragment;
-
-    private ArrayList<Platillo> platillos;
+    public static Bitmap imgProfile;
+    public static ImageView imageView;
     public static Carrito carrito=new Carrito();
+
+    public static NavController navController;
+
     private static FloatingActionButton floatingActionButton;
 
     public static Pedido pedido;
+
     private FirebaseAuth mAuth=FirebaseAuth.getInstance();
 
     public static Cliente cliente;
+    public static TextView titulo;
+    private TextView user,email;
 
-    private TextView titulo;
-    private float originalX, originalY;
+    public static List<Platillo> platillos=new ArrayList<>();
+
+    public static List<Platillo> platillosFavoritos=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        login();
+        Utils.getImageProfile(this);
         binding = ActivityHomeClienteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         titulo=findViewById(R.id.title);
         setSupportActionBar(binding.appBarHomeCliente.toolbar);
-
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home,R.id.nav_opcion1 ,R.id.nav_opcion2 ,R.id.nav_opcion3 ,R.id.nav_opcion4 ,R.id.nav_opcion5 ,R.id.nav_perfil, R.id.nav_favoritos,R.id.nav_pedidos,R.id.nav_ayuda,R.id.nav_categoria,R.id.nav_envio, R.id.nav_platillo,R.id.nav_carrito,R.id.nav_confirmar,R.id.nav_nueva_ubicacion)
+                R.id.nav_home,R.id.nav_opcion1 ,R.id.nav_opcion2 ,R.id.nav_opcion3 ,R.id.nav_opcion4 ,R.id.nav_opcion5 ,R.id.nav_perfil, R.id.nav_favoritos,R.id.nav_pedidos,R.id.nav_ayuda,R.id.nav_categoria,R.id.nav_envio, R.id.nav_platillo,R.id.nav_carrito,R.id.nav_confirmar,R.id.nav_nueva_ubicacion,R.id.nav_change_pass, R.id.nav_cerrar_sesion)
                 .setOpenableLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home_cliente);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home_cliente);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         binding.appBarHomeCliente.fab.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +101,8 @@ public class HomeCliente extends AppCompatActivity {
                 navController.navigate(R.id.nav_envio);
             }
         });
+
+
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -126,8 +122,12 @@ public class HomeCliente extends AppCompatActivity {
                 else if(item.getItemId()==R.id.nav_pedidos){
                     setTitulo("Pedidos");
                     navController.navigate(R.id.nav_pedidos);
-                }
-                else{
+                } else if (item.getItemId()==R.id.nav_cerrar_sesion) {
+                    FirebaseAuth.getInstance().signOut();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else{
                     setTitulo("Ayuda");
                     navController.navigate(R.id.nav_ayuda);
                 }
@@ -135,12 +135,29 @@ public class HomeCliente extends AppCompatActivity {
                 return true;
             }
         });
-        consultarUsuario();
-
+        consultarUsuario(getIntent().getStringExtra("correo"));
+        TextView textView=new TextView(this);
+        textView.setText("a ver que show");
+        imageView=(ImageView)binding.navView.getHeaderView(0).findViewById(R.id.imgClienteMenu);
+        user=(TextView) binding.navView.getHeaderView(0).findViewById(R.id.nameUser);
+        email=(TextView) binding.navView.getHeaderView(0).findViewById(R.id.emailUserCliente);
         floatingActionButton=findViewById(R.id.fab);
         floatingActionButton.setVisibility(View.INVISIBLE);
+
+        ((ImageView)findViewById(R.id.btnCarrito)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(carrito.getTotal()>0){
+                    navController.navigate(R.id.nav_carrito);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(),"Su carrito se encuentra vacío",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         consultarExtras();
     }
+
 
     public static Carrito getCarrito(){
         return carrito;
@@ -150,8 +167,8 @@ public class HomeCliente extends AppCompatActivity {
         return cliente;
     }
 
-    public void consultarUsuario(){
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("usuarios").document("jose@gmail.com");
+    public void consultarUsuario(String correo){
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("usuarios").document(correo);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -160,12 +177,16 @@ public class HomeCliente extends AppCompatActivity {
                     if (document.exists()) {
                         String correo=document.getId();
                         String nombre=document.getString("nombre");
+                        user.setText(nombre);
+                        email.setText(correo);
                         GeoPoint ubicacion = document.getGeoPoint("ubicacion");
                         double latitud = ubicacion.getLatitude();
                         double longitud = ubicacion.getLongitude();
                         Ubicacion ubic=new Ubicacion(latitud,longitud);
                         String numTelefono=document.getString("numero");
-                        cliente=new Cliente(nombre,numTelefono,correo,ubic,new ArrayList<>(),new ArrayList<>());
+                        cliente=new Cliente(nombre,numTelefono,correo,ubic,(ArrayList<String>)document.get("favoritos"),new ArrayList<>());
+                        cliente.setDireccion(Utils.getAddressFromLatLng(getApplicationContext(),latitud,longitud));
+                        cliente.setDocumentReference(docRef);
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -180,38 +201,15 @@ public class HomeCliente extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         return false;
     }
-
-
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home_cliente);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
-    public void goInicio(){
-        this.titulo.setText("Bienvenido");
+    public static void setTitulo(String titulo){
+        HomeCliente.titulo.setText(titulo);
     }
-    public void setTitulo(String titulo){
-        this.titulo.setText(titulo);
-    }
-
-    public void login(){
-        mAuth.signInWithEmailAndPassword("dario@gmail.com", "jose16")
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(getApplicationContext(),"Usario y/o contradeñas incorrectas",Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        }
-                );
-    }
-
     public void consultarExtras(){
         FirebaseFirestore.getInstance().collection("extras")
                 .get()
@@ -229,7 +227,7 @@ public class HomeCliente extends AppCompatActivity {
                     }
                 });
     }
-//
+
     public static ArrayList<Extra> getExtras(){
         return extras;
     }

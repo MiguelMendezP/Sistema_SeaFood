@@ -53,8 +53,12 @@
     <string name="ubicacionGuardada">Usar dirección guardada</string>
     <string name="nuevaubicacion">Nueva Ubicación</string>
     <string name="selecionUbicacion">Seleccione su ubicacion de entrega</string>
-<string name="entregar">Entregar Pedido</string>
+    <string name="entregar">Entregar Pedido</string>
     <string name="productos">Productos:</string>
+    <string name="currentPass">Contraseña actual</string>
+    <string name="newPass">Nueva Contraseña</string>
+    <string name="confirmPass">Confirmar contraseña</string>
+    <string name="changePass">Cambiar contraseña</string>
 
     <string name="actualizar">Actualizar Información</string>
     <string name="title_home">Inicio</string>
@@ -63,4 +67,13 @@
 
     <string name="title_activity_inicio_admin">inicioAdminActivity</string>
     <string name="title_activity_inicio_cliente">inicioCliente</string>
+    <string name="saveChanges">Guardar Cambios</string>
+    <string name="calificar">Calificar</string>
+    <string name="volveraPedir">Volver a pedir</string>
+    <string name="subtotal">Subtotal:</string>
+    <string name="envio">Envío:</string>
+    <string name="tot">Total:</string>
+    <string name="moneda">$</string>
+    <string name="trazarRuta">Trazar ruta</string>
+    <string name="cerrarSesion">Cerrar sesión</string>
 </resources>

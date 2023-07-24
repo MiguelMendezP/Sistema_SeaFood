@@ -5,6 +5,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -82,6 +83,13 @@ public class HistorialFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                ((HomeRepartidor)getActivity()).showInicio();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
 
@@ -97,7 +105,7 @@ public class HistorialFragment extends Fragment {
                             //Toast.makeText(getContext(),repartidor,Toast.LENGTH_SHORT).show();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if(document.getString("repartidor").equals(repartidor) && document.getString("estado").equals("entregado")){
-                                    PedidoRepartidor pedido=new PedidoRepartidor(document.getString("cliente"),document.getString("estado"),document.getDate("fecha"), (ArrayList<Map>) document.get("productos"), document.getGeoPoint("ubicacion"),document.getReference(),document.getString("direccion"));
+                                    PedidoRepartidor pedido=new PedidoRepartidor(document.getString("cliente"),document.getString("estado"),document.getDate("fecha"), (ArrayList<Map>) document.get("productos"), document.getGeoPoint("ubicacion"),document.getReference(),document.getString("direccion"),document.getGeoPoint("ubicacionPedido"),document.getDouble("total"));
                                     adaptadorHistorialPedidos.add(pedido);
                                 }
 

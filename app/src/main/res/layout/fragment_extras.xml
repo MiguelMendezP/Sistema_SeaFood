@@ -9,7 +9,7 @@
     tools:context=".administrador.ui.extras.ExtrasFragment">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/emailUserCliente"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Aquí puedes ver los productos extras"

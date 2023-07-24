@@ -63,16 +63,20 @@ public class MainActivity extends AppCompatActivity {
                                 if (itemsUsuaarios.get(i).getCorreo().equals(correo)) {
                                     if (itemsUsuaarios.get(i).getRol().equals("cliente")) {
                                         Intent menuCliente = new Intent(MainActivity.this, HomeCliente.class);
+                                        menuCliente.putExtra("correo",itemsUsuaarios.get(i).getCorreo());
                                         startActivity(menuCliente);
+                                        finish();
                                         break;
                                     } else if (itemsUsuaarios.get(i).getRol().equals("repartidor")) {
                                         Intent menuRepartidor = new Intent(MainActivity.this, HomeRepartidor.class);
                                         startActivity(menuRepartidor);
+                                        finish();
                                         break;
 
                                     } else if (itemsUsuaarios.get(i).getRol().equals("admin")) {
                                         Intent menuAdmin = new Intent(MainActivity.this, InicioAdmin.class);
                                         startActivity(menuAdmin);
+                                        finish();
                                         break;
                                     }
                                 }

@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.sistema_seafood.cliente.ConfirmarFragment;
+import com.example.sistema_seafood.cliente.HomeCliente;
+import com.example.sistema_seafood.cliente.PerfilFragment;
 import com.example.sistema_seafood.repartidor.ObtenerCoordenadas;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -44,6 +46,8 @@ public class ObtenerUbicacionFragment extends Fragment implements OnMapReadyCall
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    public static String motivo;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -94,16 +98,31 @@ public class ObtenerUbicacionFragment extends Fragment implements OnMapReadyCall
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_obtener_ubicacion, container, false);
+        HomeCliente.setTitulo("Ubicación");
         ubicacion=view.findViewById(R.id.showDireccion);
+        TextView showMotivo=view.findViewById(R.id.showMotivo);
+        if(motivo.equals("perfil")){
+            showMotivo.setText("Seleccione su nueva ubicación");
+        }
+        else {
+            showMotivo.setText("Seleccione su ubicación de entrega");
+        }
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapUbicacion);
-        //if(mapFragment!=null)
         mapFragment.getMapAsync(this);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
         ((Button)view.findViewById(R.id.btnConfirmarUbicacion)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConfirmarFragment.direccionEntrega=marker.getPosition();
-                Navigation.findNavController(view).navigate(R.id.nav_confirmar);
+                if(motivo.equals("perfil")){
+                    PerfilFragment.nuevaDireccion=Utils.getAddressFromLatLng(getContext(),marker.getPosition().latitude,marker.getPosition().longitude);
+                    Navigation.findNavController(view).navigate(R.id.nav_perfil);
+                }
+                else {
+                    ConfirmarFragment.direccionEntrega=marker.getPosition();
+                    Navigation.findNavController(view).navigate(R.id.nav_confirmar);
+                }
+
+
             }
         });
         return view;
