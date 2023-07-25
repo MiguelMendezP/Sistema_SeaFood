@@ -93,5 +93,10 @@
         android:name="com.example.sistema_seafood.cliente.CambiarContraseniaCliente"
         android:label=""
         tools:layout="@layout/fragment_cambiar_contrasenia_cliente" />
+    <fragment
+        android:id="@+id/nav_calificar"
+        android:name="com.example.sistema_seafood.cliente.CalificarFragment"
+        android:label=""
+        tools:layout="@layout/fragment_calificar" />
 
 </navigation>

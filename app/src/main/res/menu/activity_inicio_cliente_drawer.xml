@@ -30,7 +30,7 @@
             android:title="@string/menu_repartidores" />
         <item
             android:id="@+id/nav_ayuda"
-            android:icon="@drawable/help"
+            android:icon="@drawable/ayuda"
             android:title="@string/menu_ayuda" />
     </group>
 </menu>

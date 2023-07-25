@@ -70,8 +70,8 @@ public class AdaptadorPlatillo extends BaseAdapter {
         LayoutInflater layoutInflater=LayoutInflater.from(context);
         v= layoutInflater.inflate(R.layout.card_categoria,null);
         Platillo aux = platillos.get(i);
-        ImageView imageView = v.findViewById(R.id.imgCategoria);
-        TextView title=v.findViewById(R.id.titular);
+        ImageView imageView = v.findViewById(R.id.imgValoracion);
+        TextView title=v.findViewById(R.id.tituloCategoria);
         aux.mostrarImagen(imageView);
         title.setText(aux.getNombre());
         return v;

@@ -75,5 +75,6 @@
     <string name="tot">Total:</string>
     <string name="moneda">$</string>
     <string name="trazarRuta">Trazar ruta</string>
+    <string name="comprar">Comprar</string>
     <string name="cerrarSesion">Cerrar sesión</string>
 </resources>

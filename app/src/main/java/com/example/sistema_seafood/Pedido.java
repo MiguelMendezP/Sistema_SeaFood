@@ -1,6 +1,11 @@
 package com.example.sistema_seafood;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Date;
 
@@ -125,16 +130,15 @@ public class Pedido {
         return direccion;
     }
 
+    public String getEstado(){
+        return estado;
+    }
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
 
     public void setUbicacion(Ubicacion ubicacion) {
         this.ubicacion = ubicacion;
-    }
-
-    public String getEstado() {
-        return estado;
     }
 
     public void setEstado(String estado) {

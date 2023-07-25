@@ -14,7 +14,7 @@
             android:title="@string/perfil" />
         <item
             android:id="@+id/nav_favoritos"
-            android:icon="@android:drawable/btn_star"
+            android:icon="@drawable/favorito"
             android:title="@string/favoritos" />
         <item
             android:id="@+id/nav_pedidos"
@@ -22,7 +22,7 @@
             android:title="@string/pedidos" />
         <item
             android:id="@+id/nav_ayuda"
-            android:icon="@android:drawable/ic_menu_help"
+            android:icon="@drawable/help"
             android:title="@string/ayuda" />
         <item
             android:id="@+id/nav_cerrar_sesion"
