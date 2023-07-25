@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EAFBFB"
+    tools:context=".cliente.AyudaFragmentOp5">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#EAFBFB"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingTop="60sp"
+            android:paddingEnd="20dp"
+            android:text="Términos y condiciones"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:background="?android:attr/listDivider"
+            android:textAlignment="center" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardBackgroundColor="#EAFBFB">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="100dp"
+                android:background="#EAFBFB">
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="4sp"
+                    android:padding="10dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="Al utilizar nuestra Aplicación, usted acepta cumplir con estos Términos. Si no está de acuerdo con alguno de los términos aquí establecidos, le recomendamos que no utilice nuestra Aplicación. Uso de la Aplicación: La Aplicación es una plataforma que le permite realizar pedidos de comida a través de nuestro servicio de entrega. Usted acepta utilizar la Aplicación únicamente con fines personales y no comerciales. No puede utilizar la Aplicación de ninguna manera que pueda dañar, deshabilitar o sobrecargar nuestros servidores o interferir con el uso y disfrute de la Aplicación por parte de otros usuarios. Registro de Usuario: Para utilizar la Aplicación, es posible que se le solicite que se registre y cree una cuenta de usuario. Usted garantiza que toda la información proporcionada durante el proceso de registro es precisa y actualizada. Usted es responsable de mantener la confidencialidad de su información de inicio de sesión y de todas las actividades que ocurran en su cuenta. En caso de sospecha de uso no autorizado de su cuenta, debe notificarlo de inmediato a través de nuestros canales de atención al cliente. Pedidos y Pagos: La Aplicación le permite realizar pedidos de alimentos disponibles en nuestro menú. Tenga en cuenta que solo aceptamos pagos en efectivo en el momento de la entrega. No se aceptan tarjetas de crédito ni otros métodos de pago electrónicos. El costo total de su pedido se le informará antes de confirmar su compra. Los precios están sujetos a cambios sin previo aviso. Envío y Entrega: Nos esforzamos por realizar las entregas en el menor tiempo posible. Sin embargo, las estimaciones de tiempo de entrega son solo aproximadas y pueden variar según la ubicación y la disponibilidad de nuestros repartidores. No nos hacemos responsables de los retrasos en la entrega debido a circunstancias ajenas a nuestro control, como condiciones climáticas adversas o congestión del tráfico. Cancelaciones y Reembolsos: Si desea cancelar un pedido después de haberlo realizado, le recomendamos que se comunique con nuestro servicio de atención al cliente lo antes posible. Dependiendo del estado de su pedido, podemos o no procesar la cancelación y ofrecer un reembolso. En caso de que el pedido ya haya sido enviado y no se pueda cancelar, no podremos ofrecer un reembolso. Responsabilidad: Hacemos todo lo posible para garantizar que la información sobre los alimentos, precios y disponibilidad en la Aplicación sea precisa y actualizada. Sin embargo, no garantizamos que la información sea completamente libre de errores. No nos hacemos responsables de cualquier daño, pérdida o inconveniente que pueda surgir del uso de la Aplicación o de la entrega de los alimentos. Modificaciones a los Términos: Nos reservamos el derecho de modificar estos Términos en cualquier momento y sin previo aviso. Cualquier modificación entrará en vigencia a partir de su publicación en la Aplicación. Es su responsabilidad revisar periódicamente los Términos actualizados. El uso continuado de la Aplicación después de cualquier modificación constituirá su aceptación de los nuevos Términos. Al utilizar nuestra Aplicación, usted reconoce haber leído, comprendido y aceptado todos los términos y condiciones establecidos en este documento. Si tiene alguna pregunta o inquietud sobre estos Términos, le recomendamos que se comunique con nuestro equipo de atención al cliente antes de utilizar la Aplicación. Última actualización: 14-17-2023"
+                    android:textAlignment="textStart"
+                    android:textSize="16sp" />
+            </ScrollView>
+
+            <Button
+                android:id="@+id/contactar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="15dp"
+                android:text="Contactar"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF" />
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</FrameLayout>

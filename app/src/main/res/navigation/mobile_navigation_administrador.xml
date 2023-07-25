@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_pedidos">
+
+    <fragment
+        android:id="@+id/nav_extras"
+        android:name="com.example.sistema_seafood.administrador.ui.extras.ExtrasFragment"
+        android:label=""
+        tools:layout="@layout/fragment_extras" />
+
+    <fragment
+        android:id="@+id/nav_categorias"
+        android:name="com.example.sistema_seafood.administrador.ui.categoria.CategoriaFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_categoria_admin" />
+
+    <fragment
+        android:id="@+id/nav_agregarCategoria"
+        android:name="com.example.sistema_seafood.administrador.ui.categoria.agregarCategoria"
+        android:label=" "
+        tools:layout="@layout/fragment_agregar_categoria" />
+
+    <fragment
+        android:id="@+id/nav_platillos"
+        android:name="com.example.sistema_seafood.administrador.ui.platillos.PlatilloFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_platillo_admin" />
+
+    <fragment
+        android:id="@+id/nav_agregarPlatillo"
+        android:name="com.example.sistema_seafood.administrador.ui.platillos.agregarPlatillo"
+        android:label=" "
+        tools:layout="@layout/fragment_agregar_platillo" />
+
+    <fragment
+        android:id="@+id/nav_pedidos"
+        android:name="com.example.sistema_seafood.administrador.ui.pedido.PedidoFragment"
+        android:label=""
+        tools:layout="@layout/fragment_pedido" />
+
+    <fragment
+        android:id="@+id/nav_perfil"
+        android:name="com.example.sistema_seafood.administrador.ui.perfil.PerfilFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_perfil_admin" />
+
+    <fragment
+        android:id="@+id/nav_repartidores"
+        android:name="com.example.sistema_seafood.administrador.ui.repartidor.RepartidorFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_repartidor" />
+
+    <fragment
+        android:id="@+id/nav_agregarRepartidor"
+        android:name="com.example.sistema_seafood.administrador.ui.repartidor.agregarRepartidor"
+        android:label=" "
+        tools:layout="@layout/fragment_agregar_repartidor" />
+
+
+    <fragment
+        android:id="@+id/nav_ayuda"
+        android:name="com.example.sistema_seafood.administrador.ui.ayuda.AyudaFragment"
+        android:label=" "
+        tools:layout="@layout/fragment_ayuda" />
+
+</navigation>

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="30dp"
+    app:cardElevation="12dp"
+    android:layout_margin="16dp"
+    style="@style/MyCardViewStyle">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="end">
+
+                <TextView
+                    android:id="@+id/tv_fecha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DD.MM-AAAA"
+                    android:textSize="14dp"
+                    android:textColor="#C4C4C4"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_cliente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Usuario ficticio"
+                android:textSize="20dp"
+                android:textColor="#7B7B7B"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/tv_ubicacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="123 avenida falsa, colonia ficticia, estado Imaginario"
+                android:textSize="14dp"
+                android:textColor="#C4C4C4"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/tv_precio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Precio : $500.00"
+                android:textSize="18dp"
+                android:textColor="#7B7B7B"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Productos:"
+                android:textSize="14dp"
+                android:textColor="#C4C4C4"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/tv_productos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ensalada"
+                android:textSize="14dp"
+                android:textColor="#C4C4C4"
+                android:textStyle="bold"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_height="1dp"
+                android:background="#C4C4C4" />
+
+        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layoutAcepRech"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_aceptar"
+            style="@android:style/Widget.Button"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_backgroud"
+            android:text="Aceptar"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <View
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_rechazar"
+            style="@android:style/Widget.Button"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_backgroud2"
+            android:text="Rechazar"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutListo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_pedidoListo"
+            style="@android:style/Widget.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/button_backgroud"
+            android:text="Pedido listo"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutDetalles"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:visibility="gone">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_pedidoDetalles"
+                style="@android:style/Widget.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/button_backgroud"
+                android:text="Detalles"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/layoutRechazado"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Haz rechazado este pedido"
+                android:textSize="18dp"
+                android:textColor="#7B7B7B"
+                android:textStyle="bold"/>/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutEnviado"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Su pedido a sido enviado"
+                android:textSize="18dp"
+                android:textColor="#7B7B7B"
+                android:textStyle="bold"/>/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</androidx.cardview.widget.CardView>
