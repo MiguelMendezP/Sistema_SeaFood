@@ -5,15 +5,18 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sistema_seafood.administrador.InicioAdmin;
@@ -33,10 +36,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     ArrayList<usuarioModel> itemsUsuaarios = new ArrayList<>();
@@ -59,12 +65,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         firebaseAuth = FirebaseAuth.getInstance();
-
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
+
+        /*GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
+        googleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // Aquí puedes manejar el resultado del cierre de sesión de Google si es necesario.
+                        // Luego de desautorizar la cuenta de Google, procede a cerrar sesión en FirebaseAuth.
+                        FirebaseAuth.getInstance().signOut();
+                        // Ahora el usuario debería ver el panel de selección de cuenta de Google al iniciar sesión nuevamente.
+                    }
+                });*/
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
@@ -75,39 +92,6 @@ public class MainActivity extends AppCompatActivity {
         btn_registrar = findViewById(R.id.btn_registrar);
         getItemsUsuario();
 
-        SharedPreferences preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
-        nombre = preferences.getString("nombre", "nombre");
-        correo = preferences.getString("correo", "correo");
-        contrasenia = preferences.getString("contrasenia", "contrasenia");
-        rol = preferences.getString("rol", "rol");
-        System.out.println(preferences.getBoolean("estado", true));
-        System.out.println(rol);
-        System.out.println(correo);
-        System.out.println(contrasenia);
-
-        if (preferences.getBoolean("estado", true) == true) {
-            firebaseAuth.signInWithEmailAndPassword(correo, contrasenia).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-
-                        if (rol.equals("cliente")) {
-                            Intent menuCliente = new Intent(MainActivity.this, HomeCliente.class);
-                            startActivity(menuCliente);
-                        } else if (rol.equals("repartidor")) {
-                            Intent menuRepartidor = new Intent(MainActivity.this, HomeRepartidor.class);
-                            startActivity(menuRepartidor);
-                        } else if (rol.equals("admin")) {
-                            Intent menuAdmin = new Intent(MainActivity.this, InicioAdmin.class);
-                            startActivity(menuAdmin);
-
-                        }
-                    } else {
-                        Toast.makeText(MainActivity.this, "Datos incorrectos", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        }
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,22 +136,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ImageView loginFacebook = findViewById(R.id.loginFacebook);
-        loginFacebook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-
-        });
-
-        ImageView loginGoogle = findViewById(R.id.loginGoogle);
+        Button loginGoogle = findViewById(R.id.loginGoogle);
         loginGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signIn();
             }
-
         });
 
         btn_registrar.setOnClickListener(new View.OnClickListener() {
@@ -187,11 +161,6 @@ public class MainActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         updateUI(currentUser);
-    }
-
-    private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     // [START onactivityresult]
@@ -221,10 +190,60 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
                             // Sign in success, update UI with the signed-in user's information
-                            irAdmin();
                             FirebaseUser user = firebaseAuth.getCurrentUser();
-                            updateUI(user);
+
+                            boolean correoExiste = false;
+                            for (usuarioModel usuarioModel : itemsUsuaarios) {
+                                if (usuarioModel.getCorreo().equals(user.getEmail())) {
+                                    // El correo ya existe en algún usuario
+                                    correoExiste = true;
+                                    break; // Termina el bucle, ya que encontraste el correo buscado
+                                }
+                            }
+
+                            if (correoExiste) {
+                                updateUI(user);
+                            } else {
+                                AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
+                                LayoutInflater inflater = getLayoutInflater();
+                                View view = inflater.inflate(R.layout.dialog_agregar_numero,null);
+                                alerta.setView(view);
+
+                                final AlertDialog dialog = alerta.create();
+                                dialog.show();
+
+                                TextView et_telefono = view.findViewById(R.id.et_telefono);
+
+                                Button btn_iniciarSesion = view.findViewById(R.id.btn_iniciarSesion);
+                                btn_iniciarSesion.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        String nombre = user.getDisplayName();
+                                        String correo = user.getEmail();
+                                        String contrasenia = user.getDisplayName();
+                                        String numero = et_telefono.getText().toString();
+                                        if (numero.length() == 10) {
+
+                                            Map<String,Object> item = new HashMap<>();
+                                            item.put("contrasenia",contrasenia);
+                                            item.put("correo",correo);
+                                            item.put("favoritos",new ArrayList<String>());
+                                            item.put("nombre",nombre);
+                                            item.put("numero",numero);
+                                            item.put("rol","cliente");
+                                            item.put("ubicacion",new GeoPoint(0.0,0.0));
+
+                                            db.collection("usuarios").document(correo).set(item);
+                                            dialog.dismiss();
+                                            updateUI(user);
+                                        }else {
+                                            Toast.makeText(MainActivity.this, "Formato de numero incorrecto", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -234,18 +253,56 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
     private void updateUI(FirebaseUser user) {
         user = firebaseAuth.getCurrentUser();
         if (user != null){
 
-            irAdmin();
+            irCliente();
+        }else{
+            loginCredencialesLocales();
         }
     }
-
-    private void irAdmin() {
-        Intent menuRepartidor = new Intent(MainActivity.this, HomeRepartidor.class);
+    private void irCliente() {
+        Intent menuRepartidor = new Intent(MainActivity.this, HomeCliente.class);
         startActivity(menuRepartidor);
         finish();
+    }
+
+    public void loginCredencialesLocales(){
+        SharedPreferences preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        nombre = preferences.getString("nombre", "nombre");
+        correo = preferences.getString("correo", "correo");
+        contrasenia = preferences.getString("contrasenia", "contrasenia");
+        rol = preferences.getString("rol", "rol");
+
+        if (preferences.getBoolean("estado", true) == true) {
+            firebaseAuth.signInWithEmailAndPassword(correo, contrasenia).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+
+                        if (rol.equals("cliente")) {
+                            Intent menuCliente = new Intent(MainActivity.this, HomeCliente.class);
+                            startActivity(menuCliente);
+                        } else if (rol.equals("repartidor")) {
+                            Intent menuRepartidor = new Intent(MainActivity.this, HomeRepartidor.class);
+                            startActivity(menuRepartidor);
+                        } else if (rol.equals("admin")) {
+                            Intent menuAdmin = new Intent(MainActivity.this, InicioAdmin.class);
+                            startActivity(menuAdmin);
+
+                        }
+                    } else {
+                        Toast.makeText(MainActivity.this, "Datos incorrectos", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
     }
 
     public void guardarSesion(String correo, String contrasenia, String rol, String nombre) {

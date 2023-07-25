@@ -24,8 +24,12 @@ import com.example.sistema_seafood.cliente.HomeCliente;
 import com.example.sistema_seafood.databinding.FragmentPerfilAdminBinding;
 import com.example.sistema_seafood.databinding.FragmentPerfilBinding;
 import com.example.sistema_seafood.models.usuarioModel;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,6 +43,8 @@ public class PerfilFragment extends Fragment {
     private FragmentPerfilAdminBinding binding;
     TextView mostrarNombre, mostrarCorreo, muestrarContraseña,mostrarNumero;
     Button btn_cerrarSesion;
+
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
@@ -66,6 +72,7 @@ public class PerfilFragment extends Fragment {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         cerrarSesion();
+                                        FirebaseAuth.getInstance().signOut();
                                         Intent menuCliente = new Intent(getActivity(), MainActivity.class);
                                         startActivity(menuCliente);
                                     }

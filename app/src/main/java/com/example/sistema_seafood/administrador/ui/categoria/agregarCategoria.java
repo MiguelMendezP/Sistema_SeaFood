@@ -92,12 +92,11 @@ public class agregarCategoria extends Fragment {
             public void onClick(View v) {
                 String nombreCat = et_nameCategoria.getText().toString();
                 if(!nombreCat.isEmpty() && imagenUri != null){
-                    progressDialog.show();
                     subirImagen();
                     db = FirebaseFirestore.getInstance();
                     Map<String,Object> categoriaElemento = new HashMap<>();
                     categoriaElemento.put("nombre",nombreCat);
-                    categoriaElemento.put("descuento",new ArrayList<Platillo>());
+                    categoriaElemento.put("platillos",new ArrayList<Platillo>());
 
                     db.collection("Categoria").document().set(categoriaElemento);
                     mostrarDialog(vista);
