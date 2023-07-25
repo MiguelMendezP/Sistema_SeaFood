@@ -157,7 +157,7 @@ public class HomeCliente extends AppCompatActivity {
                 return true;
             }
         });
-        //consultarUsuario(getIntent().getStringExtra("correo"));
+        consultarUsuario(getIntent().getStringExtra("correo"));
         TextView textView=new TextView(this);
         textView.setText("a ver que show");
         imageView=(ImageView)binding.navView.getHeaderView(0).findViewById(R.id.imgClienteMenu);
