@@ -1,6 +1,8 @@
 package com.example.sistema_seafood;
 
 import android.graphics.Bitmap;
+
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
@@ -8,8 +10,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
@@ -21,6 +22,18 @@ import java.io.IOException;
 public class Repartidor {
     private String nombre, numTelefono,correo;
     private Ubicacion ubicacion;
+
+    private Bitmap bitmap;
+
+    public DocumentReference getDocumentReference() {
+        return documentReference;
+    }
+
+    public void setDocumentReference(DocumentReference documentReference) {
+        this.documentReference = documentReference;
+    }
+
+    private DocumentReference documentReference;
 
     public Repartidor(String nombre, String numTelefono, String correo, Ubicacion ubicacion) {
         this.nombre = nombre;
@@ -94,11 +107,17 @@ public class Repartidor {
         return true;
     }
 
+    public void setImage(){
+
+    }
+
+    public void consultarImagen(){
+
+    }
+
     private Bitmap imagen;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
-    private QueryDocumentSnapshot documentReference;
-
     public void mostrarImagen(ImageView imageView){
         String path = referenciaImagen+".jpg";
         System.out.println(path);
@@ -123,7 +142,6 @@ public class Repartidor {
                             // Manejar errores en caso de que la descarga falle
                         }
                     });
-
         } catch (IOException e) {
             e.printStackTrace();
         }

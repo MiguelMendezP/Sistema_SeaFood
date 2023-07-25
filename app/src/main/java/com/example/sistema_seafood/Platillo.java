@@ -63,6 +63,10 @@ private Bitmap imagen;
     }
 
     @Override
+    public Bitmap getImagen() {
+        return imagen;
+    }
+    @Override
     public double getPrecio(){
         return precio - (precio*descuento/100);
     }
@@ -103,13 +107,5 @@ private Bitmap imagen;
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public Bitmap getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(Bitmap imagen) {
-        this.imagen = imagen;
     }
 }

@@ -78,6 +78,11 @@ public class AdaptadorPlatillo extends BaseAdapter {
         TextView mPuntuacion=v.findViewById(R.id.valoracion);
         mPuntuacion.setText(aux.getPuntuacion()+"");
         mPuntuacion.setVisibility(View.VISIBLE);
+        TextView descuento=v.findViewById(R.id.showDescuento);
+        if(aux.getDescuento()>0){
+            descuento.setText(aux.getDescuento()+"%");
+            descuento.setVisibility(View.VISIBLE);
+        }
         v.findViewById(R.id.star).setVisibility(View.VISIBLE);
         aux.setImagen(imageView,categoria.getNombre());
         mMesa.setText(aux.getNombre());

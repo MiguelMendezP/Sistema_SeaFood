@@ -1,13 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/inicio_repartidor"
         android:icon="@drawable/ic_inicio"
         android:title="@string/inicio" />
     <item
-        android:id="@+id/envio_actual"
-        android:icon="@drawable/ic_inicio"
-        android:title="@string/inicio" />
+        android:id="@+id/envio"
+        android:icon="@drawable/ic_ubicacion_foreground"
+        android:title="@string/envioActual" />
     <item
         android:id="@+id/page_historial"
         android:icon="@drawable/ic_pedidos"

@@ -1,7 +1,5 @@
 package com.example.sistema_seafood.cliente;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -17,24 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.example.sistema_seafood.Categoria;
 import com.example.sistema_seafood.R;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,10 +41,9 @@ public class InicioFragment extends Fragment {
     private String mParam2;
 
     private View vista;
-    private GridView gridViewMesas;
-    private boolean inicio=true;
 
-    private Bitmap bitmap;
+    private boolean inicio=true;
+    private GridView gridViewCategorias;
     private AdaptadorCategoria adaptadorCategoria;
 
     public InicioFragment() {
@@ -101,6 +88,7 @@ public class InicioFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Categoria aux=new Categoria(document.getString("nombre"),document);
                                 adaptadorCategoria.add(aux);
+                                HomeCliente.platillos.addAll(aux.getPlatillos());
                             }
                         } else {
                             Log.d(MotionEffect.TAG, "Error getting documents: ", task.getException());
@@ -108,34 +96,28 @@ public class InicioFragment extends Fragment {
                     }
                 });
     }
-
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        if(inicio==false){
-            ((HomeCliente)getActivity()).setTitulo("Bienvenido");
+        if(inicio){
+            inicio=false;
         }
-        inicio=false;
+        else {
+            HomeCliente.setTitulo("Bienvenido");
+            HomeCliente.navController.popBackStack(R.id.nav_home,false);
+        }
         vista= inflater.inflate(R.layout.fragment_inicio, container, false);
-        gridViewMesas =vista.findViewById(R.id.contenedorCategoria);
+        gridViewCategorias =vista.findViewById(R.id.contenedorCategoria);
         adaptadorCategoria=new AdaptadorCategoria(getContext());
         consultarCategorias(FirebaseFirestore.getInstance());
-        gridViewMesas.setAdapter(adaptadorCategoria);
-        gridViewMesas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridViewCategorias.setAdapter(adaptadorCategoria);
+        gridViewCategorias.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //Toast.makeText(getContext(),adaptadorMesas.getMesa(i).getNombre(),Toast.LENGTH_SHORT).show();
-                Bundle bundle=new Bundle();
-                bundle.putString("categoria",adaptadorCategoria.getCategoria(i).getNombre());
-                CategoriaFragment categoriaFragment=new CategoriaFragment();
-                categoriaFragment.setCategoria(adaptadorCategoria.getCategoria(i));
-                Navigation.findNavController(view).navigate(R.id.nav_categoria,bundle);
-                // Obtener el FragmentManager
+                CategoriaFragment.categoria=adaptadorCategoria.getCategoria(i);
+                Navigation.findNavController(view).navigate(R.id.nav_categoria);
             }
         });
         return vista;

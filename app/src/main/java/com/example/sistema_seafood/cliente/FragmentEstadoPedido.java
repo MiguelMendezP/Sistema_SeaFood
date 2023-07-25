@@ -22,13 +22,16 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -50,11 +53,12 @@ public class FragmentEstadoPedido extends Fragment implements OnMapReadyCallback
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    private Pedido pedido;
-
     private GoogleMap googleMap;
+    private MarkerOptions markerOptions;
+
+    private ListenerRegistration listenerRegistration;
     private View view;
+    private Marker miMarcador;
 
     private TextView estado;
 
@@ -94,8 +98,8 @@ public class FragmentEstadoPedido extends Fragment implements OnMapReadyCallback
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_estado_pedido, container, false);
+        HomeCliente.setTitulo("Seguimiento del pedido");
         estado=view.findViewById(R.id.estado);
-        pedido=HomeCliente.getPedido();
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         //if(mapFragment!=null)
         mapFragment.getMapAsync(this);
@@ -107,27 +111,39 @@ public class FragmentEstadoPedido extends Fragment implements OnMapReadyCallback
 this.googleMap=googleMap;
 this.googleMap.setOnMapClickListener(this);
 this.googleMap.setOnMapLongClickListener(this);
-pedido.getDocumentReference().addSnapshotListener(new EventListener<DocumentSnapshot>() {
-    @Override
-    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-        GeoPoint geoPoint=value.getGeoPoint("ubicacionPedido");
-        LatLng ubicacion=new LatLng(geoPoint.getLatitude(),geoPoint.getLongitude());
-        googleMap.addMarker(new MarkerOptions().position(ubicacion).title("Mi ubicacion"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(ubicacion));
-        switch (value.getString("estado")){
-            case "en espera":
-                estado.setText("Estamos preparando tu pedido");
-                break;
-            case "enviado":
-                estado.setText("Tu pedido se encuentra en camino");
-                break;
-        }
+recibirActualizaciones();
     }
-});
 
-//LatLng miUbicacion= new LatLng(17.125263,-96.773983);
-//this.googleMap.addMarker(new MarkerOptions().position(miUbicacion).title("Mi ubicacion"));
-//this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(miUbicacion));
+    private void recibirActualizaciones(){
+        listenerRegistration = HomeCliente.pedido.getDocumentReference().addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w("FirestoreListener", "Error al escuchar cambios", e);
+                    return;
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    if(miMarcador!=null){
+                        miMarcador.remove();
+                    }
+                    LatLng latLng=new LatLng(snapshot.getGeoPoint("ubicacionPedido").getLatitude(),snapshot.getGeoPoint("ubicacionPedido").getLongitude());
+                    markerOptions = new MarkerOptions()
+                            .position(latLng)
+                            .title("Repartidor");
+                    //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.motorcycle));
+                    miMarcador=googleMap.addMarker(markerOptions);
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
+                    // El documento existe y se ha recibido una actualización
+                    // Accede a los datos del documento usando snapshot.getData()
+                    // Por ejemplo, si el documento contiene un campo "nombre":
+                    // String nombre = snapshot.getString("nombre");
+                } else {
+                    // El documento no existe (por ejemplo, ha sido eliminado)
+                    Log.d("FirestoreListener", "El documento no existe");
+                }
+            }
+        });
     }
 
     @Override

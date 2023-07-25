@@ -20,8 +20,6 @@ import java.util.Map;
 
 public class Categoria {
     private String nombre;
-    //private List<Platillo> platillos,platillosConDescuento;
-
     private Bitmap imagen;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();

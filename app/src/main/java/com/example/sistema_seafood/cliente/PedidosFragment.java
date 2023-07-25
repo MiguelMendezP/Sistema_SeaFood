@@ -1,14 +1,32 @@
 package com.example.sistema_seafood.cliente;
 
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.helper.widget.MotionEffect;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
 import com.example.sistema_seafood.R;
+import com.example.sistema_seafood.repartidor.AdaptadorHistorialPedidos;
+import com.example.sistema_seafood.repartidor.HomeRepartidor;
+import com.example.sistema_seafood.repartidor.PedidoRepartidor;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +43,9 @@ public class PedidosFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private GridView gridView;
+    private AdaptadorPedidosRealizados adaptador;
+    private View view;
 
     public PedidosFragment() {
         // Required empty public constructor
@@ -55,6 +76,13 @@ public class PedidosFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                HomeCliente.navController.popBackStack(R.id.nav_home,false);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Override
@@ -62,6 +90,31 @@ public class PedidosFragment extends Fragment {
                              Bundle savedInstanceState) {
         ((HomeCliente)getActivity()).setTitulo("Pedidos");
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pedidos, container, false);
+        view= inflater.inflate(R.layout.fragment_pedidos, container, false);
+        gridView =view.findViewById(R.id.contenedorPedidosRealizados);
+        adaptador=new AdaptadorPedidosRealizados(getContext());
+        consultarHistorial();
+        gridView.setAdapter(adaptador);
+        return view;
+    }
+
+    public void consultarHistorial(){
+        FirebaseFirestore.getInstance().collection("Pedidos").whereEqualTo("cliente",HomeCliente.cliente.getNombre())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            //Toast.makeText(getContext(),repartidor,Toast.LENGTH_SHORT).show();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                    PedidoRepartidor pedido=new PedidoRepartidor(document.getString("cliente"),document.getString("estado"),document.getDate("fecha"), (ArrayList<Map>) document.get("productos"), document.getGeoPoint("ubicacion"),document.getReference(),document.getString("direccion"),document.getGeoPoint("ubicacionPedido"),document.getDouble("total"));
+                                    adaptador.add(pedido);
+                            }
+                        } else {
+                            Log.d(MotionEffect.TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 }
