@@ -35,6 +35,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -42,6 +43,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -70,18 +72,6 @@ public class MainActivity extends AppCompatActivity {
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-
-        /*GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
-        googleSignInClient.signOut()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // Aquí puedes manejar el resultado del cierre de sesión de Google si es necesario.
-                        // Luego de desautorizar la cuenta de Google, procede a cerrar sesión en FirebaseAuth.
-                        FirebaseAuth.getInstance().signOut();
-                        // Ahora el usuario debería ver el panel de selección de cuenta de Google al iniciar sesión nuevamente.
-                    }
-                });*/
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
@@ -204,6 +194,10 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             if (correoExiste) {
+                                SharedPreferences preferecnes = getSharedPreferences("sesion", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = preferecnes.edit();
+                                editor.putString("rol", "cliente");
+                                editor.commit();
                                 updateUI(user);
                             } else {
                                 AlertDialog.Builder alerta = new AlertDialog.Builder(MainActivity.this);
@@ -237,6 +231,10 @@ public class MainActivity extends AppCompatActivity {
 
                                             db.collection("usuarios").document(correo).set(item);
                                             dialog.dismiss();
+                                            SharedPreferences preferecnes = getSharedPreferences("sesion", Context.MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = preferecnes.edit();
+                                            editor.putString("rol", "cliente");
+                                            editor.commit();
                                             updateUI(user);
                                         }else {
                                             Toast.makeText(MainActivity.this, "Formato de numero incorrecto", Toast.LENGTH_SHORT).show();
@@ -260,8 +258,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         user = firebaseAuth.getCurrentUser();
-        if (user != null){
+        SharedPreferences preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        rol = preferences.getString("rol", "rol");
+        System.out.println(rol);
 
+        if (user != null && rol.equals("cliente")){
             irCliente();
         }else{
             loginCredencialesLocales();

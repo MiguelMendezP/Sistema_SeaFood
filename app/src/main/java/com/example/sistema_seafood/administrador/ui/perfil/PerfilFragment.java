@@ -72,6 +72,7 @@ public class PerfilFragment extends Fragment {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         cerrarSesion();
+                                        cerrarSesionGoogle();
                                         FirebaseAuth.getInstance().signOut();
                                         Intent menuCliente = new Intent(getActivity(), MainActivity.class);
                                         startActivity(menuCliente);
@@ -100,6 +101,25 @@ public class PerfilFragment extends Fragment {
         editor.putString("rol","");
         editor.putString("nombre","");
         editor.commit();
+    }
+
+    public void cerrarSesionGoogle(){
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+        googleSignInClient.signOut()
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // Aquí puedes manejar el resultado del cierre de sesión de Google si es necesario.
+                        // Luego de desautorizar la cuenta de Google, procede a cerrar sesión en FirebaseAuth.
+                        FirebaseAuth.getInstance().signOut();
+                        // Ahora el usuario debería ver el panel de selección de cuenta de Google al iniciar sesión nuevamente.
+                    }
+                });
     }
 
     public void setDatos(String idUsuario) {
