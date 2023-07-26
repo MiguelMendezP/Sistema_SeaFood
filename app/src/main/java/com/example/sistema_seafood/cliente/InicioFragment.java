@@ -44,7 +44,6 @@ public class InicioFragment extends Fragment {
 
     private boolean inicio=true;
     private GridView gridViewCategorias;
-    private AdaptadorCategoria adaptadorCategoria;
 
     public InicioFragment() {
         // Required empty public constructor
@@ -77,29 +76,9 @@ public class InicioFragment extends Fragment {
         }
     }
 
-    public void consultarCategorias(FirebaseFirestore db){
-        db.collection("Categoria")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @RequiresApi(api = Build.VERSION_CODES.O)
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Categoria aux=new Categoria(document.getString("nombre"),document);
-                                adaptadorCategoria.add(aux);
-                                HomeCliente.platillos.addAll(aux.getPlatillos());
-                            }
-                        } else {
-                            Log.d(MotionEffect.TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         if(inicio){
             inicio=false;
         }
@@ -109,14 +88,12 @@ public class InicioFragment extends Fragment {
         }
         vista= inflater.inflate(R.layout.fragment_inicio, container, false);
         gridViewCategorias =vista.findViewById(R.id.contenedorCategoria);
-        adaptadorCategoria=new AdaptadorCategoria(getContext());
-        consultarCategorias(FirebaseFirestore.getInstance());
-        gridViewCategorias.setAdapter(adaptadorCategoria);
+        gridViewCategorias.setAdapter(HomeCliente.adaptadorCategoria);
         gridViewCategorias.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                CategoriaFragment.categoria=adaptadorCategoria.getCategoria(i);
+                CategoriaFragment.categoria=HomeCliente.adaptadorCategoria.getCategoria(i);
                 Navigation.findNavController(view).navigate(R.id.nav_categoria);
             }
         });

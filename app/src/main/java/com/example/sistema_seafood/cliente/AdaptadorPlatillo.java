@@ -73,12 +73,12 @@ public class AdaptadorPlatillo extends BaseAdapter {
         LayoutInflater layoutInflater=LayoutInflater.from(context);
         v= layoutInflater.inflate(R.layout.card,null);
         Platillo aux=platillos.get(i);
-        ImageView imageView=v.findViewById(R.id.imgCategoria);
-        TextView mMesa=v.findViewById(R.id.titular);
+        ImageView imageView=v.findViewById(R.id.imgValoracion);
+        TextView mMesa=v.findViewById(R.id.tituloCategoria);
         TextView mPuntuacion=v.findViewById(R.id.valoracion);
         mPuntuacion.setText(aux.getPuntuacion()+"");
         mPuntuacion.setVisibility(View.VISIBLE);
-        TextView descuento=v.findViewById(R.id.showDescuento);
+        TextView descuento=v.findViewById(R.id.txtDescuento);
         if(aux.getDescuento()>0){
             descuento.setText(aux.getDescuento()+"%");
             descuento.setVisibility(View.VISIBLE);

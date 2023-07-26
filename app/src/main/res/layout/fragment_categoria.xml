@@ -7,16 +7,6 @@
     tools:context=".cliente.CategoriaFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/verde"
-        android:fontFamily="cursive"
-        android:gravity="center"
-        android:paddingBottom="10dp"
-        android:textColor="@color/white"
-        android:textSize="20dp" />
 
     <GridView
         android:id="@+id/contenedorPlatillos"

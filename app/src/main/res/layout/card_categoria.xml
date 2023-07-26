@@ -31,7 +31,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imgCategoria"
+                android:id="@+id/imgValoracion"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:scaleType="centerCrop"
@@ -50,7 +50,7 @@
             android:background="#1A5D1A">
 
             <TextView
-                android:id="@+id/titular"
+                android:id="@+id/tituloCategoria"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Text"
