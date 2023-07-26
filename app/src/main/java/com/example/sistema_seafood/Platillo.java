@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -26,8 +27,9 @@ public class Platillo extends Producto{
     private int descuento;
     private List<Valoracion> valoraciones;
     private List<Map> vals;
+    private QueryDocumentSnapshot documentReference;
 
-private Bitmap imagen;
+    private Bitmap imagen;
     private double puntuacion;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
@@ -43,6 +45,7 @@ private Bitmap imagen;
         this.descuento=descuento;
         this.vals=valoraciones;
         this.puntuacion=puntuacion;
+        this.documentReference=documentReference;
     }
 
     public List<Valoracion> getValoraciones(){
@@ -75,6 +78,13 @@ private Bitmap imagen;
         return descuento;
     }
 
+    public QueryDocumentSnapshot getDocumentReference() {
+        return documentReference;
+    }
+
+    public void setDocumentReference(QueryDocumentSnapshot documentReference) {
+        this.documentReference = documentReference;
+    }
 
     public void setDescuento(int descuento){
         this.descuento=descuento;
