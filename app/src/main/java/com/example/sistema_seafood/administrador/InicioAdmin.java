@@ -1,10 +1,15 @@
 package com.example.sistema_seafood.administrador;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.sistema_seafood.MainActivity;
@@ -16,9 +21,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -27,12 +34,24 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.sistema_seafood.databinding.ActivityInicioAdminBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class InicioAdmin extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     public static NavController navController;
     public static TextView titulo;
+
+    public static Bitmap imgProfile;
+    public static ImageView imageView;
+
+    private static FloatingActionButton floatingActionButton;
+    public static FirebaseFirestore firestore=FirebaseFirestore.getInstance();
+
+    private TextView user,email;
 private ActivityInicioAdminBinding binding;
 
     @Override
@@ -85,6 +104,16 @@ private ActivityInicioAdminBinding binding;
                 return true;
             }
         });
+
+        imageView=(ImageView)binding.navView.getHeaderView(0).findViewById(R.id.imgClienteMenu);
+        user=(TextView) binding.navView.getHeaderView(0).findViewById(R.id.nameUser);
+        email=(TextView) binding.navView.getHeaderView(0).findViewById(R.id.emailUserCliente);
+
+        SharedPreferences preferences = InicioAdmin.this.getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        String nombre = preferences.getString("correo","correo");
+        String correo = preferences.getString("nombre","nombre");
+        user.setText(nombre);
+        email.setText(correo);
 
     }
     public static void setTitulo(String titulo){

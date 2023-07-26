@@ -29,8 +29,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <GridView
+            android:id="@+id/contenedorPedidosLista"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

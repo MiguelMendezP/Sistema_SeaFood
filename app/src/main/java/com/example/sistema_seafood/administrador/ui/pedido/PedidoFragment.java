@@ -1,36 +1,27 @@
 package com.example.sistema_seafood.administrador.ui.pedido;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.constraintlayout.helper.widget.MotionEffect;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sistema_seafood.Pedido;
 import com.example.sistema_seafood.R;
-import com.example.sistema_seafood.administrador.ui.AdapterPedido;
-import com.example.sistema_seafood.databinding.FragmentPedidoBinding;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.example.sistema_seafood.administrador.ui.AdapterPedido2;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -38,74 +29,110 @@ import java.util.HashMap;
 
 public class PedidoFragment extends Fragment {
 
-    private FragmentPedidoBinding binding;
-    private RecyclerView recyclerView;
-    private ArrayList<Pedido> listaPedidos;
-    private AdapterPedido adapterPedido;
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
-    //Ubicacion actual
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+    private GridView gridView;
+    private AdapterPedido2 adapterPedido;
+
+    public static PedidoFragment newInstance(String param1, String param2) {
+        PedidoFragment fragment = new PedidoFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentPedidoBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
-        recyclerView = root.findViewById(R.id.recyclerView);
-        listaPedidos = new ArrayList<>();
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapterPedido = new AdapterPedido(getActivity(), listaPedidos);
-        recyclerView.setAdapter(adapterPedido);
-
-        consultarCategorias(FirebaseFirestore.getInstance());
-
-        return root;
+        View vista = inflater.inflate(R.layout.fragment_pedido, container, false);
+        gridView = vista.findViewById(R.id.contenedorPedidosLista);
+        adapterPedido=new AdapterPedido2(getContext());
+        consultarPedidosDisponibles();
+        gridView.setAdapter(adapterPedido);
+        return vista;
     }
 
-
-    public void consultarCategorias(FirebaseFirestore db) {
-        db.collection("Pedidos")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void consultarPedidosDisponibles(){
+        FirebaseFirestore.getInstance().collection("Pedidos")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String productosListados = "";
-
-                                ArrayList<HashMap<String, Object>> matrizObjetos = (ArrayList<HashMap<String, Object>>) document.get("productos");
-                                for (HashMap<String, Object> objeto : matrizObjetos) {
-                                    String cantidad = objeto.get("cantidad").toString();
-                                    String producto = objeto.get("producto").toString();
-                                    productosListados = productosListados + producto+" X"+cantidad + "\n";
-                                }
+                    public void onEvent(@Nullable QuerySnapshot snapshots,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "listen:error", e);
+                            return;
+                        }
+                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                            switch (dc.getType()) {
+                                case ADDED:
 
 
-                                String referencia = document.getReference().getPath();
-                                Pedido pedido = new Pedido(
-                                        referencia,
-                                        document.getString("cliente"),
-                                        document.getDate("fecha"),
-                                        document.getString("direccion"),
-                                        document.getString("estado"),
-                                        productosListados,
-                                        document.getString("repartidor"),
-                                        document.getDouble("total"));
-                                pedido.setDocumentReference(document.getReference());
-                                listaPedidos.add(pedido);
+                                        String productosListados = "";
+                                        ArrayList<HashMap<String, Object>> matrizObjetos = (ArrayList<HashMap<String, Object>>) dc.getDocument().get("productos");
+                                        for (HashMap<String, Object> objeto : matrizObjetos) {
+                                            String cantidad = objeto.get("cantidad").toString();
+                                            String producto = objeto.get("producto").toString();
+                                            productosListados = productosListados + producto+" X"+cantidad + "\n";
+                                        }
+
+                                        String referencia = dc.getDocument().getReference().getPath();
+                                        Pedido pedido = new Pedido(
+                                                referencia,
+                                                dc.getDocument().getString("cliente"),
+                                                dc.getDocument().getDate("fecha"),
+                                                dc.getDocument().getString("direccion"),
+                                                dc.getDocument().getString("estado"),
+                                                productosListados,
+                                                dc.getDocument().getString("repartidor"),
+                                                dc.getDocument().getDouble("total"));
+
+                                        adapterPedido.add(pedido);
+
+                                    break;
+                                case MODIFIED:
+
+                                    String productosListados2 = "";
+                                        ArrayList<HashMap<String, Object>> matrizObjetos2 = (ArrayList<HashMap<String, Object>>) dc.getDocument().get("productos");
+                                        for (HashMap<String, Object> objeto : matrizObjetos2) {
+                                            String cantidad = objeto.get("cantidad").toString();
+                                            String producto = objeto.get("producto").toString();
+                                            productosListados2 = productosListados2 + producto+" X"+cantidad + "\n";
+                                        }
+
+                                        String referencia2 = dc.getDocument().getReference().getPath();
+                                        Pedido pedido2 = new Pedido(
+                                                referencia2,
+                                                dc.getDocument().getString("cliente"),
+                                                dc.getDocument().getDate("fecha"),
+                                                dc.getDocument().getString("direccion"),
+                                                dc.getDocument().getString("estado"),
+                                                productosListados2,
+                                                dc.getDocument().getString("repartidor"),
+                                                dc.getDocument().getDouble("total"));
+
+                                        adapterPedido.add(pedido2);
+
+                                    break;
+                                case REMOVED:
                             }
-                            adapterPedido.notifyDataSetChanged();
-                        } else {
-                            Log.d(MotionEffect.TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 }

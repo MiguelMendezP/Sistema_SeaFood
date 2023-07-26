@@ -38,7 +38,6 @@ public class AdapterPedido extends RecyclerView.Adapter<AdapterPedido.MyViewHold
     private Context context;
     private ArrayList<Pedido> pedidos;
 
-    private LatLng originLatLng;
     private FusedLocationProviderClient fusedLocationClient;
 
     public AdapterPedido(Context context, ArrayList<Pedido> pedidos) {
@@ -51,32 +50,42 @@ public class AdapterPedido extends RecyclerView.Adapter<AdapterPedido.MyViewHold
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.card_pedidos, parent, false);
 
+
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AdapterPedido.MyViewHolder holder, int position) {
-        Pedido pedido = pedidos.get(position);
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-
-        if (pedido.getEstado().equals("pendiente")) {
-            holder.layoutAcepRech.setVisibility(View.VISIBLE);
-        }
-        if (pedido.getEstado().equals("preparacion")) {
-            holder.layoutListo.setVisibility(View.VISIBLE);
-        }
-        if (pedido.getEstado().equals("enviado")) {
-            holder.layoutDetalles.setVisibility(View.VISIBLE);
-        }
-        if (pedido.getEstado().equals("entregado")) {
-            holder.layoutDetalles.setVisibility(View.VISIBLE);
-        }
-        if (pedido.getEstado().equals("rechazado")) {
-            holder.layoutRechazado.setVisibility(View.VISIBLE);
-        }
-        if (pedido.getEstado().equals("listo")) {
-            holder.layoutListo.setVisibility(View.VISIBLE);
+        Pedido pedido = pedidos.get(position);
+        switch (pedido.getEstado()) {
+            case "pendiente":
+                holder.layoutPendiente.setVisibility(View.VISIBLE);
+                break;
+            case "preparacion":
+                holder.layoutPendiente.setVisibility(View.INVISIBLE);
+                holder.layoutPreparacion.setVisibility(View.VISIBLE);
+                break;
+            case "listo":
+                holder.layoutPendiente.setVisibility(View.INVISIBLE);
+                holder.layoutRechazado.setVisibility(View.VISIBLE);
+                holder.estados.setText("Esperando repartidor");
+                break;
+            case "enviado":
+                holder.layoutPendiente.setVisibility(View.INVISIBLE);
+                holder.layoutRechazado.setVisibility(View.VISIBLE);
+                holder.estados.setText("El pedido esta en camino");
+                break;
+            case "entregado":
+                holder.layoutPendiente.setVisibility(View.INVISIBLE);
+                holder.layoutRechazado.setVisibility(View.VISIBLE);
+                holder.estados.setText("El pedido ya se entrego");
+                break;
+            case "rechazado":
+                holder.layoutPendiente.setVisibility(View.INVISIBLE);
+                holder.layoutRechazado.setVisibility(View.VISIBLE);
+                holder.estados.setText("Haz rechazado este pedido");
+                break;
         }
 
         //Cambiar el formato de un objeto Date
@@ -94,15 +103,15 @@ public class AdapterPedido extends RecyclerView.Adapter<AdapterPedido.MyViewHold
             @Override
             public void onClick(View view) {
                 actualizarEstadoPedido(pedido.getReferencia(), "preparacion", db);
-                holder.layoutAcepRech.setVisibility(View.GONE);
-                holder.layoutListo.setVisibility(View.VISIBLE);
+                holder.layoutPendiente.setVisibility(View.GONE);
+                holder.layoutPreparacion.setVisibility(View.VISIBLE);
             }
         });
         holder.btn_rechazar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 actualizarEstadoPedido(pedido.getReferencia(), "rechazado", db);
-                holder.layoutAcepRech.setVisibility(View.GONE);
+                holder.layoutPendiente.setVisibility(View.GONE);
                 holder.layoutRechazado.setVisibility(View.VISIBLE);
             }
         });
@@ -110,18 +119,9 @@ public class AdapterPedido extends RecyclerView.Adapter<AdapterPedido.MyViewHold
             @Override
             public void onClick(View view) {
                 actualizarEstadoPedido(pedido.getReferencia(), "listo", db);
-
                 obtenerUbicacionActual(pedido.getDocumentReference());
-
-                holder.layoutListo.setVisibility(View.GONE);
-                holder.layoutEnviado.setVisibility(View.VISIBLE);
-            }
-        });
-        holder.btn_pedidoDetalles.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Enviar a la ventana de detalle
-
+                holder.layoutPreparacion.setVisibility(View.GONE);
+                holder.layoutListo.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -133,9 +133,9 @@ public class AdapterPedido extends RecyclerView.Adapter<AdapterPedido.MyViewHold
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_fecha, tv_cliente, tv_ubicacion, tv_precio, tv_productos;
-        Button btn_aceptar, btn_rechazar, btn_pedidoListo, btn_pedidoDetalles;
-        LinearLayout layoutAcepRech, layoutListo, layoutDetalles, layoutRechazado, layoutEnviado;
+        TextView tv_fecha, tv_cliente, tv_ubicacion, tv_precio, tv_productos,estados;
+        Button btn_aceptar, btn_rechazar, btn_pedidoListo;
+        LinearLayout layoutPendiente, layoutPreparacion, layoutRechazado, layoutListo;
 
 
         public MyViewHolder(@NonNull View itemView) {
@@ -145,17 +145,16 @@ public class AdapterPedido extends RecyclerView.Adapter<AdapterPedido.MyViewHold
             tv_ubicacion = itemView.findViewById(R.id.tv_ubicacion);
             tv_precio = itemView.findViewById(R.id.tv_precio);
             tv_productos = itemView.findViewById(R.id.tv_productos);
+            estados = itemView.findViewById(R.id.estados);
 
             btn_aceptar = itemView.findViewById(R.id.btn_aceptar);
-            btn_pedidoDetalles = itemView.findViewById(R.id.btn_pedidoDetalles);
             btn_rechazar = itemView.findViewById(R.id.btn_rechazar);
             btn_pedidoListo = itemView.findViewById(R.id.btn_pedidoListo);
 
-            layoutAcepRech = itemView.findViewById(R.id.layoutAcepRech);
-            layoutListo = itemView.findViewById(R.id.layoutListo);
-            layoutDetalles = itemView.findViewById(R.id.layoutDetalles);
+            layoutPendiente = itemView.findViewById(R.id.layoutPendiente);
+            layoutPreparacion = itemView.findViewById(R.id.layoutPreparacion);
             layoutRechazado = itemView.findViewById(R.id.layoutRechazado);
-            layoutEnviado = itemView.findViewById(R.id.layoutEnviado);
+
 
         }
     }
@@ -179,10 +178,8 @@ public class AdapterPedido extends RecyclerView.Adapter<AdapterPedido.MyViewHold
 
     public void obtenerUbicacionActual(DocumentReference documento) {
         // Verificar si se concedió el permiso de ubicación
-        System.out.println("1");
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             // Obtener la última ubicación conocida del FusedLocationProviderClient
-            System.out.println("2");
             fusedLocationClient.getLastLocation().addOnSuccessListener(((InicioAdmin)context), new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
@@ -209,23 +206,6 @@ public class AdapterPedido extends RecyclerView.Adapter<AdapterPedido.MyViewHold
                 }
             });
         }
-    }
-
-    public void actualizarUbicacion(String referencia, GeoPoint nuevaUbicacion, FirebaseFirestore db) {
-        DocumentReference docRef = db.document(referencia);
-        docRef.update("ubicacionPedido", nuevaUbicacion)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(MotionEffect.TAG, "Estado actualizado exitosamente");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(MotionEffect.TAG, "Error al actualizar el estado: " + e.getMessage());
-                    }
-                });
     }
 
 }

@@ -47,7 +47,7 @@ public class AdaptadorPedidosDisponible extends BaseAdapter {
 
     public AdaptadorPedidosDisponible(Context context){
         this.context=context;
-        this.pedidos =new ArrayList<>();
+        this.pedidos = new ArrayList<>();
     }
 
     public void add(PedidoRepartidor pedido){
@@ -90,14 +90,17 @@ public class AdaptadorPedidosDisponible extends BaseAdapter {
         Button btnAceptar=v.findViewById(R.id.btnAceptarPedido);
 
         PedidoRepartidor aux= pedidos.get(i);
+
         nombreCliente.setText(aux.getCliente());
         direccionCliente.setText(aux.getDireccion());
         LinearLayout linearLayou=v.findViewById(R.id.listaProductosPedido);
+
         for (Map producto:aux.getProductos()){
             TextView textView=new TextView(context);
             textView.setText(producto.get("cantidad")+" "+producto.get("producto"));
             linearLayou.addView(textView);
         }
+
         ((TextView)v.findViewById(R.id.viewTotal)).setText("$ "+aux.getTotal());
 
         btnAceptar.setOnClickListener(new View.OnClickListener() {

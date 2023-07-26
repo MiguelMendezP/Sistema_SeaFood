@@ -19,17 +19,23 @@ public class AdapterExtras extends RecyclerView.Adapter<AdapterExtras.MyViewHold
 
     Context context;
     ArrayList<Extra> extras;
+    private View.OnClickListener itemClickListener;
 
     public AdapterExtras(Context context, ArrayList<Extra> extras) {
         this.context = context;
         this.extras = extras;
     }
-
+    // Método para establecer el OnClickListener
+    public void setOnItemClickListener(View.OnClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.card_extras,parent,false);
 
+        // Establecer el OnClickListener en la vista del ítem
+        view.setOnClickListener(itemClickListener);
         return new MyViewHolder(view);
     }
 
@@ -40,6 +46,8 @@ public class AdapterExtras extends RecyclerView.Adapter<AdapterExtras.MyViewHold
         holder.tv_nombre.setText(extra.getNombre());
         holder.tv_precio.setText("Precio: $"+extra.getPrecio());
         holder.tv_descripcion.setText(extra.getDescripcion());
+        extra.mostrarImagen(holder.imagenEditar);
+
     }
 
     @Override
@@ -49,7 +57,7 @@ public class AdapterExtras extends RecyclerView.Adapter<AdapterExtras.MyViewHold
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         TextView imageButtonEliminar, tv_nombre, tv_precio, tv_descripcion;
-        ImageView imageButtonEditar;
+        ImageView imageButtonEditar, imagenEditar;
 
         public MyViewHolder(@NonNull View itemView){
             super(itemView);
@@ -59,6 +67,8 @@ public class AdapterExtras extends RecyclerView.Adapter<AdapterExtras.MyViewHold
 
             imageButtonEliminar = itemView.findViewById(R.id.imageButtonEliminar);
             imageButtonEditar = itemView.findViewById(R.id.imageButtonEditar);
+
+            imagenEditar=itemView.findViewById(R.id.imagenEditar);
 
         }
     }

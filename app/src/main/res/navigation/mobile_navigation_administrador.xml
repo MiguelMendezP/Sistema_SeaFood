@@ -12,10 +12,17 @@
         tools:layout="@layout/fragment_extras" />
 
     <fragment
+        android:id="@+id/nav_agregarExtras"
+        android:name="com.example.sistema_seafood.administrador.ui.extras.agregarExtra"
+        android:label=""
+        tools:layout="@layout/fragment_agregar_extras" />
+
+    <fragment
         android:id="@+id/nav_categorias"
         android:name="com.example.sistema_seafood.administrador.ui.categoria.CategoriaFragment"
         android:label=" "
         tools:layout="@layout/fragment_categoria_admin" />
+
 
     <fragment
         android:id="@+id/nav_agregarCategoria"

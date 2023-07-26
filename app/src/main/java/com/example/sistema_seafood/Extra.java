@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -22,9 +24,24 @@ public class Extra extends Producto{
     private Bitmap imagen;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
+    private DocumentReference documentReference;
     public Extra(String nombre, String descripcion, double precio) {
         super(nombre, descripcion, precio);
         cargarImagen();
+    }
+
+    public Extra(String nombre, String descripcion, double precio, DocumentReference documentReference) {
+        super(nombre, descripcion, precio);
+        cargarImagen();
+        this.documentReference=documentReference;
+    }
+
+    public DocumentReference getDocumentReference() {
+        return documentReference;
+    }
+
+    public void setDocumentReference(DocumentReference documentReference) {
+        this.documentReference = documentReference;
     }
 
     public void cargarImagen(){
@@ -40,7 +57,7 @@ public class Extra extends Producto{
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                             // Carga el archivo temporal en un Bitmap
-                            imagen= BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                            imagen = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -54,6 +71,36 @@ public class Extra extends Producto{
             e.printStackTrace();
         }
     }
+
+    public void mostrarImagen(ImageView imageView){
+        String path = nombre+".jpg";
+        try {
+            // Crea un archivo temporal para almacenar la imagen
+            File localFile = File.createTempFile(nombre,"jpg");
+
+            // Descarga la imagen desde Firebase Cloud Storage al archivo temporal
+            storageRef.child("extras").child(path).getFile(localFile)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            // Carga el archivo temporal en un Bitmap
+                            imagen = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                            imageView.setImageBitmap(imagen);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Manejar errores en caso de que la descarga falle
+                        }
+                    });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     @Override
     public Bitmap getImagen() {
