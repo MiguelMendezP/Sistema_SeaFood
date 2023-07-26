@@ -113,4 +113,7 @@ public class Categoria {
         return imagen;
     }
 
+    public QueryDocumentSnapshot getDocumentReference() {
+        return documentReference;
+    }
 }

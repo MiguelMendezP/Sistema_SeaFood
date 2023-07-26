@@ -1,5 +1,9 @@
 package com.example.sistema_seafood.administrador.ui.pedido;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,16 +13,23 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.helper.widget.MotionEffect;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sistema_seafood.Pedido;
 import com.example.sistema_seafood.R;
-import com.example.sistema_seafood.administrador.AdapterPedido;
+import com.example.sistema_seafood.administrador.ui.AdapterPedido;
 import com.example.sistema_seafood.databinding.FragmentPedidoBinding;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -31,6 +42,8 @@ public class PedidoFragment extends Fragment {
     private RecyclerView recyclerView;
     private ArrayList<Pedido> listaPedidos;
     private AdapterPedido adapterPedido;
+
+    //Ubicacion actual
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +61,8 @@ public class PedidoFragment extends Fragment {
 
         return root;
     }
+
+
     public void consultarCategorias(FirebaseFirestore db) {
         db.collection("Pedidos")
                 .get()
@@ -77,6 +92,7 @@ public class PedidoFragment extends Fragment {
                                         productosListados,
                                         document.getString("repartidor"),
                                         document.getDouble("total"));
+                                pedido.setDocumentReference(document.getReference());
                                 listaPedidos.add(pedido);
                             }
                             adapterPedido.notifyDataSetChanged();

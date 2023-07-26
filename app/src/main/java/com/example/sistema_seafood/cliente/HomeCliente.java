@@ -4,6 +4,7 @@ package com.example.sistema_seafood.cliente;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +27,9 @@ import com.example.sistema_seafood.Producto;
 import com.example.sistema_seafood.ProductoOrdenado;
 import com.example.sistema_seafood.R;
 import com.example.sistema_seafood.Utils;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -84,6 +88,7 @@ public class HomeCliente extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         consultarUsuario(getIntent().getStringExtra("correo"));
         adaptadorCategoria=new AdaptadorCategoria(this);
@@ -114,8 +119,6 @@ public class HomeCliente extends AppCompatActivity {
             }
         });
 
-
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -135,7 +138,25 @@ public class HomeCliente extends AppCompatActivity {
                     setTitulo("Pedidos");
                     navController.navigate(R.id.nav_pedidos);
                 } else if (item.getItemId()==R.id.nav_cerrar_sesion) {
-                    FirebaseAuth.getInstance().signOut();
+
+                    cerrarSesion();
+                    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .requestIdToken(getString(R.string.default_web_client_id))
+                            .requestEmail()
+                            .build();
+
+                    GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(HomeCliente.this, gso);
+                    googleSignInClient.signOut()
+                            .addOnCompleteListener(HomeCliente.this, new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    // Aquí puedes manejar el resultado del cierre de sesión de Google si es necesario.
+                                    // Luego de desautorizar la cuenta de Google, procede a cerrar sesión en FirebaseAuth.
+                                    FirebaseAuth.getInstance().signOut();
+                                    // Ahora el usuario debería ver el panel de selección de cuenta de Google al iniciar sesión nuevamente.
+                                }
+                            });
+
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     finish();
@@ -198,6 +219,16 @@ public class HomeCliente extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    public void cerrarSesion(){
+        SharedPreferences preferences = HomeCliente.this.getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("estado",false);
+        editor.putString("correo","");
+        editor.putString("rol","");
+        editor.putString("nombre","");
+        editor.commit();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.sistema_seafood.models;
 
 public class usuarioModel {
+    String referencia;
     String correo;
     String nombre;
     String contrasenia;
@@ -13,6 +14,10 @@ public class usuarioModel {
         this.contrasenia = contrasenia;
         this.numero = numero;
         this.rol = rol;
+    }
+
+    public String getReferencia() {
+        return referencia;
     }
 
     public String getCorreo() {
