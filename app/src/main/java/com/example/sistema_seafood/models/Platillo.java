@@ -35,12 +35,21 @@ public class Platillo extends Producto {
         this.puntuacion = puntuacion;
     }
     private String categoria;
-    public Platillo(String nombre, String descripcion, double precio, double descuento, String categoria) {
+    private int numPlatillos;
+    public Platillo(String nombre, String descripcion, double precio, double descuento, String categoria, int numPlatillos, QueryDocumentSnapshot documentReference) {
         super(nombre, descripcion, precio);
         this.descuento=descuento;
-        this.valoraciones=valoraciones;
-        this.puntuacion = puntuacion;
         this.categoria=categoria;
+        this.numPlatillos=numPlatillos;
+        this.documentReference=documentReference;
+    }
+
+    public int getNumPlatillos() {
+        return numPlatillos;
+    }
+
+    public QueryDocumentSnapshot getDocumentReference() {
+        return documentReference;
     }
 
     public String getCategoria() {
