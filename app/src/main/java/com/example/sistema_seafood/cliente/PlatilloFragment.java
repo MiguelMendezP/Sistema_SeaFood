@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -95,10 +96,16 @@ public class PlatilloFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        if(HomeCliente.platillosFavoritos==null){
+            HomeCliente.consultarFavoritos();
+        }
         view= inflater.inflate(R.layout.fragment_platillo, container, false);
         imageView=view.findViewById(R.id.imgPlatillo);
         imageView.setImageBitmap(platillo.getImagen());
         CheckBox favorito=view.findViewById(R.id.checkFavorito);
+        if(HomeCliente.platillosFavoritos.contains(platillo)){
+            favorito.setChecked(true);
+        }
         ((TextView)view.findViewById(R.id.nombre)).setText(platillo.getNombre());
         ((TextView)view.findViewById(R.id.puntuacion)).setText(platillo.getPuntuacion()+"");
         contenedorComentarios =view.findViewById(R.id.contenedorComentarios);
@@ -108,12 +115,20 @@ public class PlatilloFragment extends Fragment {
         cantidad=view.findViewById(R.id.cantidad);
         cantidad.setText("1");
         ((TextView)view.findViewById(R.id.descripcion)).setText(platillo.getDescripcion());
-favorito.setOnClickListener(new View.OnClickListener() {
+favorito.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
     @Override
-    public void onClick(View v) {
-        HomeCliente.cliente.getPlatillosFav().add(platillo.getNombre());
-        HomeCliente.cliente.getDocumentReference().update("favoritos",HomeCliente.cliente.getPlatillosFav());
-        Toast.makeText(getContext(),"Platillo añadido a favoritos",Toast.LENGTH_SHORT).show();
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(isChecked){
+            HomeCliente.cliente.getPlatillosFav().add(platillo.getNombre());
+            HomeCliente.cliente.getDocumentReference().update("favoritos",HomeCliente.cliente.getPlatillosFav());
+            HomeCliente.platillosFavoritos.add(platillo);
+            Toast.makeText(getContext(),"Platillo añadido a favoritos",Toast.LENGTH_SHORT).show();
+        }else {
+            HomeCliente.cliente.getPlatillosFav().remove(platillo.getNombre());
+            HomeCliente.cliente.getDocumentReference().update("favoritos",HomeCliente.cliente.getPlatillosFav());
+            HomeCliente.platillosFavoritos.remove(platillo);
+            Toast.makeText(getContext(),"Platillo eliminado de favoritos",Toast.LENGTH_SHORT).show();
+        }
     }
 });
         btnMenos=view.findViewById(R.id.btnMenos);

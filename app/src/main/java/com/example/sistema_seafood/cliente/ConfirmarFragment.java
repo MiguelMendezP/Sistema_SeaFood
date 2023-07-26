@@ -7,6 +7,7 @@ import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -32,8 +33,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import org.w3c.dom.Text;
 
@@ -117,7 +122,7 @@ public class ConfirmarFragment extends Fragment {
         String direccion;
 
         if (direccionEntrega==null){
-            direccion= Utils.getAddressFromLatLng(getContext(),HomeCliente.getCliente().getUbicacion().getLatitud(),HomeCliente.getCliente().getUbicacion().getLongitud());
+            direccion= Utils.getAddressFromLatLng(getContext(),HomeCliente.cliente.getUbicacion().getLatitude(),HomeCliente.getCliente().getUbicacion().getLongitude());
         }
         else {
             direccion=Utils.getAddressFromLatLng(getContext(),direccionEntrega.latitude,direccionEntrega.longitude);
@@ -138,7 +143,7 @@ public class ConfirmarFragment extends Fragment {
                 HomeCliente.setPedido(pedido);
                 GeoPoint geoPoint;
                 if(direccionEntrega==null){
-                    geoPoint=new GeoPoint(HomeCliente.getCliente().getUbicacion().getLatitud(),HomeCliente.getCliente().getUbicacion().getLongitud());
+                    geoPoint=HomeCliente.cliente.getUbicacion();
                 }
                 else {
                     geoPoint=new GeoPoint(direccionEntrega.latitude,direccionEntrega.longitude);
@@ -158,11 +163,23 @@ public class ConfirmarFragment extends Fragment {
                 FirebaseFirestore.getInstance().collection("Pedidos").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
-                                HomeCliente.getPedido().setDocumentReference(documentReference);
+                                ListenerRegistration listenerRegistration = documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                                        // Aquí se manejan los cambios en el documento
+                                        if (documentSnapshot != null && documentSnapshot.exists()) {
+                                            pedido.setEstado(documentSnapshot.getString("estado"));
+                                            // El documento existe y contiene datos
+                                            // Puedes obtener los datos con documentSnapshot.getData()
+                                        } else {
+                                            // El documento no existe o está vacío
+                                        }
+                                    }
+                                });
+                                HomeCliente.pedido.setDocumentReference(documentReference);
                                 HomeCliente.carrito=new Carrito();
-                                Navigation.findNavController(view).navigate(R.id.nav_envio);
-                                //Toast.makeText(getContext(),documentReference.getId(), Toast.LENGTH_LONG).show();
-                                //Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                Toast.makeText(getContext(),"Tu pedido se ha realizado con éxito", Toast.LENGTH_SHORT).show();
+                                Navigation.findNavController(view).navigate(R.id.nav_home);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -171,7 +188,6 @@ public class ConfirmarFragment extends Fragment {
                                 Log.w(TAG, "Error adding document", e);
                             }
                         });
-
             }
         });
         return view;

@@ -34,6 +34,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.sistema_seafood.Cliente;
 import com.example.sistema_seafood.R;
 import com.example.sistema_seafood.Utils;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -77,6 +78,8 @@ public class EnvioFragment extends Fragment implements OnMapReadyCallback, Googl
     RequestQueue request;
     private String mParam2;
     private GoogleMap mMap;
+
+    private static boolean sendMessage=false;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationManager locationManager;
     private View view;
@@ -169,6 +172,8 @@ public class EnvioFragment extends Fragment implements OnMapReadyCallback, Googl
                 @Override
                 public void onClick(View v) {
                     trazarRuta();
+//                    SendMessage sendMessage=new SendMessage();
+//                    sendMessage.sendMessage();
                 }
             });
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
@@ -374,8 +379,25 @@ public class EnvioFragment extends Fragment implements OnMapReadyCallback, Googl
         if(pedido!=null) {
             pedido.getDocumentReference().update("ubicacionPedido", new GeoPoint(location.getLatitude(), location.getLongitude()));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15f));
+            if(!sendMessage){
+                if(calcularDistancia(new LatLng(pedido.getUbicacion().getLatitude(),pedido.getUbicacion().getLongitude()),
+                        new LatLng(location.getLatitude(),location.getLongitude()))<50){
+                    sendMessage=true;
+                    SendMessage sendMessage=new SendMessage("9585857856");
+                    sendMessage.sendMessage();
+                }
+            }
         }
     }
+    private float calcularDistancia(LatLng punto1, LatLng punto2) {
+        Location location1 = new Location("Punto 1");
+        location1.setLatitude(punto1.latitude);
+        location1.setLongitude(punto1.longitude);
 
+        Location location2 = new Location("Punto 2");
+        location2.setLatitude(punto2.latitude);
+        location2.setLongitude(punto2.longitude);
+        return location1.distanceTo(location2);
+    }
 
 }

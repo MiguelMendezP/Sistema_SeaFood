@@ -87,7 +87,7 @@ private View view;
         contenedorProductosOrdenados =view.findViewById(R.id.contenedorProductosOrd);
         adaptadorProductosOrdenados=new AdaptadorProductosOrdenados(getContext());
         contenedorProductosOrdenados.setAdapter(adaptadorProductosOrdenados);
-        ArrayAdapter adapter= new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, HomeCliente.getExtras());
+        ArrayAdapter adapter= new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, HomeCliente.extras);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnTouchListener(new View.OnTouchListener() {
@@ -102,7 +102,7 @@ private View view;
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                if(isSpinnerOpened){
-                   HomeCliente.getCarrito().add(new ProductoOrdenado(HomeCliente.getExtras().get(position),1));
+                   HomeCliente.getCarrito().add(new ProductoOrdenado(HomeCliente.extras.get(position),1));
                    adaptadorProductosOrdenados.notifyDataSetChanged();
                    CarritoFragment.actualizar();
                }

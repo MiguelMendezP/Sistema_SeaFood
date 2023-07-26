@@ -75,6 +75,7 @@
     <string name="tot">Total:</string>
     <string name="moneda">$</string>
     <string name="trazarRuta">Trazar ruta</string>
+    <string name="comprar">Comprar</string>
     <string name="cerrarSesion">Cerrar sesión</string>
 
     <string name="facebook_app_id">1234</string>

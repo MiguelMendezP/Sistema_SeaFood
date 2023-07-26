@@ -87,7 +87,7 @@ public class AdaptadorPedidosDisponible extends BaseAdapter {
         v= layoutInflater.inflate(R.layout.card_pedido,null);
         TextView nombreCliente=v.findViewById(R.id.datePedido);
         TextView direccionCliente=v.findViewById(R.id.direccionPedido);
-        Button btnAceptar=v.findViewById(R.id.btnAceptarPedido);
+        Button btnAceptar=v.findViewById(R.id.btnVolverPedir);
 
         PedidoRepartidor aux= pedidos.get(i);
         nombreCliente.setText(aux.getCliente());
