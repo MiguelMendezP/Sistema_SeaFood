@@ -92,16 +92,6 @@ public class HomeCliente extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         consultarUsuario(getIntent().getStringExtra("correo"));
-        String clie= getIntent().getStringExtra("cliente");
-        Toast.makeText(this,clie,Toast.LENGTH_SHORT).show();
-        System.out.println(clie);
-        Intent serviceIntent = new Intent(this, FirebaseBackgroundService.class);
-        serviceIntent.putExtra(FirebaseBackgroundService.EXTRA_CLIENTE, clie);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(serviceIntent);
-        } else {
-            startService(serviceIntent);
-        }
         adaptadorCategoria=new AdaptadorCategoria(this);
         consultarCategorias();
         Utils.getImageProfile(this);
