@@ -16,7 +16,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_gravity="center_vertical">
@@ -47,7 +47,7 @@
                 android:textStyle="bold"/>
             <TextView
                 android:id="@+id/tv_ubicacion"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="123 avenida falsa, colonia ficticia, estado Imaginario"

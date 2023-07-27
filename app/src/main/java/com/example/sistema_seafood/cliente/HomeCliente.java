@@ -90,9 +90,28 @@ public class HomeCliente extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         consultarUsuario(getIntent().getStringExtra("correo"));
+
+        String clie = getIntent().getStringExtra("cliente");
+        // Se almacena el nombre del cliente localmente en SharedPreferences si no es nulo o está vacío.
+        if (clie != null && !clie.isEmpty()) {
+            SharedPreferences sharedPreferences = getSharedPreferences("MiPref", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("nombre_cliente", clie);
+            editor.apply();
+        } else {
+            // Si clie es nulo o está vacío, recupera el nombre del cliente almacenado previamente.
+            SharedPreferences sharedPreferencesBackground = getSharedPreferences("MiPref", Context.MODE_PRIVATE);
+            clie = sharedPreferencesBackground.getString("nombre_cliente", null);
+        }
+        // Inicia el servicio en segundo plano solo si el nombre del cliente no es nulo o está vacío.
+        if (clie != null && !clie.isEmpty()) {
+            Intent serviceIntent = new Intent(this, FirebaseBackgroundService.class);
+            serviceIntent.putExtra(FirebaseBackgroundService.EXTRA_CLIENTE, clie);
+            startService(serviceIntent);
+        }
+
         adaptadorCategoria=new AdaptadorCategoria(this);
         consultarCategorias();
         Utils.getImageProfile(this);
