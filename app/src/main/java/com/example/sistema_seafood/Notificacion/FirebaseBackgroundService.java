@@ -27,8 +27,14 @@ public class FirebaseBackgroundService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+    }
 
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null && intent.hasExtra(EXTRA_CLIENTE)) {
+            cliente = intent.getStringExtra(EXTRA_CLIENTE);
+        }
 
         notificacion = new Notificacion(this);
         // Agrega el listener para observar cambios en la colección de "pedidos"
@@ -70,14 +76,10 @@ public class FirebaseBackgroundService extends Service {
                 }
             }
         });
+        return START_NOT_STICKY; // Si el sistema mata el servicio, no lo reinicie automáticamente.
     }
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && intent.hasExtra(EXTRA_CLIENTE)) {
-            cliente = intent.getStringExtra(EXTRA_CLIENTE);
-        }
-        return START_STICKY;
-    }
+
+
 
     @Override
     public void onDestroy() {
