@@ -1,6 +1,7 @@
 package com.example.sistema_seafood;
 
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,6 +31,7 @@ import com.squareup.picasso.Target;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -161,6 +163,24 @@ public class Utils {
         drawable.setColor(context.getResources().getColor(android.R.color.white));
         drawable.setCornerRadius(cornerRadius);
         return drawable;
+    }
+    public static Bitmap getBitmapFromUri(Uri imageUri,Context context) {
+        try {
+            // Utiliza un ContentResolver para abrir el flujo de datos de la imagen utilizando la URI
+            ContentResolver resolver = context.getContentResolver();
+            InputStream inputStream = resolver.openInputStream(imageUri);
+
+            // Decodifica el flujo de datos en un objeto Bitmap
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+            // Recuerda cerrar el InputStream después de utilizarlo
+            inputStream.close();
+
+            return bitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
 

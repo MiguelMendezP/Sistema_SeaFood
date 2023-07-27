@@ -42,9 +42,10 @@ public static TextView subtotal,total;
 private View view;
     private GridView contenedorProductosOrdenados;
 
-    private boolean isSpinnerOpened = false;
+    public static boolean isSpinnerOpened = true;
 
-    private boolean first=true;
+    private ArrayAdapter adapter;
+
     private AdaptadorProductosOrdenados adaptadorProductosOrdenados;
     public CarritoFragment() {
         // Required empty public constructor
@@ -82,34 +83,26 @@ private View view;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_carrito, container, false);
+        isSpinnerOpened=true;
         HomeCliente.setTitulo("Carrito");
         spinner=view.findViewById(R.id.spinner);
         contenedorProductosOrdenados =view.findViewById(R.id.contenedorProductosOrd);
         adaptadorProductosOrdenados=new AdaptadorProductosOrdenados(getContext());
         contenedorProductosOrdenados.setAdapter(adaptadorProductosOrdenados);
-        ArrayAdapter adapter= new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, HomeCliente.extras);
+        adapter= new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, HomeCliente.extras);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        spinner.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                isSpinnerOpened = true;
-                return false;
-            }
-        });
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-               if(isSpinnerOpened){
-                   HomeCliente.getCarrito().add(new ProductoOrdenado(HomeCliente.extras.get(position),1));
-                   adaptadorProductosOrdenados.notifyDataSetChanged();
-                   CarritoFragment.actualizar();
-               }
-               else {
-                   // Marcar que el Spinner ya se ha cargado por primera vez
-                   isSpinnerOpened= false;
-               }
+                if(isSpinnerOpened){
+                    isSpinnerOpened=false;
+                }
+                else {
+                    HomeCliente.getCarrito().add(new ProductoOrdenado(HomeCliente.extras.get(position),1));
+                    adaptadorProductosOrdenados.actualizar();
+                    CarritoFragment.actualizar();
+                }
             }
 
             @Override
@@ -127,7 +120,10 @@ private View view;
         ((Button)view.findViewById(R.id.btnPedir)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                spinner.setAdapter(null);
+                isSpinnerOpened=true;
                 Navigation.findNavController(view).navigate(R.id.nav_confirmar);
+
             }
         });
         return view;

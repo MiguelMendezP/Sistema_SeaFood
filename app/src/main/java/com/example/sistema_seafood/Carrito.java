@@ -20,6 +20,13 @@ public class Carrito {
 
 
     public boolean add(ProductoOrdenado productoOrdenado){
+        for (ProductoOrdenado producto:productosOrdenados){
+            if(producto.getProducto().getNombre().equals(productoOrdenado.getProducto().getNombre())){
+                producto.setCantidad(producto.getCantidad()+1);
+                System.out.println(producto.getCantidad());
+                return true;
+            }
+        }
         return productosOrdenados.add(productoOrdenado);
     }
 

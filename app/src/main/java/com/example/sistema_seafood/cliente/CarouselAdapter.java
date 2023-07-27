@@ -74,11 +74,11 @@ public class CarouselAdapter extends PagerAdapter {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     //HomeCliente.platillosFavoritos.remove(aux);
+                                    FavoritosFragment.removeView(position);
                                     HomeCliente.cliente.getPlatillosFav().remove(aux.getNombre());
                                     HomeCliente.platillosFavoritos.remove(aux);
                                     HomeCliente.cliente.getDocumentReference().update("favoritos",HomeCliente.cliente.getPlatillosFav());
                                     Toast.makeText(context,"El platillo se ha eliminado de favoritos",Toast.LENGTH_SHORT).show();
-                                    FavoritosFragment.removeView(position);
                                 }
                             });
                     AlertDialog titulo=alert.create();

@@ -6,6 +6,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -29,6 +30,7 @@ import com.example.sistema_seafood.ProductoOrdenado;
 import com.example.sistema_seafood.R;
 import com.example.sistema_seafood.Ubicacion;
 import com.example.sistema_seafood.Utils;
+import com.example.sistema_seafood.repartidor.HomeRepartidor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -107,7 +109,6 @@ public class ConfirmarFragment extends Fragment {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_confirmar, container, false);
         HomeCliente.setTitulo("Confirmar Pedido");
-
         linearProducto=view.findViewById(R.id.linearProducto);
         linearTotal=view.findViewById(R.id.linearTotal);
 
