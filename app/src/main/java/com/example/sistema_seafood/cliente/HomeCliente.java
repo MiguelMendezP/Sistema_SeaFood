@@ -21,6 +21,7 @@ import com.example.sistema_seafood.Categoria;
 import com.example.sistema_seafood.Cliente;
 import com.example.sistema_seafood.Extra;
 import com.example.sistema_seafood.MainActivity;
+import com.example.sistema_seafood.Notificacion.FirebaseBackgroundService;
 import com.example.sistema_seafood.Pedido;
 import com.example.sistema_seafood.Platillo;
 import com.example.sistema_seafood.Producto;
