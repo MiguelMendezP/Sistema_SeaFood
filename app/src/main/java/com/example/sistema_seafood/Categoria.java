@@ -97,7 +97,6 @@ public class Categoria {
             e.printStackTrace();
         }
     }
-
     public void mostrarImagen(ImageView imageView){
         this.imageView=imageView;
         if(imagen!=null){
@@ -107,10 +106,10 @@ public class Categoria {
 
     public DocumentReference getDocumentReference(){
         return  documentReference.getReference();
+
     }
 
     public Bitmap getImagen() {
         return imagen;
     }
-
 }

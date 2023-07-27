@@ -32,7 +32,7 @@ public class Platillo extends Producto{
 
     private DocumentReference documentReference;
 
-private Bitmap imagen;
+    private Bitmap imagen;
 
     public DocumentReference getDocumentReference() {
         return documentReference;
