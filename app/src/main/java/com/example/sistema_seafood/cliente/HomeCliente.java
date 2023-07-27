@@ -20,6 +20,7 @@ import com.example.sistema_seafood.Categoria;
 import com.example.sistema_seafood.Cliente;
 import com.example.sistema_seafood.Extra;
 import com.example.sistema_seafood.MainActivity;
+import com.example.sistema_seafood.Notificacion.FirebaseBackgroundService;
 import com.example.sistema_seafood.Pedido;
 import com.example.sistema_seafood.Platillo;
 import com.example.sistema_seafood.Producto;
@@ -86,6 +87,16 @@ public class HomeCliente extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         consultarUsuario(getIntent().getStringExtra("correo"));
+        String clie= getIntent().getStringExtra("cliente");
+        Toast.makeText(this,clie,Toast.LENGTH_SHORT).show();
+        System.out.println(clie);
+        Intent serviceIntent = new Intent(this, FirebaseBackgroundService.class);
+        serviceIntent.putExtra(FirebaseBackgroundService.EXTRA_CLIENTE, clie);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
+        } else {
+            startService(serviceIntent);
+        }
         adaptadorCategoria=new AdaptadorCategoria(this);
         consultarCategorias();
         Utils.getImageProfile(this);
