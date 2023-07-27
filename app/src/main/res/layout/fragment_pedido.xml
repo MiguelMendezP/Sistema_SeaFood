@@ -32,7 +32,12 @@
         <GridView
             android:id="@+id/contenedorPedidosLista"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:gravity="center"
+            android:horizontalSpacing="26dp"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="16dp"/>
 
     </LinearLayout>
 

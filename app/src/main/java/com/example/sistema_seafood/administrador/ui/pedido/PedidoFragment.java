@@ -81,8 +81,6 @@ public class PedidoFragment extends Fragment {
                         for (DocumentChange dc : snapshots.getDocumentChanges()) {
                             switch (dc.getType()) {
                                 case ADDED:
-
-
                                         String productosListados = "";
                                         ArrayList<HashMap<String, Object>> matrizObjetos = (ArrayList<HashMap<String, Object>>) dc.getDocument().get("productos");
                                         for (HashMap<String, Object> objeto : matrizObjetos) {
