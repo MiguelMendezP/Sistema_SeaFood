@@ -5,6 +5,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +19,8 @@ import com.example.sistema_seafood.administrador.ui.perfil.CambiasPasswordAdmin;
 import com.example.sistema_seafood.cliente.PerfilFragment;
 import com.example.sistema_seafood.models.usuarioModel;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -35,6 +38,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
 
 public class InicioAdmin extends AppCompatActivity {
 
@@ -58,15 +67,16 @@ public class InicioAdmin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Utils.getImageProfile(this);
+
         binding = ActivityInicioAdminBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.appBarInicioAdmin.toolbar);
 
         consultarUsuario();
-        cambiasPasswordAdmin=new CambiasPasswordAdmin();
         Utils.getImageProfile(this);
-        
+
+        cambiasPasswordAdmin = new CambiasPasswordAdmin();
+
         titulo=findViewById(R.id.title);
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
@@ -115,7 +125,7 @@ public class InicioAdmin extends AppCompatActivity {
             }
         });
 
-        imageView=(ImageView)binding.navView.getHeaderView(0).findViewById(R.id.imgClienteMenu);
+        imageView =(ImageView)binding.navView.getHeaderView(0).findViewById(R.id.imgAdminMenu);
         user=(TextView) binding.navView.getHeaderView(0).findViewById(R.id.nameUser);
         email=(TextView) binding.navView.getHeaderView(0).findViewById(R.id.emailUserCliente);
 
@@ -126,6 +136,11 @@ public class InicioAdmin extends AppCompatActivity {
         email.setText(correo);
 
     }
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReference();
+
+
+
     public static void setTitulo(String titulo){
         InicioAdmin.titulo.setText(titulo);
     }
@@ -170,6 +185,10 @@ public class InicioAdmin extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void imageAdmin(){
+
     }
 
     public usuarioModel getUsuarioModel(){

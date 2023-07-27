@@ -2,6 +2,7 @@ package com.example.sistema_seafood.administrador.ui.perfil;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -94,14 +95,13 @@ public class PerfilFragment extends Fragment {
         EditText telefono=view.findViewById(R.id.editTelefonoRepartidor);
         correo.setText(usuarioModel.getCorreo());
         telefono.setText(usuarioModel.getNumero());
-        fotoPerfil.setImageBitmap(InicioAdmin.bitmap);
+        fotoPerfil.setImageBitmap(InicioAdmin.imgProfile);
 
         ((ImageButton)view.findViewById(R.id.btnNewFoto)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
-                Utils.uploadImageProfile(selectedImageUri,getContext());
             }
         });
         ((Button)view.findViewById(R.id.btn_cerrarSesion)).setOnClickListener(new View.OnClickListener() {
@@ -155,7 +155,6 @@ public class PerfilFragment extends Fragment {
         ((Button)view.findViewById(R.id.btnChangePassRepartidor)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Navigation.findNavController(v).navigate(R.id.nav_perfilCambiarContrasenia);
             }
         });
@@ -213,5 +212,16 @@ public class PerfilFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            selectedImageUri = data.getData();
+            fotoPerfil.setImageURI(selectedImageUri);
+            Utils.uploadImageProfile(selectedImageUri,getContext());
+            //Utils.getImageProfile(new InicioAdmin());
+        }
     }
 }
