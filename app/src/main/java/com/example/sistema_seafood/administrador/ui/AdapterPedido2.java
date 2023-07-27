@@ -113,26 +113,26 @@ public class AdapterPedido2 extends BaseAdapter {
                 layoutPendiente.setVisibility(View.VISIBLE);
                 break;
             case "preparacion":
-                layoutPendiente.setVisibility(View.INVISIBLE);
+                layoutPendiente.setVisibility(View.GONE);
                 layoutPreparacion.setVisibility(View.VISIBLE);
                 break;
             case "listo":
-                layoutPendiente.setVisibility(View.INVISIBLE);
+                layoutPendiente.setVisibility(View.GONE);
                 layoutRechazado.setVisibility(View.VISIBLE);
                 estados.setText("Esperando repartidor");
                 break;
             case "enviado":
-                layoutPendiente.setVisibility(View.INVISIBLE);
+                layoutPendiente.setVisibility(View.GONE);
                 layoutRechazado.setVisibility(View.VISIBLE);
                 estados.setText("El pedido esta en camino");
                 break;
             case "entregado":
-                layoutPendiente.setVisibility(View.INVISIBLE);
+                layoutPendiente.setVisibility(View.GONE);
                 layoutRechazado.setVisibility(View.VISIBLE);
                 estados.setText("El pedido ya se entrego");
                 break;
             case "rechazado":
-                layoutPendiente.setVisibility(View.INVISIBLE);
+                layoutPendiente.setVisibility(View.GONE);
                 layoutRechazado.setVisibility(View.VISIBLE);
                 estados.setText("Haz rechazado este pedido");
                 break;
