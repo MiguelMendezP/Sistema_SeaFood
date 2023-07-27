@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.sistema_seafood.Notificacion.FirebaseBackgroundService;
 import com.example.sistema_seafood.administrador.InicioAdmin;
 import com.example.sistema_seafood.cliente.HomeCliente;
 import com.example.sistema_seafood.models.usuarioModel;
@@ -94,10 +95,12 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (int i = 0; i < itemsUsuaarios.size(); i++) {
                                 if (itemsUsuaarios.get(i).getCorreo().equals(correo)) {
+
                                     if (itemsUsuaarios.get(i).getRol().equals("cliente")) {
                                         guardarSesion(itemsUsuaarios.get(i).getCorreo(), itemsUsuaarios.get(i).getContrasenia(), itemsUsuaarios.get(i).getRol(), itemsUsuaarios.get(i).getNombre());
                                         Intent menuCliente = new Intent(MainActivity.this, HomeCliente.class);
-                                        menuCliente.putExtra("correo", itemsUsuaarios.get(i).getCorreo());
+                                        menuCliente.putExtra("correo",itemsUsuaarios.get(i).getCorreo());
+                                        menuCliente.putExtra("cliente",itemsUsuaarios.get(i).getNombre());
                                         startActivity(menuCliente);
                                         finish();
                                         break;
@@ -115,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
                                         finish();
                                         break;
                                     }
+
+
                                 }
                             }
                         } else {

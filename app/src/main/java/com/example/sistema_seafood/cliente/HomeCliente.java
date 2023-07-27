@@ -1,8 +1,8 @@
 package com.example.sistema_seafood.cliente;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -12,19 +12,21 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sistema_seafood.Carrito;
+import com.example.sistema_seafood.Categoria;
 import com.example.sistema_seafood.Cliente;
 import com.example.sistema_seafood.Extra;
 import com.example.sistema_seafood.MainActivity;
+import com.example.sistema_seafood.Notificacion.FirebaseBackgroundService;
 import com.example.sistema_seafood.Pedido;
 import com.example.sistema_seafood.Platillo;
+import com.example.sistema_seafood.Producto;
+import com.example.sistema_seafood.ProductoOrdenado;
 import com.example.sistema_seafood.R;
-import com.example.sistema_seafood.Ubicacion;
 import com.example.sistema_seafood.Utils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -37,7 +39,6 @@ import com.google.android.material.navigation.NavigationView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.helper.widget.MotionEffect;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -45,10 +46,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.sistema_seafood.databinding.ActivityHomeClienteBinding;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -56,17 +54,21 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class HomeCliente extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityHomeClienteBinding binding;
 
     public static ArrayList<Extra> extras=new ArrayList<>();
-
     public static Bitmap imgProfile;
-    public static ImageView imageView;
-    public static Carrito carrito=new Carrito();
 
+    public static FirebaseFirestore firestore=FirebaseFirestore.getInstance();
+
+    public static ImageView imageView;
+
+    public static AdaptadorCategoria adaptadorCategoria;
+    public static Carrito carrito=new Carrito();
     public static NavController navController;
 
     private static FloatingActionButton floatingActionButton;
@@ -81,12 +83,27 @@ public class HomeCliente extends AppCompatActivity {
 
     public static List<Platillo> platillos=new ArrayList<>();
 
-    public static List<Platillo> platillosFavoritos=new ArrayList<>();
+    public static List<Categoria> categorias=new ArrayList<>();
+
+    public static List<Platillo> platillosFavoritos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        consultarUsuario(getIntent().getStringExtra("correo"));
+        String clie= getIntent().getStringExtra("cliente");
+        Toast.makeText(this,clie,Toast.LENGTH_SHORT).show();
+        System.out.println(clie);
+        Intent serviceIntent = new Intent(this, FirebaseBackgroundService.class);
+        serviceIntent.putExtra(FirebaseBackgroundService.EXTRA_CLIENTE, clie);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
+        } else {
+            startService(serviceIntent);
+        }
+        adaptadorCategoria=new AdaptadorCategoria(this);
+        consultarCategorias();
         Utils.getImageProfile(this);
         binding = ActivityHomeClienteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -95,7 +112,7 @@ public class HomeCliente extends AppCompatActivity {
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home,R.id.nav_opcion1 ,R.id.nav_opcion2 ,R.id.nav_opcion3 ,R.id.nav_opcion4 ,R.id.nav_opcion5 ,R.id.nav_perfil, R.id.nav_favoritos,R.id.nav_pedidos,R.id.nav_ayuda,R.id.nav_categoria,R.id.nav_envio, R.id.nav_platillo,R.id.nav_carrito,R.id.nav_confirmar,R.id.nav_nueva_ubicacion,R.id.nav_change_pass, R.id.nav_cerrar_sesion)
+                R.id.nav_home,R.id.nav_opcion1 ,R.id.nav_opcion2 ,R.id.nav_opcion3 ,R.id.nav_opcion4 ,R.id.nav_opcion5 ,R.id.nav_perfil, R.id.nav_favoritos,R.id.nav_pedidos,R.id.nav_ayuda,R.id.nav_categoria,R.id.nav_envio, R.id.nav_platillo,R.id.nav_carrito,R.id.nav_confirmar,R.id.nav_nueva_ubicacion,R.id.nav_change_pass, R.id.nav_cerrar_sesion,R.id.nav_calificar)
                 .setOpenableLayout(drawer)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home_cliente);
@@ -104,7 +121,12 @@ public class HomeCliente extends AppCompatActivity {
         binding.appBarHomeCliente.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.nav_envio);
+//                if(pedido.getEstado().equals("pendiente")){
+//                    mostrarPendiente();
+//                }
+//                else {
+                    navController.navigate(R.id.nav_envio);
+//                }
             }
         });
 
@@ -157,9 +179,6 @@ public class HomeCliente extends AppCompatActivity {
                 return true;
             }
         });
-        // consultarUsuario(getIntent().getStringExtra("correo"));
-        TextView textView=new TextView(this);
-        textView.setText("a ver que show");
         imageView=(ImageView)binding.navView.getHeaderView(0).findViewById(R.id.imgClienteMenu);
         user=(TextView) binding.navView.getHeaderView(0).findViewById(R.id.nameUser);
         email=(TextView) binding.navView.getHeaderView(0).findViewById(R.id.emailUserCliente);
@@ -190,34 +209,27 @@ public class HomeCliente extends AppCompatActivity {
     }
 
     public void consultarUsuario(String correo){
-
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("usuarios").document(correo);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        String correo=document.getId();
-                        String nombre=document.getString("nombre");
-                        user.setText(nombre);
-                        email.setText(correo);
-                        GeoPoint ubicacion = document.getGeoPoint("ubicacion");
-                        double latitud = ubicacion.getLatitude();
-                        double longitud = ubicacion.getLongitude();
-                        Ubicacion ubic=new Ubicacion(latitud,longitud);
-                        String numTelefono=document.getString("numero");
-                        cliente=new Cliente(nombre,numTelefono,correo,ubic,(ArrayList<String>)document.get("favoritos"),new ArrayList<>());
-                        cliente.setDireccion(Utils.getAddressFromLatLng(getApplicationContext(),latitud,longitud));
-                        cliente.setDocumentReference(docRef);
-                    } else {
-                        Log.d(TAG, "No such document");
+        firestore.collection("usuarios").whereEqualTo("correo",correo)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String nombre=document.getString("nombre");
+                                user.setText(nombre);
+                                email.setText(correo);
+                                GeoPoint ubicacion = document.getGeoPoint("ubicacion");
+                                String numTelefono=document.getString("numero");
+                                cliente=new Cliente(nombre,numTelefono,correo,ubicacion,(ArrayList<String>)document.get("favoritos"),new ArrayList<>(),document.getReference());
+                                cliente.setDireccion(Utils.getAddressFromLatLng(getApplicationContext(),ubicacion.getLatitude(),ubicacion.getLongitude()));
+                            }
+                        } else {
+                            Log.d(MotionEffect.TAG, "Error getting documents: ", task.getException());
+                        }
                     }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
+                });
     }
 
     public void cerrarSesion(){
@@ -244,7 +256,7 @@ public class HomeCliente extends AppCompatActivity {
         HomeCliente.titulo.setText(titulo);
     }
     public void consultarExtras(){
-        FirebaseFirestore.getInstance().collection("extras")
+        firestore.collection("extras")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -261,20 +273,88 @@ public class HomeCliente extends AppCompatActivity {
                 });
     }
 
-    public static ArrayList<Extra> getExtras(){
-        return extras;
-    }
 
     public static void setPedido(Pedido pedido){
         HomeCliente.pedido=pedido;
         floatingActionButton.setVisibility(View.VISIBLE);
     }
 
-    public static Pedido getPedido(){
-        return pedido;
+    public void consultarCategorias(){
+        firestore.collection("Categoria")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Categoria aux = new Categoria(document.getString("nombre"), document);
+                                adaptadorCategoria.add(aux);
+                                categorias.add(aux);
+                                HomeCliente.platillos.addAll(aux.getPlatillos());
+                            }
+                        } else {
+                            Log.d(MotionEffect.TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 
+    public void mostrarPendiente(){
+        AlertDialog.Builder alert=new AlertDialog.Builder(this);
+        alert.setMessage("Tu pedido se encuentra en estado pendiente, el restaurant aún no ha aceptado el pedido.")
+                .setCancelable(true)
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+        AlertDialog titulo=alert.create();
+        titulo.setTitle("Pendiente");
+        titulo.show();
+    }
+
+    public static void consultarFavoritos(){
+        platillosFavoritos=new ArrayList<>();
+        for(Platillo platillo:HomeCliente.platillos){
+            if(HomeCliente.cliente.getPlatillosFav().contains(platillo.getNombre())){
+                HomeCliente.platillosFavoritos.add(platillo);
+            }
+        }
+    }
+
+    public static void volverPedir(ArrayList<Map> productos){
+        List <String> producs=new ArrayList<>();
+        for (Map map:productos){
+            carrito.add(new ProductoOrdenado(getProducto(map.get("producto").toString()),Integer.parseInt(map.get("cantidad").toString())));
+        }
+    }
+
+    public static Producto getProducto(String producto){
+        for (Producto producto1:platillos){
+            if (producto1.getNombre().equals(producto)){
+                return producto1;
+            }
+        }
+        for (Producto producto1:extras){
+            if(producto1.getNombre().equals(producto)){
+                return producto1;
+            }
+        }
+        return null;
+    }
+
+    public static Categoria getCategoria(String categoria){
+        for(Categoria categoria1:categorias){
+            if(categoria1.getNombre().equals(categoria)){
+                return categoria1;
+            }
+        }
+        return null;
+    }
 }
+
+
 
 
 

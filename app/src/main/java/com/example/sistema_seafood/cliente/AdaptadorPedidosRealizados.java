@@ -9,10 +9,13 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.navigation.Navigation;
 
 import com.example.sistema_seafood.Pedido;
+import com.example.sistema_seafood.Producto;
 import com.example.sistema_seafood.R;
 import com.example.sistema_seafood.Utils;
 import com.example.sistema_seafood.repartidor.PedidoRepartidor;
@@ -84,6 +87,26 @@ public class AdaptadorPedidosRealizados extends BaseAdapter {
             linearLayou.addView(textView);
         }
         ((TextView)v.findViewById(R.id.textTotal)).setText("$ "+aux.getTotal());
+        ((Button)v.findViewById(R.id.btnVolverPedir)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomeCliente.volverPedir(aux.getProductos());
+                Toast.makeText(context,"Productos añadidos al carrito",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ((Button)v.findViewById(R.id.btnCalificar)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Producto> products=new ArrayList<>();
+                for (Map map:aux.getProductos()){
+                    products.add(HomeCliente.getProducto(map.get("producto").toString()));
+                    Toast.makeText(context,map.get("producto").toString(),Toast.LENGTH_SHORT).show();
+                }
+                CalificarFragment.productos=products;
+                HomeCliente.navController.navigate(R.id.nav_calificar);
+            }
+        });
         return v;
     }
 }

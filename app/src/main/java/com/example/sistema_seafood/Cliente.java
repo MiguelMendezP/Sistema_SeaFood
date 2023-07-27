@@ -2,13 +2,14 @@ package com.example.sistema_seafood;
 
 import com.example.sistema_seafood.models.Platillo;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Date;
 import java.util.List;
 
 public class Cliente {
     private String nombre,numTelefono,correo, direccion;
-    private Ubicacion ubicacion;
+    private GeoPoint ubicacion;
     private List<Platillo> platillosFavoritos;
 
     private List<String> platillosFav;
@@ -33,22 +34,14 @@ public class Cliente {
         this.direccion = direccion;
     }
 
-    public Cliente(String nombre, String numTelefono, String correo, Ubicacion ubicacion, List<Pedido> pedidos) {
-        this.nombre = nombre;
-        this.numTelefono = numTelefono;
-        this.correo = correo;
-        this.ubicacion = ubicacion;
-        this.platillosFavoritos = platillosFavoritos;
-        this.pedidos=pedidos;
-    }
-
-    public Cliente(String nombre, String numTelefono, String correo, Ubicacion ubicacion, List<String> platillosFavoritos, List<Pedido> pedidos) {
+    public Cliente(String nombre, String numTelefono, String correo, GeoPoint ubicacion, List<String> platillosFavoritos, List<Pedido> pedidos,DocumentReference documentReference) {
         this.nombre = nombre;
         this.numTelefono = numTelefono;
         this.correo = correo;
         this.ubicacion = ubicacion;
         this.platillosFav = platillosFavoritos;
         this.pedidos=pedidos;
+        this.documentReference=documentReference;
     }
 
     public List<String> getPlatillosFav() {
@@ -83,7 +76,7 @@ public class Cliente {
         this.correo = correo;
     }
 
-    public Ubicacion getUbicacion() {
+    public GeoPoint getUbicacion() {
         return ubicacion;
     }
 
@@ -95,7 +88,7 @@ public class Cliente {
         return pedidos;
     }
 
-    public void setUbicacion(Ubicacion ubicacion) {
+    public void setUbicacion(GeoPoint ubicacion) {
         this.ubicacion = ubicacion;
     }
 
