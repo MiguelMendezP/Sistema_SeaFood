@@ -14,7 +14,7 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imgClienteMenu"
+        android:id="@+id/imgAdminMenu"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"

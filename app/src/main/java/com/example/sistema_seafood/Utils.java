@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.sistema_seafood.administrador.InicioAdmin;
 import com.example.sistema_seafood.cliente.HomeCliente;
 import com.example.sistema_seafood.repartidor.HomeRepartidor;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -82,6 +83,7 @@ public class Utils {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             // Foto subida exitosamente
+                            getImageProfile(context);
                             Toast.makeText(context, "Foto de perfil actualizada", Toast.LENGTH_SHORT).show();
                         }
                     })
@@ -98,6 +100,7 @@ public class Utils {
     public static void getImageProfile(Context context) {
         //Toast.makeText(context,firebaseAuth.getCurrentUser().getUid(),Toast.LENGTH_SHORT).show();
         StorageReference profilePhotoRef = firebaseStorage.child("usuarios").child(firebaseAuth.getCurrentUser().getUid() + ".jpg");
+        System.out.println("Si"+firebaseAuth.getCurrentUser().getUid());
         // Obtener la URL de descarga del archivo
         try {
             // Crea un archivo temporal para almacenar la imagen
@@ -116,6 +119,10 @@ public class Utils {
                                 HomeCliente.imgProfile = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                                 HomeCliente.imageView.setImageBitmap(HomeCliente.imgProfile);
                                 //HomeCliente.imgProfileMenu.setImageBitmap(HomeCliente.imgProfile);
+                            }
+                            if(context instanceof InicioAdmin){
+                                InicioAdmin.imgProfile = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                                InicioAdmin.imageView.setImageBitmap(InicioAdmin.imgProfile);
                             }
                         }
                     })

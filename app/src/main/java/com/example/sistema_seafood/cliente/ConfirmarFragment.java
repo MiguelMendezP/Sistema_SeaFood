@@ -127,7 +127,8 @@ gridView.setAdapter(adaptadorProductosConfirmar);
         else {
             direccion=Utils.getAddressFromLatLng(getContext(),direccionEntrega.latitude,direccionEntrega.longitude);
         }
-        ((TextView)view.findViewById(R.id.direccionGuardada)).setText(direccion);
+        TextView direccionGuardada = ((TextView)view.findViewById(R.id.direccionGuardada));
+        direccionGuardada.setText(direccion);
         Button btnAgregarDireccion=view.findViewById(R.id.btnNuevaUbicacion);
         btnAgregarDireccion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,9 +137,17 @@ gridView.setAdapter(adaptadorProductosConfirmar);
                 Navigation.findNavController(view).navigate(R.id.nav_nueva_ubicacion);
             }
         });
+        Button btnConfirmar=view.findViewById(R.id.btnConfirmar);
+        if(!direccionGuardada.getText().equals("")){
+            btnConfirmar.setEnabled(true);
+        }
+        else {
+            btnConfirmar.setEnabled(false);
+        }
         ((Button)view.findViewById(R.id.btnConfirmar)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Pedido pedido=new Pedido(HomeCliente.getCliente(),HomeCliente.getCarrito(),new Date(),new Ubicacion(17.097837343208298, -96.75758794245301),"en espera");
                 HomeCliente.setPedido(pedido);
                 GeoPoint geoPoint;

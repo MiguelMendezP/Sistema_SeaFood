@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     String rol = "";
     String correo = "";
     String contrasenia = "";
+    String userID = "";
 
     //Inisiar sesion
     private static final int RC_SIGN_IN = 1;
@@ -265,19 +266,16 @@ public class MainActivity extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         SharedPreferences preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
         rol = preferences.getString("rol", "rol");
-        System.out.println(rol);
 
         if (user != null && rol.equals("cliente")){
-            irCliente();
+            irCliente(user.getEmail());
         }else{
             loginCredencialesLocales();
         }
     }
-    private void irCliente() {
+    private void irCliente(String email) {
         Intent menuRepartidor = new Intent(MainActivity.this, HomeCliente.class);
-        SharedPreferences preferences=getSharedPreferences("sesion", Context.MODE_PRIVATE);
-        String correAux=preferences.getString("correo","correo");
-        menuRepartidor.putExtra("correo",correAux);
+        menuRepartidor.putExtra("correo",email);
         startActivity(menuRepartidor);
         finish();
     }
@@ -288,6 +286,9 @@ public class MainActivity extends AppCompatActivity {
         correo = preferences.getString("correo", "correo");
         contrasenia = preferences.getString("contrasenia", "contrasenia");
         rol = preferences.getString("rol", "rol");
+
+        System.out.println(correo);
+        System.out.println(contrasenia);
 
         if (preferences.getBoolean("estado", true) == true) {
             firebaseAuth.signInWithEmailAndPassword(correo, contrasenia).addOnCompleteListener(new OnCompleteListener<AuthResult>() {

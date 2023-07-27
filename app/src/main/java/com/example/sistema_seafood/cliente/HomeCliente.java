@@ -98,7 +98,6 @@ public class HomeCliente extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         extras=new ArrayList<>();
         consultarUsuario(getIntent().getStringExtra("correo"));
-
         String clie = getIntent().getStringExtra("cliente");
         // Se almacena el nombre del cliente localmente en SharedPreferences si no es nulo o está vacío.
         if (clie != null && !clie.isEmpty()) {
