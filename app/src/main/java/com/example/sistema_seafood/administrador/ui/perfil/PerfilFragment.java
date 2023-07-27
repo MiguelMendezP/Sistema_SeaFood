@@ -7,23 +7,35 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.sistema_seafood.MainActivity;
 import com.example.sistema_seafood.R;
+import com.example.sistema_seafood.Utils;
+import com.example.sistema_seafood.administrador.InicioAdmin;
 import com.example.sistema_seafood.cliente.HomeCliente;
 import com.example.sistema_seafood.databinding.FragmentPerfilAdminBinding;
 import com.example.sistema_seafood.databinding.FragmentPerfilBinding;
 import com.example.sistema_seafood.models.usuarioModel;
+import com.example.sistema_seafood.repartidor.HomeRepartidor;
+import com.example.sistema_seafood.repartidor.PerfilRepartidorFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -40,57 +52,115 @@ import java.util.ArrayList;
 
 public class PerfilFragment extends Fragment {
 
-    private FragmentPerfilAdminBinding binding;
-    TextView mostrarNombre, mostrarCorreo, muestrarContraseña,mostrarNumero;
-    Button btn_cerrarSesion;
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
-    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    // TODO: Rename and change types of parameters
+
+    private String mParam1;
+    private String mParam2;
+
+    private static final int GALLERY_REQUEST_CODE = 123;
+    private static final int CAMERA_REQUEST_CODE = 456;
+    private View view;
+    private ImageView fotoPerfil;
+    private Uri selectedImageUri;
+    private TextView mostrarNombre, mostrarCorreo,mostrarNumero;
+    private Button btn_cerrarSesion;
+    private usuarioModel usuarioModel;
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+    public static PerfilFragment newInstance(String param1, String param2) {
+        PerfilFragment fragment = new PerfilFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_perfil_admin, container, false);
 
-        binding = FragmentPerfilAdminBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        //login();
+        usuarioModel = ((InicioAdmin)getActivity()).getUsuarioModel();
+        fotoPerfil = view.findViewById(R.id.imgRepartidor);
+        ((TextView) view.findViewById(R.id.mostrarNombre)).setText(usuarioModel.getNombre());
+        EditText correo=view.findViewById(R.id.editEmailRepartidor);
+        EditText telefono=view.findViewById(R.id.editTelefonoRepartidor);
+        correo.setText(usuarioModel.getCorreo());
+        telefono.setText(usuarioModel.getNumero());
+        fotoPerfil.setImageBitmap(InicioAdmin.bitmap);
 
-        mostrarCorreo = root.findViewById(R.id.mostrarCorreo);
-        mostrarNombre = root.findViewById(R.id.mostrarNombre);
-        muestrarContraseña = root.findViewById(R.id.muestrarContraseña);
-        mostrarNumero = root.findViewById(R.id.mostrarNumero);
-
-        SharedPreferences preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
-        String correo = preferences.getString("correo","correo");
-        setDatos(correo);
-
-        btn_cerrarSesion = root.findViewById(R.id.btn_cerrarSesion);
-        btn_cerrarSesion.setOnClickListener(new View.OnClickListener() {
+        ((ImageButton)view.findViewById(R.id.btnNewFoto)).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                AlertDialog.Builder alerta = new AlertDialog.Builder(getActivity());
-                alerta.setMessage("¿Deseas cerrar sesion?")
-                        .setCancelable(false)
-                                .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            public void onClick(View v) {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
+                Utils.uploadImageProfile(selectedImageUri,getContext());
+            }
+        });
+        ((Button)view.findViewById(R.id.btn_cerrarSesion)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+                cerrarSesion();
+            }
+        });
+        ((Button)view.findViewById(R.id.btn_actualizar)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(correo.getText().toString().equals("") && telefono.getText().toString().equals("")){
+                    Toast.makeText(getContext(),"Campos vacíos",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if(!correo.getText().toString().equals("")){
+                        FirebaseAuth.getInstance().getCurrentUser().updateEmail(correo.getText().toString())
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        cerrarSesion();
-                                        cerrarSesionGoogle();
-                                        FirebaseAuth.getInstance().signOut();
-                                        Intent menuCliente = new Intent(getActivity(), MainActivity.class);
-                                        startActivity(menuCliente);
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            // El correo electrónico se actualizó exitosamente.
+                                            Toast.makeText(getContext(), "Revise su bandeja de entrada y confirme el cambio", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            // Ocurrió un error al actualizar el correo electrónico.
+                                            Toast.makeText(getContext(), "Error al actualizar el correo electrónico", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        });
-                AlertDialog titulo = alerta.create();
-                titulo.setTitle("Cerrar sesion");
-                titulo.show();
+                                });
+                        usuarioModel.getDocumentReference().update("correo",correo.getText().toString());
+                        correo.setText(correo.getText().toString());
+                        correo.clearFocus();
+
+                    }
+                    if(!telefono.getText().toString().equals("")){
+                        usuarioModel.getDocumentReference().update("numero",telefono.getText().toString());
+                        telefono.setText(telefono.getText().toString());
+                        telefono.clearFocus();
+
+                    }
+                    Toast.makeText(getContext(),"Información actualizada",Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
-        return root;
+        ((Button)view.findViewById(R.id.btnChangePassRepartidor)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Navigation.findNavController(v).navigate(R.id.nav_perfilCambiarContrasenia);
+            }
+        });
+
+        return view;
     }
 
     public void cerrarSesion(){
@@ -133,7 +203,6 @@ public class PerfilFragment extends Fragment {
 
                         mostrarNombre.setText(document.getString("nombre"));
                         mostrarCorreo.setText(document.getString("correo"));
-                        muestrarContraseña.setText(document.getString("contrasenia"));
                         mostrarNumero.setText(document.getString("numero"));
 
                     } else {
@@ -144,11 +213,5 @@ public class PerfilFragment extends Fragment {
                 }
             }
         });
-    }
-
-@Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 }

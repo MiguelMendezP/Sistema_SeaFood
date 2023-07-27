@@ -55,6 +55,12 @@
         tools:layout="@layout/fragment_perfil_admin" />
 
     <fragment
+        android:id="@+id/nav_perfilCambiarContrasenia"
+        android:name="com.example.sistema_seafood.administrador.ui.perfil.CambiasPasswordAdmin"
+        android:label=" "
+        tools:layout="@layout/fragment_cambias_password_admin" />
+
+    <fragment
         android:id="@+id/nav_repartidores"
         android:name="com.example.sistema_seafood.administrador.ui.repartidor.RepartidorFragment"
         android:label=" "

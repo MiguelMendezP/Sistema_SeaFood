@@ -35,12 +35,40 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/fotoPerfil"
-                android:layout_width="100dp"
-                android:layout_height="150dp"
-                android:layout_weight="1"
-                tools:src="@drawable/perfil" />
+            <FrameLayout
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:background="@drawable/circle_background">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/circle_background">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/imgRepartidor"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:padding="4dp"
+                        android:scaleType="centerCrop"
+                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                        app:strokeColor="@color/gris"
+                        app:strokeWidth="4dp" />
+
+                    <ImageButton
+                        android:id="@+id/btnNewFoto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/fui_transparent"
+                        android:src="@android:drawable/ic_menu_camera"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/mostrarNombre"
@@ -50,197 +78,95 @@
                 android:layout_weight="1"
                 android:textSize="24dp"
                 android:textColor="@color/black"
-                android:text="Miguel mendez pinacho" />
+                android:text="Prueba"
+                android:layout_margin="10dp"/>
+
         </LinearLayout>
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="32dp">
+            android:text="@string/correo"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:layout_marginTop="32dp"/>
+        <EditText
+            android:id="@+id/editEmailRepartidor"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/background_edit"
+            android:ems="10"
+            android:paddingLeft="20dp"
+            android:textColor="#808080"
+            android:textColorHint="@color/gris"
+            android:hint="Correo"
+            android:inputType="textEmailAddress"
+            tools:ignore="MissingConstraints"
+            android:layout_marginTop="10dp"/>
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/background_edit">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:gravity="clip_vertical|center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textView5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:gravity="center_vertical"
-                        android:hint="Correo"
-                        android:textAlignment="textEnd"
-                        android:layout_marginLeft="10dp"
-                        android:textColor="@color/gris"
-                        tools:ignore="RtlCompat" />
-
-                    <TextView
-                        android:id="@+id/mostrarCorreo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="TextView"
-                        android:paddingRight="20dp"
-                        android:textColor="@color/black"
-                        android:textAlignment="textEnd" />
-                </LinearLayout>
-            </FrameLayout>
-
-            <ImageView
-                android:id="@+id/imageButton"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:src="@drawable/edit"/>
-
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="32dp">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/background_edit">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:gravity="clip_vertical|center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textView10"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:gravity="center_vertical"
-                        android:hint="Contraseña"
-                        android:textAlignment="textEnd"
-                        android:layout_marginLeft="10dp"
-                        android:textColor="@color/gris"
-                        tools:ignore="RtlCompat" />
-
-                    <TextView
-                        android:id="@+id/muestrarContraseña"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:paddingRight="20dp"
-                        android:text="TextView"
-                        android:textColor="@color/black"
-                        android:textAlignment="textEnd" />
-                </LinearLayout>
-
-            </FrameLayout>
-
-            <ImageView
-                android:id="@+id/imageButton2"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:src="@drawable/edit" />
-
-        </LinearLayout>
-
-        <LinearLayout
+            android:text="Telefono"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:layout_marginTop="32dp"/>
+        <EditText
+            android:id="@+id/editTelefonoRepartidor"
             android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/background_edit"
+            android:ems="10"
+            android:paddingLeft="20dp"
+            android:textColor="#808080"
+            android:textColorHint="@color/gris"
+            android:layout_marginTop="10dp"
+            android:hint="Telefono"
+            android:inputType="textEmailAddress"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/btnChangePassRepartidor"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="32dp">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/background_edit">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:gravity="clip_vertical|center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textView6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:gravity="center_vertical"
-                        android:hint="Correo"
-                        android:textAlignment="textEnd"
-                        android:layout_marginLeft="10dp"
-                        android:textColor="@color/gris"
-                        tools:ignore="RtlCompat" />
-
-                    <TextView
-                        android:id="@+id/mostrarNumero"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="TextView"
-                        android:paddingRight="20dp"
-                        android:textColor="@color/black"
-                        android:textAlignment="textEnd" />
-                </LinearLayout>
-            </FrameLayout>
-
-            <ImageView
-                android:id="@+id/imageButton3"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:src="@drawable/edit"/>
-
-        </LinearLayout>
+            android:layout_gravity="end"
+            android:layout_marginTop="10dp"
+            android:background="@color/fui_transparent"
+            android:text="@string/changePass"
+            android:textColor="@android:color/holo_blue_light" />
 
     </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="110dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_actualizar"
+            style="@android:style/Widget.Button"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@drawable/button_backgroud"
+            android:gravity="center"
+            android:text="Actualizar datos"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_cerrarSesion"
             style="@android:style/Widget.Button"
             android:layout_width="200dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
-            android:background="@drawable/button_backgroud"
+            android:background="@drawable/button_backgroud2"
             android:gravity="center"
             android:text="Cerrar sesion"
+            android:layout_marginTop="15dp"
             android:textColor="#ffffff"
             android:textSize="18sp"
             android:textStyle="bold" />

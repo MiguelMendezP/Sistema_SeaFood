@@ -103,7 +103,13 @@ public class AdapterPedido2 extends BaseAdapter {
 
 
         Pedido pedidoElem = pedidos.get(i);
-        tv_fecha.setText(pedidoElem.getFecha().toString());
+
+        //Cambiar el formato de un objeto Date
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy");
+        String fechaFormateada = dateFormat.format(pedidoElem.getFecha());
+
+
+        tv_fecha.setText(fechaFormateada);
         tv_cliente.setText(pedidoElem.getCorreoCliente());
         tv_ubicacion.setText(pedidoElem.getDireccion());
         tv_precio.setText("Precio: $" + pedidoElem.getTotal());

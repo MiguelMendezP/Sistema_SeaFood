@@ -76,7 +76,7 @@ private PedidosDisponiblesRepartidor pedidosDisponiblesRepartidor;
         historialFragment=new HistorialFragment();
         perfil=new PerfilRepartidorFragment();
         pedidosDisponiblesRepartidor= new PedidosDisponiblesRepartidor();
-        cambiasPasswordRepartidor=new CambiasPasswordRepartidor();
+        cambiasPasswordRepartidor = new CambiasPasswordRepartidor();
         bottomNavigationView = findViewById(R.id.barraNavegacion);
         setupBottomMenu();
         Utils.getImageProfile(this);

@@ -108,27 +108,6 @@ public class PedidoFragment extends Fragment {
 
                                     adapterPedido.actualizar(dc);
 
-                                    /* productosListados2 = "";
-                                        ArrayList<HashMap<String, Object>> matrizObjetos2 = (ArrayList<HashMap<String, Object>>) dc.getDocument().get("productos");
-                                        for (HashMap<String, Object> objeto : matrizObjetos2) {
-                                            String cantidad = objeto.get("cantidad").toString();
-                                            String producto = objeto.get("producto").toString();
-                                            productosListados2 = productosListados2 + producto+" X"+cantidad + "\n";
-                                        }
-
-                                        String referencia2 = dc.getDocument().getReference().getPath();
-                                        Pedido pedido2 = new Pedido(
-                                                referencia2,
-                                                dc.getDocument().getString("cliente"),
-                                                dc.getDocument().getDate("fecha"),
-                                                dc.getDocument().getString("direccion"),
-                                                dc.getDocument().getString("estado"),
-                                                productosListados2,
-                                                dc.getDocument().getString("repartidor"),
-                                                dc.getDocument().getDouble("total"));
-                                        pedido2.setDocumentReference(dc.getDocument().getReference());
-                                        adapterPedido.add(pedido2);*/
-
                                     break;
                                 case REMOVED:
                             }

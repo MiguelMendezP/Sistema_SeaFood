@@ -90,7 +90,6 @@ public class HomeCliente extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         consultarUsuario(getIntent().getStringExtra("correo"));
         adaptadorCategoria=new AdaptadorCategoria(this);

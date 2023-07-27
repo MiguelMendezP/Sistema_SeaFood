@@ -1,5 +1,7 @@
 package com.example.sistema_seafood.cliente;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -120,6 +122,7 @@ public class CambiarContraseniaCliente extends Fragment {
             @Override
             public void onClick(View v) {
                 FirebaseUser user = mAuth.getCurrentUser();
+                System.out.println(user.getUid());
                 if(newPassword.getText().toString().equals(confirmPassword.getText().toString()) ){
                     String newPass = confirmPassword.getText().toString();
 
@@ -130,11 +133,14 @@ public class CambiarContraseniaCliente extends Fragment {
                                     if (task.isSuccessful()) {
                                         // Contraseña cambiada exitosamente
                                         Toast.makeText(getContext(), "Contraseña actualizada", Toast.LENGTH_SHORT).show();
+                                        actualizarSesion(newPass);
                                         if(getActivity() instanceof HomeCliente){
                                             Navigation.findNavController(view).navigate(R.id.nav_perfil);
                                         }
-                                        else {
+                                        else if((getActivity() instanceof HomeRepartidor)){
                                             ((HomeRepartidor)getActivity()).showPerfil();
+                                        }else{
+                                            Navigation.findNavController(v).navigate(R.id.nav_perfil);
                                         }
                                     } else {
                                         // Ocurrió un error al cambiar la contraseña
@@ -151,6 +157,11 @@ public class CambiarContraseniaCliente extends Fragment {
         });
         return view;
     }
-
+    public void actualizarSesion(String contrasenia) {
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("contrasenia", contrasenia);
+        editor.apply();
+    }
 
 }

@@ -106,10 +106,11 @@ public class PerfilRepartidorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_perfil_repartidor, container, false);
+
+
         //login();
-        repartidor=((HomeRepartidor)getActivity()).getRepartidor();
+        repartidor = ((HomeRepartidor)getActivity()).getRepartidor();
         imageView= view.findViewById(R.id.imgRepartidor);
         ((TextView)view.findViewById(R.id.nombreRepartidor)).setText(repartidor.getNombre());
         EditText correo=view.findViewById(R.id.editEmailRepartidor);
