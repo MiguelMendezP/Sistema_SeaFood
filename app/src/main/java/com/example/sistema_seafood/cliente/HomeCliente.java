@@ -38,6 +38,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.helper.widget.MotionEffect;
 import androidx.navigation.NavController;
@@ -48,12 +49,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.sistema_seafood.databinding.ActivityHomeClienteBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -72,7 +77,7 @@ public class HomeCliente extends AppCompatActivity {
     public static Carrito carrito=new Carrito();
     public static NavController navController;
 
-    private static FloatingActionButton floatingActionButton;
+    public static FloatingActionButton floatingActionButton;
 
     public static Pedido pedido;
 
@@ -91,6 +96,7 @@ public class HomeCliente extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        extras=new ArrayList<>();
         consultarUsuario(getIntent().getStringExtra("correo"));
 
         String clie = getIntent().getStringExtra("cliente");
@@ -266,7 +272,6 @@ public class HomeCliente extends AppCompatActivity {
         HomeCliente.titulo.setText(titulo);
     }
     public void consultarExtras(){
-        Toast.makeText(getApplicationContext(),"consulta de extras",Toast.LENGTH_SHORT).show();
         firestore.collection("extras")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

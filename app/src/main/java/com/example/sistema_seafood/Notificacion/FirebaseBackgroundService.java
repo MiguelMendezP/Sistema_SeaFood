@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import com.example.sistema_seafood.cliente.HomeCliente;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -66,6 +68,7 @@ public class FirebaseBackgroundService extends Service {
                                     break;
                                 case "entregado" :
                                     notificacion.lanzarNotificacion("Pedido Entregado", "Tu pedido se ha entregado, que lo disfrutes!!");
+                                    HomeCliente.floatingActionButton.setVisibility(View.INVISIBLE);
                                     break;
                                 case "rechazado" :
                                     notificacion.lanzarNotificacion("Pedido Rechazado", "Tu pedido lamentablemente ha sido rechazado");

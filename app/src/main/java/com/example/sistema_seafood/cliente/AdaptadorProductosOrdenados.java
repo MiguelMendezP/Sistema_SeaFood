@@ -58,11 +58,11 @@ public class AdaptadorProductosOrdenados extends BaseAdapter {
         LayoutInflater layoutInflater=LayoutInflater.from(context);
         v= layoutInflater.inflate(R.layout.car_producto_ordenado,null);
         ProductoOrdenado aux= productoOrdenados.get(i);
-        ((ImageView)v.findViewById(R.id.imgProducto)).setImageBitmap(aux.getProducto().getImagen());
-        ((TextView)v.findViewById(R.id.nombreProducto)).setText(aux.getProducto().getNombre());
+        ((ImageView)v.findViewById(R.id.imgProductoConfirmado)).setImageBitmap(aux.getProducto().getImagen());
+        ((TextView)v.findViewById(R.id.nombreProductoConfirmado)).setText(aux.getProducto().getNombre());
         TextView cantidad=v.findViewById(R.id.cantProductoOrd);
         cantidad.setText(aux.getCantidad()+"");
-        TextView subtotal=v.findViewById(R.id.subtotal);
+        TextView subtotal=v.findViewById(R.id.subtotalProductoConfirmado);
         subtotal.setText("$"+aux.getSubtotal());
         ((Button)v.findViewById(R.id.btnadd)).setOnClickListener(new View.OnClickListener() {
             @Override

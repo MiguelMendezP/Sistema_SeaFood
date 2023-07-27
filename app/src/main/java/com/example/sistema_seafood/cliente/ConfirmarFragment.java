@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -72,6 +73,10 @@ public class ConfirmarFragment extends Fragment {
     private LinearLayout linearProducto,linearTotal;
     private View view;
 
+    private GridView gridView;
+
+    private AdaptadorProductosConfirmar adaptadorProductosConfirmar;
+
     public ConfirmarFragment() {
         // Required empty public constructor
     }
@@ -109,17 +114,11 @@ public class ConfirmarFragment extends Fragment {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_confirmar, container, false);
         HomeCliente.setTitulo("Confirmar Pedido");
-        linearProducto=view.findViewById(R.id.linearProducto);
-        linearTotal=view.findViewById(R.id.linearTotal);
+        gridView=view.findViewById(R.id.contenedorConfirmar);
+adaptadorProductosConfirmar=new AdaptadorProductosConfirmar(getContext(),HomeCliente.getCarrito().getProductoOrdenados());
+gridView.setAdapter(adaptadorProductosConfirmar);
 
-        for (ProductoOrdenado productoOrdenado:HomeCliente.getCarrito().getProductoOrdenados()){
-            TextView auxProd=new TextView(getContext()),auxTotal=new TextView(getContext());
-            auxProd.setText(productoOrdenado.getProducto().getNombre());
-            auxTotal.setText("$ "+productoOrdenado.getSubtotal());
-            linearProducto.addView(auxProd);
-            linearTotal.addView(auxTotal);
-        }
-        ((TextView)view.findViewById(R.id.totalPedido)).setText("$ "+(HomeCliente.getCarrito().getTotal()+30));
+//        ((TextView)view.findViewById(R.id.totalPedido)).setText("$ "+(HomeCliente.getCarrito().getTotal()+30));
         String direccion;
 
         if (direccionEntrega==null){
