@@ -247,6 +247,7 @@ public class HomeCliente extends AppCompatActivity {
         HomeCliente.titulo.setText(titulo);
     }
     public void consultarExtras(){
+        Toast.makeText(getApplicationContext(),"consulta de extras",Toast.LENGTH_SHORT).show();
         firestore.collection("extras")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

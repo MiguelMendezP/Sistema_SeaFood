@@ -20,7 +20,7 @@ import java.util.List;
 
 public class AdaptadorProductosOrdenados extends BaseAdapter {
     public Context context;
-    public static List<ProductoOrdenado> productoOrdenados;
+    public List<ProductoOrdenado> productoOrdenados;
 
     public ProductoOrdenado getProductoOrdenado(int position){
         return productoOrdenados.get(position);
@@ -29,6 +29,11 @@ public class AdaptadorProductosOrdenados extends BaseAdapter {
     public AdaptadorProductosOrdenados(Context context){
         this.context=context;
         this.productoOrdenados = HomeCliente.getCarrito().getProductoOrdenados();
+    }
+
+    public void actualizar(){
+        this.productoOrdenados = HomeCliente.getCarrito().getProductoOrdenados();
+        this.notifyDataSetChanged();
     }
 
     @Override

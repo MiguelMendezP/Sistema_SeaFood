@@ -123,7 +123,6 @@ public class PerfilRepartidorFragment extends Fragment {
             public void onClick(View v) {
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
-                Utils.uploadImageProfile(selectedImageUri,getContext());
             }
         });
         ((Button)view.findViewById(R.id.btnCerrarSesion)).setOnClickListener(new View.OnClickListener() {
@@ -191,7 +190,8 @@ public class PerfilRepartidorFragment extends Fragment {
         if (requestCode == GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
             selectedImageUri = data.getData();
             imageView.setImageURI(selectedImageUri);
-
+            HomeRepartidor.bitmap=Utils.getBitmapFromUri(selectedImageUri,getContext());
+            Utils.uploadImageProfile(selectedImageUri,getContext());
         }
     }
     public void cerrarSesion(){

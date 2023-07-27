@@ -129,7 +129,6 @@ TextView nombre,direccion;
             public void onClick(View v) {
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
-                Utils.uploadImageProfile(selectedImageUri,getContext());
             }
         });
 
@@ -197,7 +196,9 @@ TextView nombre,direccion;
         if (requestCode == GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
             selectedImageUri = data.getData();
             imageView.setImageURI(selectedImageUri);
-
+            HomeCliente.imgProfile=Utils.getBitmapFromUri(selectedImageUri,getContext());
+            HomeCliente.imageView.setImageURI(selectedImageUri);
+            Utils.uploadImageProfile(selectedImageUri,getContext());
         }
     }
 }

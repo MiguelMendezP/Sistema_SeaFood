@@ -275,6 +275,9 @@ public class MainActivity extends AppCompatActivity {
     }
     private void irCliente() {
         Intent menuRepartidor = new Intent(MainActivity.this, HomeCliente.class);
+        SharedPreferences preferences=getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        String correAux=preferences.getString("correo","correo");
+        menuRepartidor.putExtra("correo",correAux);
         startActivity(menuRepartidor);
         finish();
     }
@@ -294,6 +297,8 @@ public class MainActivity extends AppCompatActivity {
 
                         if (rol.equals("cliente")) {
                             Intent menuCliente = new Intent(MainActivity.this, HomeCliente.class);
+                            menuCliente.putExtra("correo",correo);
+                            menuCliente.putExtra("nombre",nombre);
                             startActivity(menuCliente);
                         } else if (rol.equals("repartidor")) {
                             Intent menuRepartidor = new Intent(MainActivity.this, HomeRepartidor.class);
