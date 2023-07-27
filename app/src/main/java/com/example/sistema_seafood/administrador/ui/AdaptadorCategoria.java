@@ -68,11 +68,11 @@ public class AdaptadorCategoria extends BaseAdapter {
         View vista;
         LayoutInflater layoutInflater=LayoutInflater.from(context);
         vista= layoutInflater.inflate(R.layout.card_categoria,null);
-        /*Categoria categoria = categorias.get(i);
+        Categoria categoria = categorias.get(i);
         ImageView imageView = vista.findViewById(R.id.imgValoracion);
         TextView title=vista.findViewById(R.id.tituloCategoria);
         categoria.mostrarImagen(imageView);
-        title.setText(categoria.getNombre());*/
+        title.setText(categoria.getNombre());
 
         return vista;
     }

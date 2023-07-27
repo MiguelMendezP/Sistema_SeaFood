@@ -2,6 +2,7 @@ package com.example.sistema_seafood.cliente;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;

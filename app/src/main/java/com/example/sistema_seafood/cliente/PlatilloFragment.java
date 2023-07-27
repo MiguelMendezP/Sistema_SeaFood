@@ -3,7 +3,6 @@ package com.example.sistema_seafood.cliente;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +19,6 @@ import android.widget.Toast;
 import com.example.sistema_seafood.Platillo;
 import com.example.sistema_seafood.ProductoOrdenado;
 import com.example.sistema_seafood.R;
-
-import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.

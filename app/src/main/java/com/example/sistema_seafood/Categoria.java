@@ -59,7 +59,7 @@ public class Categoria {
         if(platillos==null){
             platillos=new ArrayList<>();
             for(Map map:(ArrayList<Map>)documentReference.get("platillos")){
-                platillos.add(new Platillo(map.get("nombre").toString(),map.get("descripcion").toString(),Double.parseDouble(map.get("precio").toString()),Integer.parseInt(map.get("descuento").toString()), (List<Map>) map.get("valoraciones"),Double.parseDouble(map.get("puntuacion").toString()),this.getNombre()));
+                platillos.add(new Platillo(map.get("nombre").toString(),map.get("descripcion").toString(),Double.parseDouble(map.get("precio").toString()),(int)Double.parseDouble(map.get("descuento").toString()), (List<Map>) map.get("valoraciones"),Double.parseDouble(map.get("puntuacion").toString()),this.getNombre()));
             }
         }
         return platillos;
@@ -113,7 +113,4 @@ public class Categoria {
         return imagen;
     }
 
-    public QueryDocumentSnapshot getDocumentReference() {
-        return documentReference;
-    }
 }

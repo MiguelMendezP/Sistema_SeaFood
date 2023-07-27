@@ -32,6 +32,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
@@ -161,6 +162,18 @@ public class AdapterPedido2 extends BaseAdapter {
         });
 
         return vista;
+    }
+
+    public void actualizar(DocumentChange documentChange){
+        for (Pedido pedido: pedidos
+             ) {
+            if (pedido.getDocumentReference().equals(documentChange.getDocument().getReference())){
+                pedido.setEstado(documentChange.getDocument().getString("estado"));
+                notifyDataSetChanged();
+                break;
+            }
+
+        }
     }
 
     public void obtenerUbicacionActual(DocumentReference documento) {

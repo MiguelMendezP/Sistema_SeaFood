@@ -1,7 +1,6 @@
 package com.example.sistema_seafood.cliente;
 
 import android.annotation.SuppressLint;
-import android.content.res.ColorStateList;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;

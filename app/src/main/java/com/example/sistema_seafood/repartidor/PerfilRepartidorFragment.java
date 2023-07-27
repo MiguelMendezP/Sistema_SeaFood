@@ -3,7 +3,9 @@ package com.example.sistema_seafood.repartidor;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -28,6 +30,7 @@ import com.example.sistema_seafood.MainActivity;
 import com.example.sistema_seafood.R;
 import com.example.sistema_seafood.Repartidor;
 import com.example.sistema_seafood.Utils;
+import com.example.sistema_seafood.cliente.HomeCliente;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -130,6 +133,7 @@ public class PerfilRepartidorFragment extends Fragment {
                 Intent intent = new Intent(getContext(), MainActivity.class);
                 startActivity(intent);
                 getActivity().finish();
+                cerrarSesion();
             }
         });
         ((Button)view.findViewById(R.id.btnActualizar)).setOnClickListener(new View.OnClickListener() {
@@ -189,6 +193,15 @@ public class PerfilRepartidorFragment extends Fragment {
             imageView.setImageURI(selectedImageUri);
 
         }
+    }
+    public void cerrarSesion(){
+        SharedPreferences preferences = getActivity().getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("estado",false);
+        editor.putString("correo","");
+        editor.putString("rol","");
+        editor.putString("nombre","");
+        editor.commit();
     }
 
     public void showTeclado(EditText editText){
