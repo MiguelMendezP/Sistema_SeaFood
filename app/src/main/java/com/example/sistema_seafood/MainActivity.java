@@ -89,48 +89,53 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String correo = et_mail.getText().toString();
                 String contrasenia = et_pass.getText().toString();
+                if(!correo.isEmpty() && !contrasenia.isEmpty()) {
 
-                firebaseAuth.signInWithEmailAndPassword(correo, contrasenia).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            for (int i = 0; i < itemsUsuaarios.size(); i++) {
-                                if (itemsUsuaarios.get(i).getCorreo().equals(correo)) {
+                    firebaseAuth.signInWithEmailAndPassword(correo, contrasenia).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                for (int i = 0; i < itemsUsuaarios.size(); i++) {
+                                    if (itemsUsuaarios.get(i).getCorreo().equals(correo)) {
 
-                                    if (itemsUsuaarios.get(i).getRol().equals("cliente")) {
-                                        guardarSesion(itemsUsuaarios.get(i).getCorreo(), itemsUsuaarios.get(i).getContrasenia(), itemsUsuaarios.get(i).getRol(), itemsUsuaarios.get(i).getNombre());
-                                        Intent menuCliente = new Intent(MainActivity.this, HomeCliente.class);
-                                        menuCliente.putExtra("correo",itemsUsuaarios.get(i).getCorreo());
-                                        menuCliente.putExtra("cliente",itemsUsuaarios.get(i).getNombre());
-                                        startActivity(menuCliente);
-                                        finish();
-                                        break;
-                                    } else if (itemsUsuaarios.get(i).getRol().equals("repartidor")) {
-                                        guardarSesion(itemsUsuaarios.get(i).getCorreo(), itemsUsuaarios.get(i).getContrasenia(), itemsUsuaarios.get(i).getRol(), itemsUsuaarios.get(i).getNombre());
-                                        Intent menuRepartidor = new Intent(MainActivity.this, HomeRepartidor.class);
-                                        startActivity(menuRepartidor);
-                                        finish();
-                                        break;
+                                        if (itemsUsuaarios.get(i).getRol().equals("cliente")) {
+                                            guardarSesion(itemsUsuaarios.get(i).getCorreo(), itemsUsuaarios.get(i).getContrasenia(), itemsUsuaarios.get(i).getRol(), itemsUsuaarios.get(i).getNombre());
+                                            Intent menuCliente = new Intent(MainActivity.this, HomeCliente.class);
+                                            menuCliente.putExtra("correo", itemsUsuaarios.get(i).getCorreo());
+                                            menuCliente.putExtra("cliente", itemsUsuaarios.get(i).getNombre());
+                                            startActivity(menuCliente);
+                                            finish();
+                                            break;
+                                        } else if (itemsUsuaarios.get(i).getRol().equals("repartidor")) {
+                                            guardarSesion(itemsUsuaarios.get(i).getCorreo(), itemsUsuaarios.get(i).getContrasenia(), itemsUsuaarios.get(i).getRol(), itemsUsuaarios.get(i).getNombre());
+                                            Intent menuRepartidor = new Intent(MainActivity.this, HomeRepartidor.class);
+                                            startActivity(menuRepartidor);
+                                            finish();
+                                            break;
 
-                                    } else if (itemsUsuaarios.get(i).getRol().equals("admin")) {
-                                        guardarSesion(itemsUsuaarios.get(i).getCorreo(), itemsUsuaarios.get(i).getContrasenia(), itemsUsuaarios.get(i).getRol(), itemsUsuaarios.get(i).getNombre());
-                                        Intent menuAdmin = new Intent(MainActivity.this, InicioAdmin.class);
-                                        startActivity(menuAdmin);
-                                        finish();
-                                        break;
+                                        } else if (itemsUsuaarios.get(i).getRol().equals("admin")) {
+                                            guardarSesion(itemsUsuaarios.get(i).getCorreo(), itemsUsuaarios.get(i).getContrasenia(), itemsUsuaarios.get(i).getRol(), itemsUsuaarios.get(i).getNombre());
+                                            Intent menuAdmin = new Intent(MainActivity.this, InicioAdmin.class);
+                                            startActivity(menuAdmin);
+                                            finish();
+                                            break;
+                                        }
+
+
                                     }
-
-
                                 }
+                            } else {
+                                Toast.makeText(MainActivity.this, "Datos incorrectos", Toast.LENGTH_SHORT).show();
                             }
-                        } else {
-                            Toast.makeText(MainActivity.this, "Datos incorrectos", Toast.LENGTH_SHORT).show();
                         }
-                    }
 
-                });
+                    });
+                }else{
+                    Toast.makeText(MainActivity.this, "Ingresa tus datos", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
 
         Button loginGoogle = findViewById(R.id.loginGoogle);
         loginGoogle.setOnClickListener(new View.OnClickListener() {
@@ -350,4 +355,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
 }

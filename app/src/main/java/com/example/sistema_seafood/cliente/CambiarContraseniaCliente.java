@@ -84,7 +84,7 @@ public class CambiarContraseniaCliente extends Fragment {
         view=inflater.inflate(R.layout.fragment_cambiar_contrasenia_cliente, container, false);
         visible1=view.findViewById(R.id.visible1);
         visible2=view.findViewById(R.id.visible2);
-        currentPassword=view.findViewById(R.id.editCurrentPass);
+        currentPassword = view.findViewById(R.id.editCurrentPass);
         newPassword=view.findViewById(R.id.editNewPass);
         confirmPassword=view.findViewById(R.id.editConfirm);
 
@@ -122,8 +122,7 @@ public class CambiarContraseniaCliente extends Fragment {
             @Override
             public void onClick(View v) {
                 FirebaseUser user = mAuth.getCurrentUser();
-                System.out.println(user.getUid());
-                if(newPassword.getText().toString().equals(confirmPassword.getText().toString()) ){
+                if(newPassword.getText().toString().equals(confirmPassword.getText().toString()) && !currentPassword.getText().toString().isEmpty()){
                     String newPass = confirmPassword.getText().toString();
 
                     user.updatePassword(newPass)
@@ -148,6 +147,8 @@ public class CambiarContraseniaCliente extends Fragment {
                                     }
                                 }
                             });
+                }else if (currentPassword.getText().toString().isEmpty()){
+                    Toast.makeText(getContext(), "Ingresa tu contraseña actual", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Toast.makeText(getContext(), "Las contraseñas no coinciden, confirme su nueva contraseña", Toast.LENGTH_SHORT).show();
