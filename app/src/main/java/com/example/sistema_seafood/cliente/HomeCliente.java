@@ -29,6 +29,7 @@ import com.example.sistema_seafood.Producto;
 import com.example.sistema_seafood.ProductoOrdenado;
 import com.example.sistema_seafood.R;
 import com.example.sistema_seafood.Utils;
+import com.example.sistema_seafood.repartidor.PedidoRepartidor;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -49,6 +50,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.sistema_seafood.databinding.ActivityHomeClienteBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -76,11 +78,11 @@ public class HomeCliente extends AppCompatActivity {
     public static AdaptadorCategoria adaptadorCategoria;
     public static Carrito carrito=new Carrito();
     public static NavController navController;
-
     public static FloatingActionButton floatingActionButton;
 
     public static Pedido pedido;
 
+    public static PedidoRepartidor pedidoRepartidor;
     private FirebaseAuth mAuth=FirebaseAuth.getInstance();
 
     public static Cliente cliente;
@@ -92,6 +94,7 @@ public class HomeCliente extends AppCompatActivity {
     public static List<Categoria> categorias=new ArrayList<>();
 
     public static List<Platillo> platillosFavoritos;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -239,6 +242,7 @@ public class HomeCliente extends AppCompatActivity {
                                 String numTelefono=document.getString("numero");
                                 cliente=new Cliente(nombre,numTelefono,correo,ubicacion,(ArrayList<String>)document.get("favoritos"),new ArrayList<>(),document.getReference());
                                 cliente.setDireccion(Utils.getAddressFromLatLng(getApplicationContext(),ubicacion.getLatitude(),ubicacion.getLongitude()));
+                                consultarPedido();
                             }
                         } else {
                             Log.d(MotionEffect.TAG, "Error getting documents: ", task.getException());
@@ -367,6 +371,30 @@ public class HomeCliente extends AppCompatActivity {
         }
         return null;
     }
+
+    public void consultarPedido(){
+        firestore.collection("Pedidos").whereEqualTo("cliente", cliente.getNombre()).orderBy("fecha", Query.Direction.DESCENDING).
+                get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if(!document.getString("estado").equals("entregado")){
+                                    pedidoRepartidor=new PedidoRepartidor(document.getString("cliente"),document.getString("estado"),document.getDate("fecha"), (ArrayList<Map>) document.get("productos"), document.getGeoPoint("ubicacion"),document.getReference(),document.getString("direccion"),document.getGeoPoint("ubicacionPedido"),document.getDouble("total"),document.getString("telefono"));
+                                    floatingActionButton.setVisibility(View.VISIBLE);
+                                    break;
+                                }
+                                //Toast.makeText(getApplicationContext(),document.getDate("fecha").toString(),Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Log.d(MotionEffect.TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
 }
 
 

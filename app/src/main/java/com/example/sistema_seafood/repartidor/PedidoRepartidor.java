@@ -20,7 +20,16 @@ public class PedidoRepartidor {
 
     private double total;
 
+    private String numeroTelefono;
 
+
+    public String getNumeroTelefono() {
+        return numeroTelefono;
+    }
+
+    public void setNumeroTelefono(String numeroTelefono) {
+        this.numeroTelefono = numeroTelefono;
+    }
 
     public DocumentReference getDocumentReference() {
         return documentReference;
@@ -40,7 +49,7 @@ public class PedidoRepartidor {
         this.total = total;
     }
 
-    public PedidoRepartidor(String cliente, String estado, Date fecha, ArrayList<Map> productos, GeoPoint ubicacion, DocumentReference documentReference, String direccion, GeoPoint ubicacionPedido, double total) {
+    public PedidoRepartidor(String cliente, String estado, Date fecha, ArrayList<Map> productos, GeoPoint ubicacion, DocumentReference documentReference, String direccion, GeoPoint ubicacionPedido, double total, String numeroTelefono) {
         this.cliente = cliente;
         this.estado = estado;
         this.fecha = fecha;
@@ -50,6 +59,7 @@ public class PedidoRepartidor {
         this.direccion=direccion;
         this.ubicacionPedido=ubicacionPedido;
         this.total=total;
+        this.numeroTelefono=numeroTelefono;
     }
 
     public String getCliente() {

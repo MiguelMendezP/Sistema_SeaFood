@@ -82,6 +82,10 @@ public class Platillo extends Producto{
         return puntuacion;
     }
 
+    public void setPuntuacion(Double puntuacion){
+        this.puntuacion=puntuacion;
+    }
+
     @Override
     public Bitmap getImagen() {
         return imagen;

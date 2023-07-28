@@ -52,8 +52,8 @@ public View getView(int i, View view, ViewGroup viewGroup) {
         ProductoOrdenado aux= productos.get(i);
     ((ImageView)v.findViewById(R.id.imgProductoConfirmado)).setImageBitmap(aux.getProducto().getImagen());
     ((TextView)v.findViewById(R.id.nombreProductoConfirmado)).setText(aux.getProducto().getNombre());
-    ((TextView)v.findViewById(R.id.cantidadProductoConfirmado)).setText("Cantidad: "+aux.getCantidad());
-    ((TextView)v.findViewById(R.id.subtotalProductoConfirmado)).setText("Subtotal: " +aux.getSubtotal());
+    ((TextView)v.findViewById(R.id.cantidadProductoConfirmado)).setText("x"+aux.getCantidad());
+    ((TextView)v.findViewById(R.id.subtotalProductoConfirmado)).setText("$ " +aux.getSubtotal());
         return v;
         }
         }

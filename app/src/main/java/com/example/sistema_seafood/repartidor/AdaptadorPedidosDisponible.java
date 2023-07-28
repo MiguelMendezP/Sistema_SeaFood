@@ -106,18 +106,23 @@ public class AdaptadorPedidosDisponible extends BaseAdapter {
         btnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                request = Volley.newRequestQueue(context);
-                aux.aceptar(((HomeRepartidor)context).getRepartidor().getNombre());
-                aux.getDocumentReference().update("estado","enviado");
-                EnvioFragment.pedido=aux;
-                Utils.coordenadas.setLatitudInicial(aux.getUbicacionPedido().getLatitude());
-                Utils.coordenadas.setLongitudInicial(aux.getUbicacionPedido().getLongitude());
-                Utils.coordenadas.setLatitudFinal(aux.getUbicacion().getLatitude());
-                Utils.coordenadas.setLongitudFinal(aux.getUbicacion().getLongitude());
-                webServiceObtenerRuta(aux.getUbicacionPedido().getLatitude() + "", aux.getUbicacionPedido().getLongitude() + "",
-                        aux.getUbicacion().getLatitude() + "", aux.getUbicacion().getLongitude() + "");
+                if(HomeRepartidor.pedidoRepartidor==null){
+                    request = Volley.newRequestQueue(context);
+                    aux.aceptar(((HomeRepartidor)context).getRepartidor().getNombre());
+                    aux.getDocumentReference().update("estado","enviado");
+                    HomeRepartidor.pedidoRepartidor=aux;
+                    Utils.coordenadas.setLatitudInicial(aux.getUbicacionPedido().getLatitude());
+                    Utils.coordenadas.setLongitudInicial(aux.getUbicacionPedido().getLongitude());
+                    Utils.coordenadas.setLatitudFinal(aux.getUbicacion().getLatitude());
+                    Utils.coordenadas.setLongitudFinal(aux.getUbicacion().getLongitude());
+                    webServiceObtenerRuta(aux.getUbicacionPedido().getLatitude() + "", aux.getUbicacionPedido().getLongitude() + "",
+                            aux.getUbicacion().getLatitude() + "", aux.getUbicacion().getLongitude() + "");
 
-                ((HomeRepartidor)context).showEnvio(aux);
+                    ((HomeRepartidor)context).showEnvio();
+                }
+                else{
+                    Toast.makeText(context,"Tienes entrega de un pedido en curso",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

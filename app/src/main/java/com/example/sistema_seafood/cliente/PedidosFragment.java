@@ -22,6 +22,7 @@ import com.example.sistema_seafood.repartidor.PedidoRepartidor;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -99,7 +100,7 @@ public class PedidosFragment extends Fragment {
     }
 
     public void consultarHistorial(){
-        FirebaseFirestore.getInstance().collection("Pedidos").whereEqualTo("cliente",HomeCliente.cliente.getNombre())
+        FirebaseFirestore.getInstance().collection("Pedidos").whereEqualTo("cliente",HomeCliente.cliente.getNombre()).orderBy("fecha", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -108,7 +109,7 @@ public class PedidosFragment extends Fragment {
                         if (task.isSuccessful()) {
                             //Toast.makeText(getContext(),repartidor,Toast.LENGTH_SHORT).show();
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                    PedidoRepartidor pedido=new PedidoRepartidor(document.getString("cliente"),document.getString("estado"),document.getDate("fecha"), (ArrayList<Map>) document.get("productos"), document.getGeoPoint("ubicacion"),document.getReference(),document.getString("direccion"),document.getGeoPoint("ubicacionPedido"),document.getDouble("total"));
+                                    PedidoRepartidor pedido=new PedidoRepartidor(document.getString("cliente"),document.getString("estado"),document.getDate("fecha"), (ArrayList<Map>) document.get("productos"), document.getGeoPoint("ubicacion"),document.getReference(),document.getString("direccion"),document.getGeoPoint("ubicacionPedido"),document.getDouble("total"),document.getString("telefono"));
                                     adaptador.add(pedido);
                             }
                         } else {
