@@ -29,6 +29,7 @@ import com.example.sistema_seafood.Producto;
 import com.example.sistema_seafood.ProductoOrdenado;
 import com.example.sistema_seafood.R;
 import com.example.sistema_seafood.Utils;
+import com.example.sistema_seafood.repartidor.PedidoRepartidor;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -38,6 +39,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.helper.widget.MotionEffect;
 import androidx.navigation.NavController;
@@ -48,12 +50,17 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.sistema_seafood.databinding.ActivityHomeClienteBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -71,11 +78,11 @@ public class HomeCliente extends AppCompatActivity {
     public static AdaptadorCategoria adaptadorCategoria;
     public static Carrito carrito=new Carrito();
     public static NavController navController;
-
-    private static FloatingActionButton floatingActionButton;
+    public static FloatingActionButton floatingActionButton;
 
     public static Pedido pedido;
 
+    public static PedidoRepartidor pedidoRepartidor;
     private FirebaseAuth mAuth=FirebaseAuth.getInstance();
 
     public static Cliente cliente;
@@ -88,13 +95,13 @@ public class HomeCliente extends AppCompatActivity {
 
     public static List<Platillo> platillosFavoritos;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        extras=new ArrayList<>();
         consultarUsuario(getIntent().getStringExtra("correo"));
         String clie = getIntent().getStringExtra("cliente");
-
         // Se almacena el nombre del cliente localmente en SharedPreferences si no es nulo o está vacío.
         if (clie != null && !clie.isEmpty()) {
             SharedPreferences sharedPreferences = getSharedPreferences("MiPref", Context.MODE_PRIVATE);
@@ -235,6 +242,7 @@ public class HomeCliente extends AppCompatActivity {
                                 String numTelefono=document.getString("numero");
                                 cliente=new Cliente(nombre,numTelefono,correo,ubicacion,(ArrayList<String>)document.get("favoritos"),new ArrayList<>(),document.getReference());
                                 cliente.setDireccion(Utils.getAddressFromLatLng(getApplicationContext(),ubicacion.getLatitude(),ubicacion.getLongitude()));
+                                consultarPedido();
                             }
                         } else {
                             Log.d(MotionEffect.TAG, "Error getting documents: ", task.getException());
@@ -267,7 +275,6 @@ public class HomeCliente extends AppCompatActivity {
         HomeCliente.titulo.setText(titulo);
     }
     public void consultarExtras(){
-        Toast.makeText(getApplicationContext(),"consulta de extras",Toast.LENGTH_SHORT).show();
         firestore.collection("extras")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -364,6 +371,30 @@ public class HomeCliente extends AppCompatActivity {
         }
         return null;
     }
+
+    public void consultarPedido(){
+        firestore.collection("Pedidos").whereEqualTo("cliente", cliente.getNombre()).orderBy("fecha", Query.Direction.DESCENDING).
+                get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if(!document.getString("estado").equals("entregado")){
+                                    pedidoRepartidor=new PedidoRepartidor(document.getString("cliente"),document.getString("estado"),document.getDate("fecha"), (ArrayList<Map>) document.get("productos"), document.getGeoPoint("ubicacion"),document.getReference(),document.getString("direccion"),document.getGeoPoint("ubicacionPedido"),document.getDouble("total"),document.getString("telefono"));
+                                    floatingActionButton.setVisibility(View.VISIBLE);
+                                    break;
+                                }
+                                //Toast.makeText(getApplicationContext(),document.getDate("fecha").toString(),Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Log.d(MotionEffect.TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
 }
 
 

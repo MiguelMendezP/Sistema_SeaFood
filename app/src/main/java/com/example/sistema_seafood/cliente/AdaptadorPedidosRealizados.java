@@ -90,8 +90,14 @@ public class AdaptadorPedidosRealizados extends BaseAdapter {
         ((Button)v.findViewById(R.id.btnVolverPedir)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HomeCliente.volverPedir(aux.getProductos());
-                Toast.makeText(context,"Productos añadidos al carrito",Toast.LENGTH_SHORT).show();
+                if(HomeCliente.pedidoRepartidor!=null){
+                    Toast.makeText(context,"Tienes un pedido en curso...",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    HomeCliente.volverPedir(aux.getProductos());
+                    Toast.makeText(context,"Productos añadidos al carrito",Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -101,7 +107,6 @@ public class AdaptadorPedidosRealizados extends BaseAdapter {
                 List<Producto> products=new ArrayList<>();
                 for (Map map:aux.getProductos()){
                     products.add(HomeCliente.getProducto(map.get("producto").toString()));
-                    Toast.makeText(context,map.get("producto").toString(),Toast.LENGTH_SHORT).show();
                 }
                 CalificarFragment.productos=products;
                 HomeCliente.navController.navigate(R.id.nav_calificar);

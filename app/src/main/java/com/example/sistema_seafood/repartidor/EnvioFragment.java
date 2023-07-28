@@ -85,18 +85,14 @@ public class EnvioFragment extends Fragment implements OnMapReadyCallback, Googl
     private View view;
 
 
-    public static PedidoRepartidor pedido;
     private Marker marker;
     private LatLng originLatLng, destinationLatLng;
+
+    private Button btnEntegarPedido;
 
 
     public EnvioFragment() {
         // Required empty public constructor
-    }
-
-
-    public void setPedidoRepartidor(PedidoRepartidor pedidoRepartidor) {
-        pedido = pedidoRepartidor;
     }
 
     /**
@@ -139,19 +135,20 @@ public class EnvioFragment extends Fragment implements OnMapReadyCallback, Googl
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_envio, container, false);
         request = Volley.newRequestQueue(getContext());
-        if (pedido == null) {
+        if (HomeRepartidor.pedidoRepartidor == null) {
             ((TextView) view.findViewById(R.id.nameCliente)).setText("Sin pedido");
             ((TextView) view.findViewById(R.id.destino)).setText("Desconocido");
             mostrarAlerta();
         } else {
-            ((TextView) view.findViewById(R.id.nameCliente)).setText(pedido.getCliente());
-            ((TextView) view.findViewById(R.id.destino)).setText(pedido.getDireccion());
-            ((Button) view.findViewById(R.id.btnEntregar)).setOnClickListener(new View.OnClickListener() {
+            ((TextView) view.findViewById(R.id.nameCliente)).setText(HomeRepartidor.pedidoRepartidor.getCliente());
+            ((TextView) view.findViewById(R.id.destino)).setText(HomeRepartidor.pedidoRepartidor.getDireccion());
+            btnEntegarPedido=view.findViewById(R.id.btnEntregar);
+            btnEntegarPedido.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    pedido.setEstado("entregado");
+                    HomeRepartidor.pedidoRepartidor.setEstado("entregado");
                     ((HomeRepartidor) getActivity()).showPedidos();
-                    pedido = null;
+                    HomeRepartidor.pedidoRepartidor = null;
                 }
             });
             ((FrameLayout) view.findViewById(R.id.showDetails)).setOnClickListener(new View.OnClickListener() {
@@ -292,11 +289,11 @@ public class EnvioFragment extends Fragment implements OnMapReadyCallback, Googl
         View dialogView = inflater.inflate(R.layout.car_detalles, null);
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        ((TextView)dialogView.findViewById(R.id.nombreClienteDetails)).setText(pedido.getCliente());
+        ((TextView)dialogView.findViewById(R.id.nombreClienteDetails)).setText(HomeRepartidor.pedidoRepartidor.getCliente());
         ((TextView)dialogView.findViewById(R.id.telefonoClienteDetails)).setText("");
-        ((TextView)dialogView.findViewById(R.id.totalDetails)).setText("$ "+pedido.getTotal());
+        ((TextView)dialogView.findViewById(R.id.totalDetails)).setText("$ "+HomeRepartidor.pedidoRepartidor.getTotal());
         LinearLayout linearLayout=dialogView.findViewById(R.id.listProductsDetails);
-        for (Map map:pedido.getProductos()){
+        for (Map map:HomeRepartidor.pedidoRepartidor.getProductos()){
             TextView textView= new TextView(getContext());
             textView.setText(map.get("cantidad")+" "+map.get("producto"));
             linearLayout.addView(textView);
@@ -334,23 +331,23 @@ public class EnvioFragment extends Fragment implements OnMapReadyCallback, Googl
         View dialogView = inflater.inflate(R.layout.car_detalles, null);
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        ((TextView)dialogView.findViewById(R.id.nombreClienteDetails)).setText(pedido.getCliente());
+        ((TextView)dialogView.findViewById(R.id.nombreClienteDetails)).setText(HomeRepartidor.pedidoRepartidor.getCliente());
         ((TextView)dialogView.findViewById(R.id.telefonoClienteDetails)).setText("");
-        ((TextView)dialogView.findViewById(R.id.totalDetails)).setText("$ "+pedido.getTotal());
+        ((TextView)dialogView.findViewById(R.id.totalDetails)).setText("$ "+HomeRepartidor.pedidoRepartidor.getTotal());
         LinearLayout linearLayout=dialogView.findViewById(R.id.listProductsDetails);
-        for (Map map:pedido.getProductos()){
+        for (Map map:HomeRepartidor.pedidoRepartidor.getProductos()){
             TextView textView= new TextView(getContext());
             textView.setText(map.get("cantidad")+" "+map.get("producto"));
             linearLayout.addView(textView);
         }
 
         alert.setView(dialogView)
-                .setNegativeButton("Confirmar", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Confirrmar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         removeUpdates();
-                        pedido.getDocumentReference().update("estado","entregado");
+                        HomeRepartidor.pedidoRepartidor.getDocumentReference().update("estado","entregado");
                         ((HomeRepartidor)getContext()).showPedidos();
-                        pedido=null;
+                        HomeRepartidor.pedidoRepartidor=null;
                     }
                 });
 
@@ -376,16 +373,19 @@ public class EnvioFragment extends Fragment implements OnMapReadyCallback, Googl
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        if(pedido!=null) {
-            pedido.getDocumentReference().update("ubicacionPedido", new GeoPoint(location.getLatitude(), location.getLongitude()));
+        if(HomeRepartidor.pedidoRepartidor!=null) {
+            HomeRepartidor.pedidoRepartidor.getDocumentReference().update("ubicacionPedido", new GeoPoint(location.getLatitude(), location.getLongitude()));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15f));
-            if(!sendMessage){
-                if(calcularDistancia(new LatLng(pedido.getUbicacion().getLatitude(),pedido.getUbicacion().getLongitude()),
-                        new LatLng(location.getLatitude(),location.getLongitude()))<50){
+            if(calcularDistancia(new LatLng(HomeRepartidor.pedidoRepartidor.getUbicacion().getLatitude(),HomeRepartidor.pedidoRepartidor.getUbicacion().getLongitude()),
+                    new LatLng(location.getLatitude(),location.getLongitude()))<50){
+                System.out.println(calcularDistancia(new LatLng(HomeRepartidor.pedidoRepartidor.getUbicacion().getLatitude(),HomeRepartidor.pedidoRepartidor.getUbicacion().getLongitude()),
+                        new LatLng(location.getLatitude(),location.getLongitude())));
+                if(!sendMessage){
                     sendMessage=true;
-                    SendMessage sendMessage=new SendMessage("9585857856");
+                    SendMessage sendMessage=new SendMessage(HomeRepartidor.pedidoRepartidor.getNumeroTelefono());
                     sendMessage.sendMessage();
                 }
+                btnEntegarPedido.setEnabled(true);
             }
         }
     }

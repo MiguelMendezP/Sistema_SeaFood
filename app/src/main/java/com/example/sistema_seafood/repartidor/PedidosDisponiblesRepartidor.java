@@ -124,13 +124,13 @@ public class PedidosDisponiblesRepartidor extends Fragment {
                             switch (dc.getType()) {
                                 case ADDED:
                                     if(dc.getDocument().getString("estado").equals("listo")){
-                                        PedidoRepartidor pedido=new PedidoRepartidor(dc.getDocument().getString("cliente"),dc.getDocument().getString("estado"),dc.getDocument().getDate("fecha"), (ArrayList<Map>) dc.getDocument().get("productos"), dc.getDocument().getGeoPoint("ubicacion"),dc.getDocument().getReference(),dc.getDocument().getString("direccion"),dc.getDocument().getGeoPoint("ubicacionPedido"),dc.getDocument().getDouble("total"));
+                                        PedidoRepartidor pedido=new PedidoRepartidor(dc.getDocument().getString("cliente"),dc.getDocument().getString("estado"),dc.getDocument().getDate("fecha"), (ArrayList<Map>) dc.getDocument().get("productos"), dc.getDocument().getGeoPoint("ubicacion"),dc.getDocument().getReference(),dc.getDocument().getString("direccion"),dc.getDocument().getGeoPoint("ubicacionPedido"),dc.getDocument().getDouble("total"),dc.getDocument().getString("telefono"));
                                         adaptadorPedidosDisponible.add(pedido);
                                     }
                                     break;
                                 case MODIFIED:
                                     if(dc.getDocument().getString("estado").equals("listo")){
-                                        PedidoRepartidor pedido=new PedidoRepartidor(dc.getDocument().getString("cliente"),dc.getDocument().getString("estado"),dc.getDocument().getDate("fecha"), (ArrayList<Map>) dc.getDocument().get("productos"), dc.getDocument().getGeoPoint("ubicacion"),dc.getDocument().getReference(),dc.getDocument().getString("direccion"),dc.getDocument().getGeoPoint("ubicacionPedido"),dc.getDocument().getDouble("total"));
+                                        PedidoRepartidor pedido=new PedidoRepartidor(dc.getDocument().getString("cliente"),dc.getDocument().getString("estado"),dc.getDocument().getDate("fecha"), (ArrayList<Map>) dc.getDocument().get("productos"), dc.getDocument().getGeoPoint("ubicacion"),dc.getDocument().getReference(),dc.getDocument().getString("direccion"),dc.getDocument().getGeoPoint("ubicacionPedido"),dc.getDocument().getDouble("total"),dc.getDocument().getString("telefono"));
                                         adaptadorPedidosDisponible.add(pedido);
                                     }
                                     else if(dc.getDocument().getString("estado").equals("enviado") || dc.getDocument().getString("estado").equals("entregado")){

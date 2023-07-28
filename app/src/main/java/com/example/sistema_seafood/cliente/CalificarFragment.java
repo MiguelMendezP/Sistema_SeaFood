@@ -182,6 +182,13 @@ public class CalificarFragment extends Fragment {
                                     for (Map map:lista){
                                         if(map.get("nombre").equals(producto.getNombre())){
                                             List<Map> valoraciones= (List<Map> )map.get("valoraciones");
+                                            double calf=calificacion;
+                                            for (Map map1:valoraciones){
+                                                calf+=Double.parseDouble(map1.get("puntuacion").toString());
+                                            }
+                                            if(valoraciones.size()>0){
+                                                calf=calf/(valoraciones.size()+1);
+                                            }
                                             Map map1=new HashMap();
                                             map1.put("comentario",comentario.getText().toString());
                                             map1.put("fecha",new Date());
@@ -189,6 +196,7 @@ public class CalificarFragment extends Fragment {
                                             map1.put("usuario",HomeCliente.cliente.getNombre());
                                             ((Platillo) producto).getValoraciones().add(new Valoracion(HomeCliente.cliente.getNombre(),comentario.getText().toString(),calificacion,new Date()));
                                             valoraciones.add(map1);
+                                            map.put("puntuacion",calf);
                                             task.getResult().getReference().update("platillos",lista);
                                             Toast.makeText(getContext(),"Su ha registrado su calificación",Toast.LENGTH_SHORT).show();
                                             comentario.setEnabled(false);

@@ -4,7 +4,9 @@ package com.example.sistema_seafood.repartidor;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.helper.widget.MotionEffect;
 import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
@@ -13,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -40,6 +43,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -49,12 +55,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class HomeRepartidor extends AppCompatActivity {
 private EnvioFragment envioFragment;
 private HistorialFragment historialFragment;
+    public static FirebaseFirestore firestore=FirebaseFirestore.getInstance();
 
-private Pedido pedido;
+public static PedidoRepartidor pedidoRepartidor;
 private PerfilRepartidorFragment perfil;
 public static Bitmap bitmap;
     BottomNavigationView bottomNavigationView;
@@ -129,6 +137,7 @@ private PedidosDisponiblesRepartidor pedidosDisponiblesRepartidor;
                         String numTelefono=document.getString("numero");
                         repartidor=new Repartidor(nombre,numTelefono,correo,ubic);
                         repartidor.setDocumentReference(document.getReference());
+                        consultarPedido();
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -162,8 +171,7 @@ private PedidosDisponiblesRepartidor pedidosDisponiblesRepartidor;
                 );
     }
 
-    public void showEnvio(PedidoRepartidor pedidoRepartidor){
-       envioFragment.setPedidoRepartidor(pedidoRepartidor);
+    public void showEnvio(){
        bottomNavigationView.setSelectedItemId(R.id.envio);
     }
 
@@ -187,5 +195,27 @@ private PedidosDisponiblesRepartidor pedidosDisponiblesRepartidor;
 
     public Repartidor getRepartidor(){
         return repartidor;
+    }
+
+    public void consultarPedido(){
+        firestore.collection("Pedidos").whereEqualTo("repartidor", repartidor.getNombre()).orderBy("fecha", Query.Direction.ASCENDING).
+                get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if(document.getString("estado").equals("enviado")){
+                                    pedidoRepartidor=new PedidoRepartidor(document.getString("cliente"),document.getString("estado"),document.getDate("fecha"), (ArrayList<Map>) document.get("productos"), document.getGeoPoint("ubicacion"),document.getReference(),document.getString("direccion"),document.getGeoPoint("ubicacionPedido"),document.getDouble("total"),document.getString("telefono"));
+                                    break;
+                                }
+                                //Toast.makeText(getApplicationContext(),document.getDate("fecha").toString(),Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Log.d(MotionEffect.TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 }

@@ -112,7 +112,7 @@ public class FragmentEstadoPedido extends Fragment implements OnMapReadyCallback
         view= inflater.inflate(R.layout.fragment_estado_pedido, container, false);
         HomeCliente.setTitulo("Seguimiento del pedido");
         estado=view.findViewById(R.id.estado);
-        estado.setText(HomeCliente.pedido.getEstado());
+        estado.setText(HomeCliente.pedidoRepartidor.getEstado());
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         //if(mapFragment!=null)
         mapFragment.getMapAsync(this);
@@ -129,7 +129,7 @@ recibirActualizaciones();
     }
 
     private void recibirActualizaciones(){
-        listenerRegistration = HomeCliente.pedido.getDocumentReference().addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        listenerRegistration = HomeCliente.pedidoRepartidor.getDocumentReference().addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {

@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ import com.example.sistema_seafood.R;
 import com.example.sistema_seafood.Ubicacion;
 import com.example.sistema_seafood.Utils;
 import com.example.sistema_seafood.repartidor.HomeRepartidor;
+import com.example.sistema_seafood.repartidor.PedidoRepartidor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,6 +47,7 @@ import com.google.firebase.firestore.ListenerRegistration;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +74,10 @@ public class ConfirmarFragment extends Fragment {
 
     private LinearLayout linearProducto,linearTotal;
     private View view;
+
+    private GridView gridView;
+
+    private AdaptadorProductosConfirmar adaptadorProductosConfirmar;
 
     public ConfirmarFragment() {
         // Required empty public constructor
@@ -109,17 +116,14 @@ public class ConfirmarFragment extends Fragment {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_confirmar, container, false);
         HomeCliente.setTitulo("Confirmar Pedido");
-        linearProducto=view.findViewById(R.id.linearProducto);
-        linearTotal=view.findViewById(R.id.linearTotal);
+        gridView=view.findViewById(R.id.contenedorConfirmar);
+adaptadorProductosConfirmar=new AdaptadorProductosConfirmar(getContext(),HomeCliente.getCarrito().getProductoOrdenados());
+gridView.setAdapter(adaptadorProductosConfirmar);
 
-        for (ProductoOrdenado productoOrdenado:HomeCliente.getCarrito().getProductoOrdenados()){
-            TextView auxProd=new TextView(getContext()),auxTotal=new TextView(getContext());
-            auxProd.setText(productoOrdenado.getProducto().getNombre());
-            auxTotal.setText("$ "+productoOrdenado.getSubtotal());
-            linearProducto.addView(auxProd);
-            linearTotal.addView(auxTotal);
-        }
-        ((TextView)view.findViewById(R.id.totalPedido)).setText("$ "+(HomeCliente.getCarrito().getTotal()+30));
+        ((TextView)view.findViewById(R.id.txtSubtotal)).setText(HomeCliente.getCarrito().getTotal()+"");
+        ((TextView)view.findViewById(R.id.txtEnvio)).setText(""+30.0);
+        ((TextView)view.findViewById(R.id.txtTotal)).setText(HomeCliente.getCarrito().getTotal()+30.0+"");
+//        ((TextView)view.findViewById(R.id.totalPedido)).setText("$ "+(HomeCliente.getCarrito().getTotal()+30));
         String direccion;
 
         if (direccionEntrega==null){
@@ -148,9 +152,6 @@ public class ConfirmarFragment extends Fragment {
         ((Button)view.findViewById(R.id.btnConfirmar)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Pedido pedido=new Pedido(HomeCliente.getCliente(),HomeCliente.getCarrito(),new Date(),new Ubicacion(17.097837343208298, -96.75758794245301),"en espera");
-                HomeCliente.setPedido(pedido);
                 GeoPoint geoPoint;
                 if(direccionEntrega==null){
                     geoPoint=HomeCliente.cliente.getUbicacion();
@@ -168,6 +169,7 @@ public class ConfirmarFragment extends Fragment {
                 map.put("ubicacionPedido",new GeoPoint(17.097837343208298, -96.75758794245301));
                 map.put("direccion",Utils.getAddressFromLatLng(getContext(),geoPoint.getLatitude(),geoPoint.getLongitude()));
                 map.put("total",HomeCliente.getCarrito().getTotal()+30);
+                map.put("telefono",HomeCliente.cliente.getNumTelefono());
 
 
                 FirebaseFirestore.getInstance().collection("Pedidos").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -178,7 +180,9 @@ public class ConfirmarFragment extends Fragment {
                                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                                         // Aquí se manejan los cambios en el documento
                                         if (documentSnapshot != null && documentSnapshot.exists()) {
-                                            pedido.setEstado(documentSnapshot.getString("estado"));
+                                            PedidoRepartidor pedidoRepartidor=new PedidoRepartidor(documentSnapshot.getString("cliente"),documentSnapshot.getString("estado"),documentSnapshot.getDate("fecha"), (ArrayList<Map>) documentSnapshot.get("productos"), documentSnapshot.getGeoPoint("ubicacion"),documentSnapshot.getReference(),documentSnapshot.getString("direccion"),documentSnapshot.getGeoPoint("ubicacionPedido"),documentSnapshot.getDouble("total"),documentSnapshot.getString("telefono"));
+                                            HomeCliente.pedidoRepartidor=pedidoRepartidor;
+                                            HomeCliente.floatingActionButton.setVisibility(View.VISIBLE);
                                             // El documento existe y contiene datos
                                             // Puedes obtener los datos con documentSnapshot.getData()
                                         } else {
@@ -186,7 +190,7 @@ public class ConfirmarFragment extends Fragment {
                                         }
                                     }
                                 });
-                                HomeCliente.pedido.setDocumentReference(documentReference);
+                                //HomeCliente.pedido.setDocumentReference(documentReference);
                                 HomeCliente.carrito=new Carrito();
                                 Toast.makeText(getContext(),"Tu pedido se ha realizado con éxito", Toast.LENGTH_SHORT).show();
                                 Navigation.findNavController(view).navigate(R.id.nav_home);

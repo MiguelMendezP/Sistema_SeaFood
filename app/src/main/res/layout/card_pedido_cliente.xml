@@ -76,7 +76,8 @@
                     android:id="@+id/btnCalificar"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/calificar" />
+                    android:text="@string/calificar"
+                    android:textColor="@color/white" />
             </FrameLayout>
 
             <FrameLayout
