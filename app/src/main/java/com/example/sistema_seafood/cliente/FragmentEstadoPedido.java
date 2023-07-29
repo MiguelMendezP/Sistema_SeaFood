@@ -79,6 +79,8 @@ public class FragmentEstadoPedido extends Fragment implements OnMapReadyCallback
     private MarkerOptions markerOptions;
 
     private Polyline polyline;
+
+    private boolean edo=false,edolisto=false;
     private List<PatternItem> pattern = Arrays.asList(new Dot(), new Gap(20f));
 
     private ListenerRegistration listenerRegistration;
@@ -169,7 +171,18 @@ recibirActualizaciones();
 
                 if (snapshot != null && snapshot.exists()) {
                     HomeCliente.pedidoRepartidor.setEstado(snapshot.getString("estado"));
-                    estado.setText("Estado: "+HomeCliente.pedidoRepartidor.getEstado());
+
+                    if(HomeCliente.pedidoRepartidor.getEstado().equals("listo") && edolisto==false){
+                        estado.setText("Estado: "+HomeCliente.pedidoRepartidor.getEstado());
+                        edolisto=true;
+                        HomeCliente.floatingActionButton.setVisibility(View.INVISIBLE);
+                    }
+
+                    if(HomeCliente.pedidoRepartidor.getEstado().equals("enviado") && edo==false){
+                        estado.setText("Estado: "+HomeCliente.pedidoRepartidor.getEstado());
+                        HomeCliente.floatingActionButton.setVisibility(View.INVISIBLE);
+                        edo=true;
+                    }
                     if(HomeCliente.pedidoRepartidor.getEstado().equals("entregado")){
                         Navigation.findNavController(view).navigate(R.id.nav_pedidos);
                         listenerRegistration.remove();

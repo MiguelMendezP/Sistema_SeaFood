@@ -70,7 +70,6 @@ public class FirebaseBackgroundService extends Service {
                                     break;
                                 case "entregado" :
                                     notificacion.lanzarNotificacion("Pedido Entregado", "Tu pedido se ha entregado, que lo disfrutes!!");
-                                    HomeCliente.floatingActionButton.setVisibility(View.INVISIBLE);
                                     break;
                                 case "rechazado" :
                                     notificacion.lanzarNotificacion("Pedido Rechazado", "Tu pedido lamentablemente ha sido rechazado");
