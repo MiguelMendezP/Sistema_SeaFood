@@ -2,14 +2,20 @@ package com.example.sistema_seafood.cliente;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +26,8 @@ import android.widget.TextView;
 
 import com.example.sistema_seafood.Pedido;
 import com.example.sistema_seafood.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -34,6 +42,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -53,12 +62,15 @@ import java.util.concurrent.Executor;
  * Use the {@link FragmentEstadoPedido#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentEstadoPedido extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.InfoWindowAdapter {
+public class FragmentEstadoPedido extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private FusedLocationProviderClient fusedLocationClient;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -67,6 +79,7 @@ public class FragmentEstadoPedido extends Fragment implements OnMapReadyCallback
     private MarkerOptions markerOptions;
 
     private Polyline polyline;
+    private List<PatternItem> pattern = Arrays.asList(new Dot(), new Gap(20f));
 
     private ListenerRegistration listenerRegistration;
     private View view;
@@ -103,6 +116,15 @@ public class FragmentEstadoPedido extends Fragment implements OnMapReadyCallback
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                HomeCliente.floatingActionButton.setVisibility(View.VISIBLE);
+                HomeCliente.navController.popBackStack(R.id.nav_home,false);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Override
@@ -110,12 +132,14 @@ public class FragmentEstadoPedido extends Fragment implements OnMapReadyCallback
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_estado_pedido, container, false);
+        HomeCliente.floatingActionButton.setVisibility(View.INVISIBLE);
         HomeCliente.setTitulo("Seguimiento del pedido");
         estado=view.findViewById(R.id.estado);
-        estado.setText(HomeCliente.pedidoRepartidor.getEstado());
+        estado.setText("Estado: "+HomeCliente.pedidoRepartidor.getEstado());
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         //if(mapFragment!=null)
         mapFragment.getMapAsync(this);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
         return view;
     }
 
@@ -124,7 +148,13 @@ public class FragmentEstadoPedido extends Fragment implements OnMapReadyCallback
 this.googleMap=googleMap;
 this.googleMap.setOnMapClickListener(this);
 this.googleMap.setOnMapLongClickListener(this);
-googleMap.setInfoWindowAdapter(this);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // Si se concedió el permiso, habilitar la capa de ubicación en el mapa
+            this.googleMap.setMyLocationEnabled(true);
+        } else {
+            // Si no se concedió el permiso, solicitarlo al usuario
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
 recibirActualizaciones();
     }
 
@@ -138,26 +168,37 @@ recibirActualizaciones();
                 }
 
                 if (snapshot != null && snapshot.exists()) {
+                    HomeCliente.pedidoRepartidor.setEstado(snapshot.getString("estado"));
+                    estado.setText("Estado: "+HomeCliente.pedidoRepartidor.getEstado());
+                    if(HomeCliente.pedidoRepartidor.getEstado().equals("entregado")){
+                        Navigation.findNavController(view).navigate(R.id.nav_pedidos);
+                        listenerRegistration.remove();
+                    }
                     if(miMarcador!=null){
                         miMarcador.remove();
                     }
                     LatLng latLng=new LatLng(snapshot.getGeoPoint("ubicacionPedido").getLatitude(),snapshot.getGeoPoint("ubicacionPedido").getLongitude());
-                    markerOptions = new MarkerOptions()
-                            .position(latLng)
-                            .title("Repartidor").icon(BitmapDescriptorFactory.fromResource(R.drawable.motorcycle));
+//                    markerOptions = new MarkerOptions()
+//                            .position(latLng)
+//                            .title("Repartidor");
                     //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.motorcycle));
+                   markerOptions=new MarkerOptions()
+                            .position(latLng)
+                            .title("Repartidor").
+                            icon(BitmapDescriptorFactory.fromResource(R.drawable.rp));
                     miMarcador=googleMap.addMarker(markerOptions);
-                   // miMarcador.showInfoWindow();
-                   // miMarcador.setIcon(new BitmapDescriptor());
+
+                    //miMarcador.showInfoWindow();
+                    //miMarcador.setIcon(new BitmapDescriptor());
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
 
                     if (polyline == null) {
                         // Si aún no hay una línea trazada, crear una nueva
-                        List<PatternItem> pattern = Arrays.asList(new Dot(), new Gap(20f));
+
                         PolylineOptions polylineOptions = new PolylineOptions()
                                 .add(latLng)
-                                .color(ContextCompat.getColor(getContext(), R.color.amarillo))
-                                .width(10)
+                                .color(ContextCompat.getColor(getContext(), R.color.azul))
+                                .width(15)
                                 .pattern(pattern);
                         polyline = googleMap.addPolyline(polylineOptions);
                     } else {
@@ -188,25 +229,8 @@ recibirActualizaciones();
 
     }
 
-    @Override
-    public View getInfoWindow(Marker marker) {
-        return null; // Usaremos solo getInfoContents para personalizar el globo
-    }
-
-    @Override
-    public View getInfoContents(Marker marker) {
-        // Obtener el diseño personalizado del globo
-        View infoWindowView = LayoutInflater.from(getContext()).inflate(R.layout.custom_info_window, null);
-
-
-        // Obtener el ImageView del diseño personalizado
-        //ImageView markerIconImageView = infoWindowView.findViewById(R.id.marker_icon);
-
-        // Establecer la imagen del icono del marcador (puedes cargarla dinámicamente según el marcador)
-        //markerIconImageView.setImageResource(R.drawable.motorcycle);
-
-        // Otros detalles, si es necesario
-
-        return infoWindowView;
+    public void onDestroyView() {
+        super.onDestroyView();
+        HomeCliente.floatingActionButton.setVisibility(View.VISIBLE);
     }
 }

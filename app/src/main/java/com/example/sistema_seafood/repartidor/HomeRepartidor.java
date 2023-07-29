@@ -7,9 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.helper.widget.MotionEffect;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -88,6 +91,7 @@ private PedidosDisponiblesRepartidor pedidosDisponiblesRepartidor;
         bottomNavigationView = findViewById(R.id.barraNavegacion);
         setupBottomMenu();
         Utils.getImageProfile(this);
+        solicitarPermisoUbicacion();
 
     }
 
@@ -217,5 +221,14 @@ private PedidosDisponiblesRepartidor pedidosDisponiblesRepartidor;
                         }
                     }
                 });
+    }
+
+    public void solicitarPermisoUbicacion(){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // Si se concedió el permiso, habilitar la capa de ubicación en el mapa
+        } else {
+            // Si no se concedió el permiso, solicitarlo al usuario
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
     }
 }

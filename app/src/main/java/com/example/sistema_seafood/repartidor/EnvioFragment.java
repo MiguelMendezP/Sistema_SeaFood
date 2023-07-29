@@ -177,7 +177,7 @@ public class EnvioFragment extends Fragment implements OnMapReadyCallback, Googl
             SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapEnvio);
             mapFragment.getMapAsync(this);
         }
-        actualizarUbicacion();
+            actualizarUbicacion();
             return view;
         }
 
@@ -210,6 +210,7 @@ public class EnvioFragment extends Fragment implements OnMapReadyCallback, Googl
         for(int i=0;i<Utils.routes.size();i++){
             points = new ArrayList<LatLng>();
             lineOptions = new PolylineOptions();
+            lineOptions.width(10f);
 
             // Obteniendo el detalle de la ruta
             List<HashMap<String, String>> path = Utils.routes.get(i);
@@ -232,7 +233,7 @@ public class EnvioFragment extends Fragment implements OnMapReadyCallback, Googl
             // Agregamos todos los puntos en la ruta al objeto LineOptions
             lineOptions.addAll(points);
             //Definimos el grosor de las Polilíneas
-            lineOptions.width(2);
+            lineOptions.width(5);
             //Definimos el color de la Polilíneas
             lineOptions.color(Color.BLUE);
         }
@@ -361,7 +362,7 @@ public class EnvioFragment extends Fragment implements OnMapReadyCallback, Googl
         // Comprueba si se tienen los permisos necesarios para acceder a la ubicación
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             // Registra el LocationListener para recibir actualizaciones de ubicación
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5l, 1f, this::onLocationChanged);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5l, 5f, this::onLocationChanged);
         } else {
             // Si no se tienen los permisos, solicítalos
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);}
@@ -376,16 +377,18 @@ public class EnvioFragment extends Fragment implements OnMapReadyCallback, Googl
         if(HomeRepartidor.pedidoRepartidor!=null) {
             HomeRepartidor.pedidoRepartidor.getDocumentReference().update("ubicacionPedido", new GeoPoint(location.getLatitude(), location.getLongitude()));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15f));
-            if(calcularDistancia(new LatLng(HomeRepartidor.pedidoRepartidor.getUbicacion().getLatitude(),HomeRepartidor.pedidoRepartidor.getUbicacion().getLongitude()),
-                    new LatLng(location.getLatitude(),location.getLongitude()))<50){
-                System.out.println(calcularDistancia(new LatLng(HomeRepartidor.pedidoRepartidor.getUbicacion().getLatitude(),HomeRepartidor.pedidoRepartidor.getUbicacion().getLongitude()),
-                        new LatLng(location.getLatitude(),location.getLongitude())));
+            float distancia=calcularDistancia(new LatLng(HomeRepartidor.pedidoRepartidor.getUbicacion().getLatitude(),HomeRepartidor.pedidoRepartidor.getUbicacion().getLongitude()),
+                    new LatLng(location.getLatitude(),location.getLongitude()));
+            System.out.println(distancia);
+            if(distancia<100){
+                if(!btnEntegarPedido.isEnabled()){
+                    btnEntegarPedido.setEnabled(true);
+                }
                 if(!sendMessage){
                     sendMessage=true;
                     SendMessage sendMessage=new SendMessage(HomeRepartidor.pedidoRepartidor.getNumeroTelefono());
                     sendMessage.sendMessage();
                 }
-                btnEntegarPedido.setEnabled(true);
             }
         }
     }
