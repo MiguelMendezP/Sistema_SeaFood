@@ -2,6 +2,7 @@ package com.example.sistema_seafood.administrador.ui.extras;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -32,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sistema_seafood.Extra;
 import com.example.sistema_seafood.R;
+import com.example.sistema_seafood.administrador.ui.AdaptadorCategoria;
 import com.example.sistema_seafood.administrador.ui.AdaptadorPlatillo;
 import com.example.sistema_seafood.administrador.ui.AdapterExtras;
 import com.example.sistema_seafood.databinding.FragmentExtrasBinding;
@@ -232,6 +234,69 @@ public class ExtrasFragment extends Fragment {
                 } else {
                     Toast.makeText(getActivity(), "Dejaste un campo vacío", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        Button btn_eliminar = view.findViewById(R.id.btn_eliminar);
+        btn_eliminar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProgressDialog progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setMessage("Eliminando extras...");
+
+                AlertDialog.Builder alerta = new AlertDialog.Builder(getActivity());
+                alerta.setMessage("¿Seguro que quieres eliminar este extra?")
+                        .setCancelable(false)
+                        .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                progressDialog.show();
+
+                                // Paso 1: Obtener la referencia al documento que contiene la matriz
+                                DocumentReference categoriaRef = FirebaseFirestore.getInstance().collection("extras").document(referencia);
+                                categoriaRef.delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+
+
+                                                consultarExtras(FirebaseFirestore.getInstance());
+                                                recyclerView = vista.findViewById(R.id.recyclerView);
+                                                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                                                adapterExtras = new AdapterExtras(getActivity(), arrayExtras);
+                                                recyclerView.setAdapter(adapterExtras);
+
+                                                if (progressDialog.isShowing()) {
+                                                    progressDialog.dismiss();
+                                                }
+
+                                                dialog.dismiss();
+                                                Toast.makeText(getActivity(), "Extra eliminado", Toast.LENGTH_SHORT).show();
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                // Error al eliminar el documento
+                                                if (progressDialog.isShowing()) {
+                                                    progressDialog.dismiss();
+                                                }
+
+                                                dialog.dismiss();
+                                                Toast.makeText(getActivity(), "Ocurrio un error", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+                AlertDialog titulo = alerta.create();
+                titulo.setTitle("Eliminar extra");
+                titulo.show();
             }
         });
     }
