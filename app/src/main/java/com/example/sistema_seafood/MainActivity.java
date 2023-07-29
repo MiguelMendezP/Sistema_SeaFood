@@ -5,8 +5,10 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -49,7 +51,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     ArrayList<usuarioModel> itemsUsuaarios = new ArrayList<>();
-    Button btn_login, btn_registrar;
+    Button btn_login, btn_registrar,btnRecuperarContrasenia;
     EditText et_mail, et_pass;
     String nombre = "";
     String rol = "";
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +85,15 @@ public class MainActivity extends AppCompatActivity {
 
         btn_login = findViewById(R.id.btn_login);
         btn_registrar = findViewById(R.id.btn_registrar);
+        btnRecuperarContrasenia=findViewById(R.id.btnRecuperarContrasenia);
         getItemsUsuario();
+
+        btnRecuperarContrasenia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+showRecuperacion();
+            }
+        });
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,6 +173,39 @@ public class MainActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         updateUI(currentUser);
+    }
+
+    public void showRecuperacion(){
+        if(et_mail.getText().toString().equals("")){
+            Toast.makeText(this,"Ingrese correo electronico",Toast.LENGTH_LONG).show();
+        }
+        else {
+            androidx.appcompat.app.AlertDialog.Builder alert=new androidx.appcompat.app.AlertDialog.Builder(this);
+            alert.setMessage("Se enviará un correo de recuperación")
+                    .setCancelable(true)
+                    .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            String emailAddress = et_mail.getText().toString();
+                            firebaseAuth.sendPasswordResetEmail(emailAddress)
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(getApplicationContext(),"Revisa tu bandeja de entrada",Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(),"Error: "+task.getException().getMessage(),Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                        }
+                    })
+                    .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    });
+            androidx.appcompat.app.AlertDialog titulo=alert.create();
+            titulo.setTitle("Recuperar Contraseña");
+            titulo.show();
+        }
     }
 
     // [START onactivityresult]

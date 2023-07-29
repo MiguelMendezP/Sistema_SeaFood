@@ -62,6 +62,15 @@
                 android:inputType="textPassword"
                 tools:ignore="MissingConstraints" />
 
+            <Button
+                android:id="@+id/btnRecuperarContrasenia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@android:color/transparent"
+                android:text="@string/recuperar"
+                android:textColor="@color/com_facebook_blue" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_login"
                 style="@android:style/Widget.Button"
