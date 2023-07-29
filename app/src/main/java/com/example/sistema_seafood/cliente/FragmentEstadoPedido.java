@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.example.sistema_seafood.Pedido;
 import com.example.sistema_seafood.R;
+import com.example.sistema_seafood.repartidor.HomeRepartidor;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -170,7 +171,7 @@ recibirActualizaciones();
                 }
 
                 if (snapshot != null && snapshot.exists()) {
-                    HomeCliente.pedidoRepartidor.setEstado(snapshot.getString("estado"));
+                    //HomeCliente.pedidoRepartidor.setEstado(snapshot.getString("estado"));
 
                     if(HomeCliente.pedidoRepartidor.getEstado().equals("listo") && edolisto==false){
                         estado.setText("Estado: "+HomeCliente.pedidoRepartidor.getEstado());
@@ -180,7 +181,7 @@ recibirActualizaciones();
 
                     if(HomeCliente.pedidoRepartidor.getEstado().equals("enviado") && edo==false){
                         estado.setText("Estado: "+HomeCliente.pedidoRepartidor.getEstado());
-                        HomeCliente.floatingActionButton.setVisibility(View.INVISIBLE);
+                        HomeCliente.floatingActionButton.setVisibility(View.INVI SIBLE);
                         edo=true;
                     }
                     if(HomeCliente.pedidoRepartidor.getEstado().equals("entregado")){
@@ -244,6 +245,12 @@ recibirActualizaciones();
 
     public void onDestroyView() {
         super.onDestroyView();
-        HomeCliente.floatingActionButton.setVisibility(View.VISIBLE);
+        if(HomeRepartidor.pedidoRepartidor==null){
+            HomeCliente.floatingActionButton.setVisibility(View.INVISIBLE);
+        }
+        else {
+            HomeCliente.floatingActionButton.setVisibility(View.VISIBLE);
+
+        }
     }
 }

@@ -380,7 +380,7 @@ public class EnvioFragment extends Fragment implements OnMapReadyCallback, Googl
             float distancia=calcularDistancia(new LatLng(HomeRepartidor.pedidoRepartidor.getUbicacion().getLatitude(),HomeRepartidor.pedidoRepartidor.getUbicacion().getLongitude()),
                     new LatLng(location.getLatitude(),location.getLongitude()));
             System.out.println(distancia);
-            if(distancia<50){
+            if(distancia<100){
                 if(!btnEntegarPedido.isEnabled()){
                     btnEntegarPedido.setEnabled(true);
                 }
