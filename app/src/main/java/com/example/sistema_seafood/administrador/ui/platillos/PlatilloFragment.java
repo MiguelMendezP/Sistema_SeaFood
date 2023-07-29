@@ -331,8 +331,6 @@ public class PlatilloFragment extends Fragment implements AdapterView.OnItemClic
                                                 if (platillos != null && platillos.size() > 0) {
                                                     // Aquí debes buscar el platillo que deseas eliminar, por ejemplo, usando su nombre
                                                     platillos.remove(numPlatiillo);
-                                                    System.out.println(platillos.get(numPlatiillo).get("nombre"));
-
                                                     // Paso 4: Actualizar la matriz en el documento
                                                     categoriaRef.update("platillos", platillos)
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {

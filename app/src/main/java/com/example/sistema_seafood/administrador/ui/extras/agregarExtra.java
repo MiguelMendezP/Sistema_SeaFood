@@ -107,7 +107,7 @@ public class agregarExtra extends Fragment {
                         extrasElem.put("nombre", nombre);
                         extrasElem.put("precio", Double.parseDouble(precio));
 
-                        db.collection("extras").document().set(extrasElem);
+                        db.collection("extras").document(et_nombre.getText().toString().toLowerCase()).set(extrasElem);
                         mostrarDialog(vista);
                     }else{
 
@@ -147,7 +147,7 @@ public class agregarExtra extends Fragment {
     private boolean subirImagen() {
 
         String imageName = et_nombre.getText().toString();
-        StorageReference folderRef = storage.getReference().child("extras/"+imageName);
+        StorageReference folderRef = storage.getReference().child("extras/");
 
         if(imagenUri != null){
             folderRef.child(imageName+".jpg").putFile(imagenUri)
@@ -210,7 +210,7 @@ public class agregarExtra extends Fragment {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                Navigation.findNavController(vista).navigate(R.id.nav_platillos);
+                Navigation.findNavController(vista).navigate(R.id.nav_extras);
             }
         });
     }

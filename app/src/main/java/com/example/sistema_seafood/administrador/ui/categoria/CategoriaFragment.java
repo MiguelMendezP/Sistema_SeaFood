@@ -2,6 +2,7 @@ package com.example.sistema_seafood.administrador.ui.categoria;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -40,6 +41,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -50,6 +52,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CategoriaFragment extends Fragment implements AdapterView.OnItemClickListener {
@@ -277,6 +280,67 @@ public class CategoriaFragment extends Fragment implements AdapterView.OnItemCli
                             }
                         });
 
+            }
+        });
+
+        Button btn_eliminar = view.findViewById(R.id.btn_eliminar);
+        btn_eliminar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProgressDialog progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setMessage("Eliminando categoria...");
+
+                AlertDialog.Builder alerta = new AlertDialog.Builder(getActivity());
+                alerta.setMessage("¿Seguro que quieres eliminar esta categoria?")
+                        .setCancelable(false)
+                        .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                progressDialog.show();
+
+                                // Paso 1: Obtener la referencia al documento que contiene la matriz
+                                DocumentReference categoriaRef = FirebaseFirestore.getInstance().collection("Categoria").document(referencia);
+                                categoriaRef.delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+
+                                                consultarCategorias(db);
+                                                contenedorCategoria = vista.findViewById(R.id.contenedorCategoria);
+                                                adaptadorCategoria = new AdaptadorCategoria(getContext());
+                                                contenedorCategoria.setAdapter(adaptadorCategoria);
+
+                                                if (progressDialog.isShowing()) {
+                                                    progressDialog.dismiss();
+                                                }
+
+                                                dialog.dismiss();
+                                                Toast.makeText(getActivity(), "Categoria eliminada", Toast.LENGTH_SHORT).show();
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                // Error al eliminar el documento
+                                                if (progressDialog.isShowing()) {
+                                                    progressDialog.dismiss();
+                                                }
+
+                                                dialog.dismiss();
+                                                Toast.makeText(getActivity(), "Ocurrio un error", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+                AlertDialog titulo = alerta.create();
+                titulo.setTitle("Eliminar categoria");
+                titulo.show();
             }
         });
     }

@@ -94,7 +94,7 @@ public class agregarCategoria extends Fragment {
                     db.collection("Categoria").document().set(categoriaElemento);
                     mostrarDialog(vista);
                 }else{
-                    Toast.makeText(getActivity(), "Debes darle un nombre a la categoria", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Debes darle un nombre y seleccionar una imagen", Toast.LENGTH_SHORT).show();
                 }
             }
         });
