@@ -127,7 +127,7 @@ public class registrar extends AppCompatActivity {
         }
 
         // Verificar que las contraseñas sea mayor de 6 digitos
-        if (contrasena.length() >= 6) {
+        if (contrasena.length() <= 6) {
             Toast.makeText(this, "Las contraseñas es mejor a 6 digitos.", Toast.LENGTH_SHORT).show();
             return false;
         }

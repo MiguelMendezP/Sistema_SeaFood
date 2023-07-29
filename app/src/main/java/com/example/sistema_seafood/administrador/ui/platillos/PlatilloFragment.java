@@ -227,37 +227,52 @@ public class PlatilloFragment extends Fragment implements AdapterView.OnItemClic
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
+                                                    if(imagenUri != null){
+                                                        //Agregar el archivo a la nueva carpeta
+                                                        StorageReference newImageRef = storage.getReference().child("categorias/"+categoria.toLowerCase()+"/"+et_nombre.getText().toString().toLowerCase()+".jpg");
+                                                        UploadTask uploadTask = newImageRef.putFile(imagenUri);
+                                                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception exception) {
 
-                                                    //Agregar el archivo a la nueva carpeta
-                                                    StorageReference newImageRef = storage.getReference().child("categorias/"+categoria.toLowerCase()+"/"+et_nombre.getText().toString().toLowerCase()+".jpg");
-                                                    UploadTask uploadTask = newImageRef.putFile(imagenUri);
-                                                    uploadTask.addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception exception) {
+                                                                if (progressDialog.isShowing()) {
+                                                                    progressDialog.dismiss();
+                                                                }
+                                                                Toast.makeText(getActivity(), "A ocurrido un error con la imagen", Toast.LENGTH_SHORT).show();
 
-                                                            if (progressDialog.isShowing()) {
-                                                                progressDialog.dismiss();
                                                             }
-                                                            Toast.makeText(getActivity(), "A ocurrido un error con la imagen", Toast.LENGTH_SHORT).show();
+                                                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                            @Override
+                                                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                                // El nuevo archivo ha sido cargado exitosamente
+                                                                consultarPlatillos(FirebaseFirestore.getInstance());
+                                                                contenedorPlatillos = vista.findViewById(R.id.contenedorPlatillos);
+                                                                adaptadorPlatillo = new AdaptadorPlatillo(getContext());
+                                                                contenedorPlatillos.setAdapter(adaptadorPlatillo);
 
-                                                        }
-                                                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                                        @Override
-                                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                                            // El nuevo archivo ha sido cargado exitosamente
-                                                            consultarPlatillos(FirebaseFirestore.getInstance());
-                                                            contenedorPlatillos = vista.findViewById(R.id.contenedorPlatillos);
-                                                            adaptadorPlatillo = new AdaptadorPlatillo(getContext());
-                                                            contenedorPlatillos.setAdapter(adaptadorPlatillo);
+                                                                if (progressDialog.isShowing()) {
+                                                                    progressDialog.dismiss();
+                                                                }
 
-                                                            if (progressDialog.isShowing()) {
-                                                                progressDialog.dismiss();
+                                                                dialog.dismiss();
+                                                                Toast.makeText(getActivity(), "Platillo actualizado", Toast.LENGTH_SHORT).show();
                                                             }
+                                                        });
+                                                    }else{
+                                                        // El nuevo archivo ha sido cargado exitosamente
+                                                        consultarPlatillos(FirebaseFirestore.getInstance());
+                                                        contenedorPlatillos = vista.findViewById(R.id.contenedorPlatillos);
+                                                        adaptadorPlatillo = new AdaptadorPlatillo(getContext());
+                                                        contenedorPlatillos.setAdapter(adaptadorPlatillo);
 
-                                                            dialog.dismiss();
-                                                            Toast.makeText(getActivity(), "Platillo actualizado", Toast.LENGTH_SHORT).show();
+                                                        if (progressDialog.isShowing()) {
+                                                            progressDialog.dismiss();
                                                         }
-                                                    });
+
+                                                        dialog.dismiss();
+                                                        Toast.makeText(getActivity(), "Platillo actualizado", Toast.LENGTH_SHORT).show();
+                                                    }
+
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
