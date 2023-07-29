@@ -233,7 +233,6 @@ public class CategoriaFragment extends Fragment implements AdapterView.OnItemCli
                                                         }
                                                     });
                                                 }
-
                                                 // Paso 4: Agregar el archivo a la nueva carpeta
                                                 StorageReference newImageRef = storage.getReference().child("categorias/"+textEditar.getText().toString().toLowerCase()+"/"+textEditar.getText().toString().toLowerCase()+".jpg");
                                                 UploadTask uploadTask = newImageRef.putFile(imagenUri);

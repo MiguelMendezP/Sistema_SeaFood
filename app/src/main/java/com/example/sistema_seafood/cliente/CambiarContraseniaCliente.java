@@ -123,8 +123,7 @@ public class CambiarContraseniaCliente extends Fragment {
             public void onClick(View v) {
                 FirebaseUser user = mAuth.getCurrentUser();
                 if(newPassword.getText().toString().equals(confirmPassword.getText().toString()) && !currentPassword.getText().toString().isEmpty()){
-                    String newPass = confirmPassword.getText().toString();
-
+                    String newPass = newPassword.getText().toString();
                     user.updatePassword(newPass)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
@@ -138,7 +137,8 @@ public class CambiarContraseniaCliente extends Fragment {
                                         }
                                         else if((getActivity() instanceof HomeRepartidor)){
                                             ((HomeRepartidor)getActivity()).showPerfil();
-                                        }else{
+                                        }
+                                        else{
                                             Navigation.findNavController(v).navigate(R.id.nav_perfil);
                                         }
                                     } else {

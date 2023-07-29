@@ -120,7 +120,6 @@ public class Repartidor {
     StorageReference storageRef = storage.getReference();
     public void mostrarImagen(ImageView imageView){
         String path = referenciaImagen+".jpg";
-        System.out.println(path);
 
         try {
             // Crea un archivo temporal para almacenar la imagen
