@@ -64,7 +64,9 @@ public class FirebaseBackgroundService extends Service {
                                     notificacion.lanzarNotificacion("Pedido en Preparacion", "Tu pedido se esta preparando");
                                     break;
                                 case "enviado" :
-                                    notificacion.lanzarNotificacion("Pedido Enviado", "Tu pedido esta en camino");
+                                    if(!HomeCliente.pedidoRepartidor.getEstado().equals("enviado")){
+                                        notificacion.lanzarNotificacion("Pedido Enviado", "Tu pedido esta en camino");
+                                    }
                                     break;
                                 case "entregado" :
                                     notificacion.lanzarNotificacion("Pedido Entregado", "Tu pedido se ha entregado, que lo disfrutes!!");

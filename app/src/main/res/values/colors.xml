@@ -8,4 +8,6 @@
     <color name="gris">#C4C4C4</color>
 <color name="amarillo">#F1C93B</color>
     <color name="pedido">#EDEDED</color>
+    <color name="azul">#1D5D9B</color>
+    <color name="estado">#EEEEEE</color>
 </resources>

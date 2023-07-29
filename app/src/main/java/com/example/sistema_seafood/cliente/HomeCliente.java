@@ -1,11 +1,13 @@
 package com.example.sistema_seafood.cliente;
 
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,6 +44,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.helper.widget.MotionEffect;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -215,6 +219,7 @@ public class HomeCliente extends AppCompatActivity {
             }
         });
         consultarExtras();
+        solicitarPermisoUbicacion();
     }
 
 
@@ -395,6 +400,14 @@ public class HomeCliente extends AppCompatActivity {
                 });
     }
 
+    public void solicitarPermisoUbicacion(){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // Si se concedió el permiso, habilitar la capa de ubicación en el mapa
+        } else {
+            // Si no se concedió el permiso, solicitarlo al usuario
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+    }
 }
 
 
